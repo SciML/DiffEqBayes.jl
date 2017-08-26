@@ -40,9 +40,9 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
   f = prob.f
   length_of_parameter = string(length(f.params))
   if alg ==:rk45
-  alg = integrate_ode_rk45
+    algorithm = "integrate_ode_rk45"
   else
-    alg = integrate_ode_bdf
+    algorithm = "integrate_ode_bdf"
   end
 
   differential_equation = generate_differential_equation(f)
@@ -74,7 +74,7 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
     real u_hat[T,$length_of_y];
     sigma ~ inv_gamma(2, 3);
     $priors_string
-    u_hat = $alg(sho, u0, t0, ts, theta, x_r, x_i);
+    u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i);
     for (t in 1:T){
       u[t] ~ normal(u_hat[t], sigma);
       }

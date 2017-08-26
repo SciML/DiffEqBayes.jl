@@ -27,11 +27,16 @@ function generate_priors(f)
   priors
 end
 
-function bayesian_inference(prob::DEProblem,t,data;alg=:integrate_ode_rk45,num_samples=1, num_warmup=1,kwargs...)
+function bayesian_inference(prob::DEProblem,t,data;alg=:rk45,num_samples=1, num_warmup=1,kwargs...)
   length_of_y = string(length(prob.u0))
   f = prob.f
   length_of_parameter = string(length(f.params))
-  alg = string(alg)
+  if alg ==:rk45
+  alg = integrate_ode_rk45
+  else
+    alg = integrate_ode_bdf
+  end
+
   differential_equation = generate_differential_equation(f)
   priors = generate_priors(f)
   const parameter_estimation_model = "

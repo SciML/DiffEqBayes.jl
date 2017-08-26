@@ -1,5 +1,7 @@
 module DiffEqBayes
+using DiffEqBase, Mamba, Stan
+using Compat
 
-# package code goes here
+include("bayesian_inference.jl")
 
 end # module

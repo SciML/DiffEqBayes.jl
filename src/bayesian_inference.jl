@@ -4,24 +4,48 @@ struct StanModel{R,C}
   return_code::R
   chain_results::C
 end
-function bayesian_inference(prob::DEProblem,t,data;alg="integrate_ode_rk45",num_samples=1, num_warmup=1,kwargs...)
-  length_of_y = string(length(prob.u0))
-  length_of_parameter = string(length(prob.f.params))
 
+function generate_differential_equation(f)
+  prob_parts = split(string(f.pfuncs[1]),"\n")
+  differential_equation = ""
+  for i in 2:length(prob_parts)-2
+    differential_equation = string(differential_equation,prob_parts[i], ";")
+  end
+  params = f.params
+  for i in 1:length(params)
+    differential_equation = replace(differential_equation,string(params[i]),"theta[$i]")
+  end
+  return differential_equation
+end
+
+function generate_priors(f)
+  priors = ""
+  params = f.params
+  for i in 1:length(params)
+    priors = string(priors,"theta[$i] ~ normal(0, 1)", " ; ")
+  end
+  priors
+end
+
+function bayesian_inference(prob::DEProblem,t,data;alg=:integrate_ode_rk45,num_samples=1, num_warmup=1,kwargs...)
+  length_of_y = string(length(prob.u0))
+  f = prob.f
+  length_of_parameter = string(length(f.params))
+  alg = string(alg)
+  differential_equation = generate_differential_equation(f)
+  priors = generate_priors(f)
   const parameter_estimation_model = "
   functions {
     real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i) {
-      real du[$length_of_y];  // 2 = length(prob.u0) = length_of_y
-      // placeholder for differential equation here
-      du[1] = theta[1] * u[1] - 1.0*u[1] * u[2]; //string(prob.f.pfuncs[1])
-      du[2] = -3.0*u[1] + 1.0*u[1] * u[2];
+      real du[$length_of_y];
+      $differential_equation
       return du;
       }
     }
   data {
-    real u0[$length_of_y]; // 2 = length(prob.u0)
+    real u0[$length_of_y];
     int<lower=1> T;
-    real u[T,$length_of_y]; // 2 = length(prob.u0)
+    real u[T,$length_of_y];
     real t0;
     real ts[T];
   }
@@ -30,14 +54,14 @@ function bayesian_inference(prob::DEProblem,t,data;alg="integrate_ode_rk45",num_
     int x_i[0];
   }
   parameters {
-    vector<lower=0>[$length_of_y] sigma;   // 2 = length(prob.u0)
-    real theta[$length_of_parameter];   // // 1=length(prob.f.params)
+    vector<lower=0>[$length_of_y] sigma;
+    real theta[$length_of_parameter];
   }
   model{
-    real u_hat[T,$length_of_y]; // 2 = length(prob.u0)
+    real u_hat[T,$length_of_y];
     sigma ~ inv_gamma(2, 3);
     // placeholder for priors here
-    theta[1] ~ normal(1.5, 1); //1=length(prob.f.params), 1.5=prob.f.a
+    $priors
     u_hat = $alg(sho, u0, t0, ts, theta, x_r, x_i);
     for (t in 1:T){
       u[t] ~ normal(u_hat[t], sigma);

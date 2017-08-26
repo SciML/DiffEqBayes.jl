@@ -16,6 +16,7 @@ using RecursiveArrayTools # for VectorOfArray
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 priors = [Normal(1.5,1)]
-bayesian_result = bayesian_inference(prob1,t,data,priors,[Normal(1.5,1)];num_samples=100,num_warmup=100)
+
+bayesian_result = bayesian_inference(prob1,t,data,priors;num_samples=100,num_warmup=100)
 theta1 = bayesian_result.chain_results[:,["theta.1"],:]
-@test mean(theta1.value) ≈ 1.5 atol=1e-1
+@test mean(theta1.value[:,:,1]) ≈ 1.5 atol=1e-1

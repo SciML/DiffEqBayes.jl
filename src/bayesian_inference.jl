@@ -70,7 +70,7 @@ function bayesian_inference(prob::DEProblem,t,data;alg=:integrate_ode_rk45,num_s
   "
 
   stanmodel = Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model);
-  const parameter_estimation_data = Dict("y0"=>prob.u0, "T" => size(t)[1], "y" => data', "t0" => prob.tspan[1], "ts"=>t)
+  const parameter_estimation_data = Dict("u0"=>prob.u0, "T" => size(t)[1], "u" => data', "t0" => prob.tspan[1], "ts"=>t)
   return_code, chain_results = stan(stanmodel, [parameter_estimation_data]; CmdStanDir=CMDSTAN_HOME)
   return StanModel(return_code,chain_results)
 end

@@ -18,16 +18,24 @@ function generate_differential_equation(f)
   return differential_equation
 end
 
-function generate_priors(f)
-  priors = ""
+function generate_priors(f,priors)
+  priors_string = ""
   params = f.params
-  for i in 1:length(params)
-    priors = string(priors,"theta[$i] ~ normal(0, 1)", " ; ")
+  if priors==nothing
+    for i in 1:length(params)
+      priors_string = string(priors_string,"theta[$i] ~ normal(0, 1)", " ; ")
+    end
+  else
+    for i in 1:length(params)
+      μ = priors[i].μ
+      σ = priors[i].σ
+      priors_string = string(priors_string,"theta[$i] ~ normal($μ, $σ)", " ; ")
+    end
   end
-  priors
+  priors_string
 end
 
-function bayesian_inference(prob::DEProblem,t,data;alg=:rk45,num_samples=1, num_warmup=1,kwargs...)
+function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,num_samples=1, num_warmup=1,kwargs...)
   length_of_y = string(length(prob.u0))
   f = prob.f
   length_of_parameter = string(length(f.params))
@@ -38,7 +46,7 @@ function bayesian_inference(prob::DEProblem,t,data;alg=:rk45,num_samples=1, num_
   end
 
   differential_equation = generate_differential_equation(f)
-  priors = generate_priors(f)
+  priors_string = generate_priors(f,priors)
   const parameter_estimation_model = "
   functions {
     real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i) {
@@ -65,8 +73,7 @@ function bayesian_inference(prob::DEProblem,t,data;alg=:rk45,num_samples=1, num_
   model{
     real u_hat[T,$length_of_y];
     sigma ~ inv_gamma(2, 3);
-    // placeholder for priors here
-    $priors
+    $priors_string
     u_hat = $alg(sho, u0, t0, ts, theta, x_r, x_i);
     for (t in 1:T){
       u[t] ~ normal(u_hat[t], sigma);

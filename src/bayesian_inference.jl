@@ -35,7 +35,7 @@ function generate_priors(f,priors)
   priors_string
 end
 
-function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,num_samples=1000, num_warmup=1000,reltol=1e-3,abstol=1e-6,maxiter=Int(1e5),kwargs...)
+function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,num_samples=1000, num_warmup=1000, reltol=1e-3, abstol=1e-6, maxiter=Int(1e5),kwargs...)
   length_of_y = string(length(prob.u0))
   f = prob.f
   length_of_parameter = string(length(f.params))
@@ -49,7 +49,7 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
   priors_string = generate_priors(f,priors)
   const parameter_estimation_model = "
   functions {
-    real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i,real rel_tol, real abs_tol, int max_steps) {
+    real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i,real rel_tol,real abs_tol,int max_steps) {
       real du[$length_of_y];
       $differential_equation
       return du;
@@ -77,7 +77,7 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
     real u_hat[T,$length_of_y];
     sigma ~ inv_gamma(2, 3);
     $priors_string
-    u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i,rel_tol, abs_tol, max_steps);
+    u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, rel_tol, abs_tol, max_steps);
     for (t in 1:T){
       u[t] ~ normal(u_hat[t], sigma);
       }

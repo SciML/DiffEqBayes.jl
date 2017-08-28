@@ -49,7 +49,7 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
   priors_string = generate_priors(f,priors)
   const parameter_estimation_model = "
   functions {
-    real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i,rel_tol, abs_tol, max_steps) {
+    real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i,real rel_tol, real abs_tol, int max_steps) {
       real du[$length_of_y];
       $differential_equation
       return du;

@@ -77,7 +77,7 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
     real u_hat[T,$length_of_y];
     sigma ~ inv_gamma(2, 3);
     $priors_string
-    u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, rel_tol, abs_tol, max_steps);
+    u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i);
     for (t in 1:T){
       u[t] ~ normal(u_hat[t], sigma);
       }

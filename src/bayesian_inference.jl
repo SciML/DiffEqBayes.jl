@@ -35,7 +35,7 @@ function generate_priors(f,priors)
   priors_string
 end
 
-function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,num_samples=1000, num_warmup=1000, reltol=1e-6, abstol=1e-6, maxiter=Int(1e6),kwargs...)
+function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,num_samples=1000, num_warmup=1000, reltol=1e-3, abstol=1e-6, maxiter=Int(1e5),kwargs...)
   length_of_y = string(length(prob.u0))
   f = prob.f
   length_of_parameter = string(length(f.params))
@@ -62,9 +62,6 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
     real u[T,$length_of_y];
     real t0;
     real ts[T];
-    real rel_tol;
-    real abs_tol;
-    int max_num_steps;
   }
   transformed data {
     real x_r[0];

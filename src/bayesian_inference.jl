@@ -49,7 +49,7 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
   priors_string = generate_priors(f,priors)
   const parameter_estimation_model = "
   functions {
-    real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i,real rel_tol, real abs_tol, int max_num_steps) {
+    real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i) {
       real du[$length_of_y];
       $differential_equation
       return du;
@@ -77,7 +77,7 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
     real u_hat[T,$length_of_y];
     sigma ~ inv_gamma(2, 3);
     $priors_string
-    u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, rel_tol, abs_tol, max_num_steps);
+    u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);
     for (t in 1:T){
       u[t] ~ normal(u_hat[t], sigma);
       }
@@ -85,7 +85,7 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
   "
 
   stanmodel = Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model);
-  const parameter_estimation_data = Dict("u0"=>prob.u0, "T" => size(t)[1], "u" => data', "t0" => prob.tspan[1], "ts"=>t, "rel_tol"=>reltol, "abs_tol"=>abstol, "max_num_steps"=>maxiter)
+  const parameter_estimation_data = Dict("u0"=>prob.u0, "T" => size(t)[1], "u" => data', "t0" => prob.tspan[1], "ts" => t)
   return_code, chain_results = stan(stanmodel, [parameter_estimation_data]; CmdStanDir=CMDSTAN_HOME)
   return StanModel(return_code,chain_results)
 end

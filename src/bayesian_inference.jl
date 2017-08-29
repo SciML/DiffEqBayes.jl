@@ -35,7 +35,7 @@ function generate_priors(f,priors)
   priors_string
 end
 
-function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,num_samples=1000, num_warmup=1000, reltol=1e-3, abstol=1e-6, maxiter=Int(1e5),kwargs...)
+function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,num_samples=1000, num_warmup=1000, reltol=1e-6, abstol=1e-6, maxiter=Int(1e6),kwargs...)
   length_of_y = string(length(prob.u0))
   f = prob.f
   length_of_parameter = string(length(f.params))
@@ -47,6 +47,7 @@ function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,nu
 
   differential_equation = generate_differential_equation(f)
   priors_string = generate_priors(f,priors)
+
   const parameter_estimation_model = "
   functions {
     real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i) {

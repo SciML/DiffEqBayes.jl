@@ -35,14 +35,18 @@ function generate_priors(f,priors)
   priors_string
 end
 
-function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,num_samples=1000, num_warmup=1000, reltol=1e-3, abstol=1e-6, maxiter=Int(1e5),kwargs...)
+function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
+                            num_samples=1000, num_warmup=1000, reltol=1e-3,
+                            abstol=1e-6, maxiter=Int(1e5),kwargs...)
   length_of_y = string(length(prob.u0))
   f = prob.f
   length_of_parameter = string(length(f.params))
   if alg ==:rk45
     algorithm = "integrate_ode_rk45"
-  else
+  elseif alg == :bdf
     algorithm = "integrate_ode_bdf"
+  else
+    error("The choices for alg are :rk45 or :bdf")
   end
 
   differential_equation = generate_differential_equation(f)

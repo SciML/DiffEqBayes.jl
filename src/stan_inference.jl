@@ -1,5 +1,3 @@
-export StanModel, bayesian_inference
-
 struct StanModel{R,C}
   return_code::R
   chain_results::C
@@ -35,7 +33,7 @@ function generate_priors(f,priors)
   priors_string
 end
 
-function bayesian_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
+function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
                             abstol=1e-6, maxiter=Int(1e5),kwargs...)
   length_of_y = string(length(prob.u0))

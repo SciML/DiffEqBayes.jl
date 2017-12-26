@@ -1,7 +1,7 @@
 function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
                             num_samples=1000, epsilon = 0.02, tau = 4, kwargs...)
 
-  bif(x=data; vi=Turing.VarInfo(), sampler=nothing) = begin
+  bif(vi, sampler, x=data) = begin
     N = length(priors)
     _theta = Vector(N)
     for i in 1:length(priors)
@@ -29,5 +29,8 @@ function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
     end
     vi
   end
+
+  bif() = bif(Turing.VarInfo(), nothing)
+
   chn = sample(bif, Turing.HMC(num_samples, epsilon, tau))
 end

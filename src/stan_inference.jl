@@ -53,7 +53,7 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
   const parameter_estimation_model = "
   functions {
     real[] sho(real t,real[] u,real[] theta,real[] x_r,int[] x_i) {
-      real du[$length_of_y];
+      real internal_var___du[$length_of_y];
       $differential_equation
       return du;
       }

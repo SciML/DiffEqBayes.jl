@@ -1,5 +1,5 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
-
+using Base.Test
 println("One parameter case")
 f1 = @ode_def_nohes LotkaVolterraTest1 begin
   dx = a*x - b*x*y
@@ -15,3 +15,5 @@ data = convert(Array,randomized)
 priors = [Normal(1.5,1)]
 
 bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=100)
+
+@test mean(bayesian_result[:theta1][25:end]) ≈ 1.5 atol=0.1

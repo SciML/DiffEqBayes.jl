@@ -78,7 +78,7 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
     $priors_string
     u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);
     for (t in 1:T){
-      u[t] ~ normal(u_hat[t], sigma);
+      internal_var___u[t] ~ normal(u_hat[t], sigma);
       }
   }
   "

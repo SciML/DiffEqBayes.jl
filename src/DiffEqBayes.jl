@@ -1,5 +1,5 @@
 module DiffEqBayes
-using DiffEqBase, Mamba, Stan, Distributions, Turing
+using DiffEqBase, Mamba, Stan, Distributions, Turing, MacroTools
 using Compat
 
 include("stan_inference.jl")

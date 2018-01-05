@@ -25,9 +25,7 @@ function generate_priors(f,priors)
     end
   else
     for i in 1:length(params)
-      μ = priors[i].μ
-      σ = priors[i].σ
-      priors_string = string(priors_string,"theta[$i] ~ normal($μ, $σ)", " ; ")
+      priors_string = string(priors_string,stan_string(priors[i],i))
     end
   end
   priors_string

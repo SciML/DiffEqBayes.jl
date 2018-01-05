@@ -12,7 +12,7 @@ sol = solve(prob1,Tsit5())
 t = collect(linspace(1,10,10))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
-priors = [Normal(1.5,1),Truncated(Normal(1,1),1,0),Gamma(3,1),Exponential(2)]
+priors = [Normal(1.5,1),Truncated(Normal(1,1),0,1),Gamma(3,1),Exponential(2)]
 
 bayesian_result = stan_inference(prob1,t,data,priors;num_samples=100,num_warmup=100)
 theta1 = bayesian_result.chain_results[:,["theta.1"],:]

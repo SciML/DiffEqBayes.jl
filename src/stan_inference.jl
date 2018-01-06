@@ -13,7 +13,6 @@ function generate_differential_equation(f)
   for i in 1:length(theta_ex.args)-1
     differential_equation = string(differential_equation,theta_ex.args[i], ";\n")
   end
-  @show differential_equation
   return differential_equation
 end
 

@@ -4,14 +4,16 @@ struct StanModel{R,C}
 end
 
 function generate_differential_equation(f)
-  theta_ex = MacroTools.postwalk(f.pfuncs[1]) do x
-    i = findfirst(f.params,x)
+  theta_ex = MacroTools.postwalk(f.fex) do x
+    i = findfirst((y)-> typeof(x) <: Expr && x.args[1] == :internal_var___p &&
+                  x.args[2].value == y,f.params)
     i != 0 ? Symbol("theta[$i]") : x
   end
   differential_equation = ""
   for i in 1:length(theta_ex.args)-1
     differential_equation = string(differential_equation,theta_ex.args[i], ";\n")
   end
+  @show differential_equation
   return differential_equation
 end
 

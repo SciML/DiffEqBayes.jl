@@ -9,8 +9,8 @@ function stan_string(p::Union{Type{Bernoulli},Bernoulli})
 end
 function stan_string(p::Union{Type{Binomial},Binomial})
 	try
-		parameters = (params(p)[1])
-		return string("binomial($parameters)")
+		parameters = (params(p)[1],params(p)[2])
+		return string("binomial$parameters")
 	catch
 		return string("binomial")
 	end
@@ -25,8 +25,8 @@ function stan_string(p::Union{Type{BetaBinomial},BetaBinomial})
 end
 function stan_string(p::Union{Type{Hypergeometric},Hypergeometric})
 	try
-		parameters = (params(p)[1])
-		return string("hypergeometric($parameters)")
+		parameters = (params(p)[1],params(p)[2],params(p)[3])
+		return string("hypergeometric$parameters")
 	catch
 		return string("hypergeometric")
 	end
@@ -50,17 +50,17 @@ end
 function stan_string(p::Union{Type{Poisson},Poisson})
 	try
 		parameters = (params(p)[1])
-		return string("beta_binomial($parameters)")
+		return string("poisson($parameters)")
 	catch
-		return string("beta_binomial")
+		return string("poisson")
 	end
 end
 function stan_string(p::Union{Type{Normal},Normal})
 	try
 		parameters = (params(p)[1],params(p)[2])
-		string("normal$parameters")
+		return string("normal$parameters")
 	catch
-		string("normal")
+		return string("normal")
 	end
 end
 function stan_string(p::Union{Type{TDist},TDist}) 
@@ -177,7 +177,7 @@ function stan_string(p::Union{Type{Pareto},Pareto})
 end
 function stan_string(p::Union{Type{GeneralizedPareto},GeneralizedPareto}) 
 	try
-		parameters = (params(p)[1],params(p)[2])
+		parameters = (params(p)[1],params(p)[2],params(p)[3])
 		return string("pareto_type_2$parameters")
 	catch
 		return string("pareto_type_2")

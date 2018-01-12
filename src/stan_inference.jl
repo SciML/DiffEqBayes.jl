@@ -25,7 +25,7 @@ function generate_priors(f,priors)
     end
   else
     for i in 1:length(params)
-      priors_string = string(priors_string,stan_string(priors[i],i))
+      priors_string = string(priors_string,"theta[$i] ~",stan_string(priors[i]),";")
     end
   end
   priors_string
@@ -33,8 +33,9 @@ end
 
 function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
-                            abstol=1e-6, maxiter=Int(1e5),kwargs...)
+                            abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,vars=("StanODEData",InverseGamma(2,3)))
   length_of_y = string(length(prob.u0))
+  length_of_params = string(length(vars))
   f = prob.f
   length_of_parameter = string(length(f.params))
   if alg ==:rk45
@@ -44,10 +45,21 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
   else
     error("The choices for alg are :rk45 or :bdf")
   end
-
+  hyper_params = ""
+  tuple_hyper_params = ""
+  for i in 1:length(vars)
+    if vars[i] == "StanODEData"
+      tuple_hyper_params = string(tuple_hyper_params,"u_hat[t]",",")
+    else
+      dist = stan_string(vars[i])
+      hyper_params = string(hyper_params,"params[$i] ~ $dist",";")
+      tuple_hyper_params = string(tuple_hyper_params,"params[$i]",",")
+    end
+  end
+  tuple_hyper_params = tuple_hyper_params[1:endof(tuple_hyper_params)-1] 
   differential_equation = generate_differential_equation(f)
-  priors_string = generate_priors(f,priors)
-
+  priors_string = string(generate_priors(f,priors),";")
+  stan_likelihood = stan_string(likelihood)
   const parameter_estimation_model = "
   functions {
     real[] sho(real t,real[] internal_var___u,real[] theta,real[] x_r,int[] x_i) {
@@ -70,14 +82,15 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
   parameters {
     vector<lower=0>[$length_of_y] sigma;
     real theta[$length_of_parameter];
+    real params[$length_of_params];
   }
   model{
     real u_hat[T,$length_of_y];
-    sigma ~ inv_gamma(2, 3);
+    $hyper_params
     $priors_string
     u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);
     for (t in 1:T){
-      internal_var___u[t] ~ normal(u_hat[t], sigma);
+      internal_var___u[t] ~ $stan_likelihood($tuple_hyper_params);
       }
   }
   "

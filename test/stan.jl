@@ -1,4 +1,5 @@
-using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools,Distributions
+using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions,
+      RecursiveArrayTools, Distributions, Base.Test
 
 println("One parameter case")
 f1 = @ode_def_nohes LotkaVolterraTest1 begin

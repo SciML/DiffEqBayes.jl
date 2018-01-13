@@ -55,7 +55,7 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
       dist = stan_string(vars[i])
       hyper_params = string(hyper_params,"sigma$(i-1) ~ $dist;")
       tuple_hyper_params = string(tuple_hyper_params,"sigma$(i-1)",",")
-      setup_params = string(setup_params,"vector<lower=0>[$length_of_y] sigma$(i-1);")
+      setup_params = string(setup_params,"row_vector<lower=0>[$length_of_y] sigma$(i-1);")
     end
   end
   tuple_hyper_params = tuple_hyper_params[1:endof(tuple_hyper_params)-1]
@@ -82,7 +82,7 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
     int x_i[0];
   }
   parameters {
-    vector<lower=0>[$length_of_y] sigma1;
+    $setup_params
     real theta[$length_of_parameter];
   }
   model{

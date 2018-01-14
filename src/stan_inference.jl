@@ -31,6 +31,30 @@ function generate_priors(f,priors)
   priors_string
 end
 
+function generate_theta(n,priors)
+  theta = ""
+  for i in 1:n
+    upper_bound = ""
+    lower_bound = ""
+    if maximum(priors[i]) != Inf
+      upper_bound = string("upper=",maximum(priors[i]))
+    end
+    if minimum(priors[i]) != -Inf
+      lower_bound = string("lower=",minimum(priors[i]))
+    end
+    if lower_bound != "" && upper_bound != ""
+      theta = string(theta,"real","<$lower_bound",",","$upper_bound>"," theta$i",";")
+    elseif lower_bound != ""
+      theta = string(theta,"real","<$lower_bound",">"," theta$i",";")
+    elseif upper_bound != ""
+      theta = string(theta,"real","<","$upper_bound>"," theta$i",";")
+    else
+      theta = string(theta,"real"," theta$i",";")
+    end
+  end
+  return theta
+end
+
 function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
                             abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,vars=("StanODEData",InverseGamma(2,3)))
@@ -48,7 +72,12 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
   hyper_params = ""
   tuple_hyper_params = ""
   setup_params = ""
-  for i in 1:length(vars)
+  thetas = ""
+  theta_string = generate_theta(length(priors),priors)
+  for i in 1:length(priors)
+    thetas = string(thetas,"theta[$i] <- theta$i",";")
+  end
+  for i in 1:length_of_params
     if vars[i] == "StanODEData"
       tuple_hyper_params = string(tuple_hyper_params,"u_hat[t,:]",",")
     else
@@ -60,7 +89,7 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
   end
   tuple_hyper_params = tuple_hyper_params[1:endof(tuple_hyper_params)-1]
   differential_equation = generate_differential_equation(f)
-  priors_string = string(generate_priors(f,priors),";")
+  priors_string = string(generate_priors(f,priors))
   stan_likelihood = stan_string(likelihood)
   const parameter_estimation_model = "
   functions {
@@ -83,7 +112,11 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
   }
   parameters {
     $setup_params
+    $theta_string
+  }
+  transformed parameters{
     real theta[$length_of_parameter];
+    $thetas
   }
   model{
     real u_hat[T,$length_of_y];

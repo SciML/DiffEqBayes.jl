@@ -32,7 +32,7 @@ sol = solve(prob1,Tsit5())
 t = collect(linspace(1,10,10))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
-priors = [Normal(1.5,0.01),Normal(1.0,0.01),Normal(3.0,0.01),Normal(1.0,0.01)]
+priors = [Truncated(Normal(1.5,0.01),0,2),Truncated(Normal(1.0,0.01),0,1.5),Truncated(Normal(3.0,0.01),0,4),Truncated(Normal(1.0,0.01),0,2)]
 
 bayesian_result = stan_inference(prob1,t,data,priors;num_samples=100,num_warmup=500,vars =("StanODEData",InverseGamma(4,1)))
 theta1 = bayesian_result.chain_results[:,["theta.1"],:]

@@ -12,7 +12,7 @@ sol = solve(prob1,Tsit5())
 t = collect(linspace(1,10,10))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
-priors = [Normal(1.5,1)]
+priors = [Normal(1.5,0.01)]
 
 bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=100)
 

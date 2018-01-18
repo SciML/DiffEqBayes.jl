@@ -3,6 +3,9 @@ struct StanModel{R,C}
   chain_results::C
 end
 
+struct StanODEData
+end
+
 function generate_differential_equation(f)
   theta_ex = MacroTools.postwalk(f.fex) do x
     i = findfirst((y)-> typeof(x) <: Expr && x.args[1] == :internal_var___p &&
@@ -57,7 +60,7 @@ end
 
 function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
-                            abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,vars=("StanODEData",InverseGamma(2,3)))
+                            abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,vars=(StanODEData(),InverseGamma(2,3)))
   length_of_y = length(prob.u0)
   length_of_params = length(vars)
   f = prob.f
@@ -78,7 +81,7 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
     thetas = string(thetas,"theta[$i] <- theta$i",";")
   end
   for i in 1:length_of_params
-    if vars[i] == "StanODEData"
+    if isa(vars[i],StanODEData)
       tuple_hyper_params = string(tuple_hyper_params,"u_hat[t,:]",",")
     else
       dist = stan_string(vars[i])

@@ -1,0 +1,212 @@
+method = sample (Default)
+  sample
+    num_samples = 100
+    num_warmup = 500
+    save_warmup = 0 (Default)
+    thin = 1 (Default)
+    adapt
+      engaged = 1 (Default)
+      gamma = 0.050000000000000003 (Default)
+      delta = 0.80000000000000004 (Default)
+      kappa = 0.75 (Default)
+      t0 = 10 (Default)
+      init_buffer = 75 (Default)
+      term_buffer = 50 (Default)
+      window = 25 (Default)
+    algorithm = hmc (Default)
+      hmc
+        engine = nuts (Default)
+          nuts
+            max_depth = 10 (Default)
+        metric = diag_e (Default)
+        stepsize = 1 (Default)
+        stepsize_jitter = 1
+id = 1
+data
+  file = parameter_estimation_model_1.data.R
+init = 2 (Default)
+random
+  seed = 297267719
+output
+  file = parameter_estimation_model_samples_1.csv
+  diagnostic_file =  (Default)
+  refresh = 100 (Default)
+
+
+Gradient evaluation took 0.000214 seconds
+1000 transitions using 10 leapfrog steps per transition would take 2.14 seconds.
+Adjust your expectations accordingly!
+
+
+Iteration:   1 / 600 [  0%]  (Warmup)
+method = sample (Default)
+  sample
+    num_samples = 100
+method = sample (Default)
+  sample
+    num_warmup = 500
+    save_warmup = 0 (Default)
+    num_samples = 100
+    num_warmup = 500
+    thin = 1 (Default)
+    adapt
+    save_warmup = 0 (Default)
+    thin = 1 (Default)
+      engaged = 1 (Default)
+      gamma = 0.050000000000000003 (Default)
+    adapt
+      engaged = 1 (Default)
+      gamma = 0.050000000000000003 (Default)
+      delta = 0.80000000000000004 (Default)
+      kappa = 0.75 (Default)
+      delta = 0.80000000000000004 (Default)
+      kappa = 0.75 (Default)
+      t0 = 10 (Default)
+      init_buffer = 75 (Default)
+      t0 = 10 (Default)
+      init_buffer = 75 (Default)
+      term_buffer = 50 (Default)
+      window = 25 (Default)
+      term_buffer = 50 (Default)
+      window = 25 (Default)
+    algorithm = hmc (Default)
+      hmc
+    algorithm = hmc (Default)
+      hmc
+        engine = nuts (Default)
+          nuts
+        engine = nuts (Default)
+          nuts
+            max_depth = 10 (Default)
+        metric = diag_e (Default)
+            max_depth = 10 (Default)
+        metric = diag_e (Default)
+        stepsize = 1 (Default)
+        stepsize_jitter = 1
+        stepsize = 1 (Default)
+        stepsize_jitter = 1
+id = 3
+data
+id = 2
+data
+  file = parameter_estimation_model_3.data.R
+init = 2 (Default)
+method = sample (Default)
+  sample
+  file = parameter_estimation_model_2.data.R
+random
+  seed = 297267787
+    num_samples = 100
+    num_warmup = 500
+    save_warmup = 0 (Default)
+    thin = 1 (Default)
+    adapt
+      engaged = 1 (Default)
+      gamma = 0.050000000000000003 (Default)
+      delta = 0.80000000000000004 (Default)
+      kappa = 0.75 (Default)
+      t0 = 10 (Default)
+      init_buffer = 75 (Default)
+      term_buffer = 50 (Default)
+      window = 25 (Default)
+    algorithm = hmc (Default)
+      hmc
+        engine = nuts (Default)
+          nuts
+            max_depth = 10 (Default)
+        metric = diag_e (Default)
+        stepsize = 1 (Default)
+        stepsize_jitter = 1
+id = 4
+data
+  file = parameter_estimation_model_4.data.R
+init = 2 (Default)
+random
+  seed = 297267789
+output
+  file = parameter_estimation_model_samples_4.csv
+  diagnostic_file =  (Default)
+  refresh = 100 (Default)
+
+output
+  file = parameter_estimation_model_samples_3.csv
+init = 2 (Default)
+random
+  seed = 297267787
+output
+  diagnostic_file =  (Default)
+  refresh = 100 (Default)
+  file = parameter_estimation_model_samples_2.csv
+  diagnostic_file =  (Default)
+
+  refresh = 100 (Default)
+
+
+
+Gradient evaluation took 0.000601 seconds
+
+Gradient evaluation took 0.000458 seconds
+Gradient evaluation took 0.000464 seconds
+1000 transitions using 10 leapfrog steps per transition would take 4.64 seconds.
+1000 transitions using 10 leapfrog steps per transition would take 6.01 seconds.
+Adjust your expectations accordingly!
+
+1000 transitions using 10 leapfrog steps per transition would take 4.58 seconds.
+Adjust your expectations accordingly!
+Adjust your expectations accordingly!
+
+
+
+
+
+Iteration:   1 / 600 [  0%]  (Warmup)
+Iteration:   1 / 600 [  0%]  (Warmup)
+Iteration:   1 / 600 [  0%]  (Warmup)
+Iteration: 100 / 600 [ 16%]  (Warmup)
+Iteration: 100 / 600 [ 16%]  (Warmup)
+Iteration: 100 / 600 [ 16%]  (Warmup)
+Iteration: 100 / 600 [ 16%]  (Warmup)
+Iteration: 200 / 600 [ 33%]  (Warmup)
+Iteration: 200 / 600 [ 33%]  (Warmup)
+Iteration: 200 / 600 [ 33%]  (Warmup)
+Iteration: 200 / 600 [ 33%]  (Warmup)
+Iteration: 300 / 600 [ 50%]  (Warmup)
+Iteration: 300 / 600 [ 50%]  (Warmup)
+Iteration: 300 / 600 [ 50%]  (Warmup)
+Iteration: 300 / 600 [ 50%]  (Warmup)
+Iteration: 400 / 600 [ 66%]  (Warmup)
+Iteration: 400 / 600 [ 66%]  (Warmup)
+Iteration: 400 / 600 [ 66%]  (Warmup)
+Iteration: 400 / 600 [ 66%]  (Warmup)
+Iteration: 500 / 600 [ 83%]  (Warmup)
+Iteration: 501 / 600 [ 83%]  (Sampling)
+Iteration: 500 / 600 [ 83%]  (Warmup)
+Iteration: 501 / 600 [ 83%]  (Sampling)
+Iteration: 500 / 600 [ 83%]  (Warmup)
+Iteration: 501 / 600 [ 83%]  (Sampling)
+Iteration: 500 / 600 [ 83%]  (Warmup)
+Iteration: 501 / 600 [ 83%]  (Sampling)
+Iteration: 600 / 600 [100%]  (Sampling)
+
+ Elapsed Time: 3.10697 seconds (Warm-up)
+               0.394674 seconds (Sampling)
+               3.50165 seconds (Total)
+
+Iteration: 600 / 600 [100%]  (Sampling)
+
+ Elapsed Time: 3.34781 seconds (Warm-up)
+               0.383978 seconds (Sampling)
+               3.73178 seconds (Total)
+
+Iteration: 600 / 600 [100%]  (Sampling)
+
+ Elapsed Time: 3.48512 seconds (Warm-up)
+               0.376653 seconds (Sampling)
+               3.86177 seconds (Total)
+
+Iteration: 600 / 600 [100%]  (Sampling)
+
+ Elapsed Time: 3.40712 seconds (Warm-up)
+               0.235519 seconds (Sampling)
+               3.64264 seconds (Total)
+

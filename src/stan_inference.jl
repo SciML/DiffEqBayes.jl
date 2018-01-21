@@ -60,7 +60,8 @@ end
 
 function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
-                            abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,vars=(StanODEData(),InverseGamma(2,3)))
+                            abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,
+                            vars=(StanODEData(),InverseGamma(length(prob.u0),3)))
   length_of_y = length(prob.u0)
   length_of_params = length(vars)
   f = prob.f

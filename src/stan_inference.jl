@@ -8,9 +8,11 @@ end
 
 function generate_differential_equation(f)
   theta_ex = MacroTools.postwalk(f.fex) do x
-    i = findfirst((y)-> typeof(x) <: Expr && x.args[1] == :internal_var___p &&
-                  x.args[2].value == y,f.params)
-    i != 0 ? Symbol("theta[$i]") : x
+    if typeof(x) <: Expr && x.args[1] == :internal_var___p
+      return Symbol("theta[$(x.args[2])]")
+    else
+      return x
+    end
   end
   differential_equation = ""
   for i in 1:length(theta_ex.args)-1

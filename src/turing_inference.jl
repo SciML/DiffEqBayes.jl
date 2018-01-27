@@ -22,7 +22,7 @@ function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
       # x[:,i] ~ MvNormal(res, σ*ones(2))
       Turing.observe(
         sampler,
-        MvNormal(res, σ*ones(2)),   # Distribution
+        MvNormal(res, σ*ones(length(prob.u0))),   # Distribution
         x[:,i],    # Data point
         vi
       )

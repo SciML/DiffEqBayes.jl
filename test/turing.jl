@@ -2,8 +2,8 @@ using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using Base.Test
 println("One parameter case")
 f1 = @ode_def_nohes LotkaVolterraTest1 begin
-  dx = a*x - b*x*y
-  dy = -c*y + d*x*y
+  dx = a*x - x*y
+  dy = -3y + x*y
 end a
 u0 = [1.0,1.0]
 tspan = (0.0,10.0)

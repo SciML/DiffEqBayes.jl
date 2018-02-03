@@ -23,7 +23,7 @@ function (P::LotkaVolterraPosterior)(θ)
     ℓ + logpdf(a_prior, a)
 end
 
-function dynamichmc_inference(prob1::DEproblem,data,priors,t,σ = 0.01)
+function dynamichmc_inference(prob1::DEProblem,data,priors,t,σ = 0.01)
     P = LotkaVolterraPosterior(prob1, data, priors, t, Normal(0.0, σ))
 
     parameter_transformation = TransformationTuple((bridge(ℝ, ℝ⁺, ))) # assuming a > 0

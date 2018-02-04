@@ -1,4 +1,4 @@
-struct LotkaVolterraPosterior{Problem, Data, A_Prior, ObservationTimes, ErrorDist}
+struct DynamicHMCPosterior{Problem, Data, A_Prior, ObservationTimes, ErrorDist}
     problem::Problem
     data::Data
     a_prior::A_Prior
@@ -6,7 +6,7 @@ struct LotkaVolterraPosterior{Problem, Data, A_Prior, ObservationTimes, ErrorDis
     ϵ_dist::ErrorDist
 end
 
-function (P::LotkaVolterraPosterior)(θ)
+function (P::DynamicHMCPosterior)(θ)
     @unpack problem, data, a_prior, t, ϵ_dist = P
     a = θ[1]
     try
@@ -23,19 +23,18 @@ function (P::LotkaVolterraPosterior)(θ)
     ℓ + logpdf(a_prior, a)
 end
 
-function dynamichmc_inference(prob1::DEProblem,data,priors,t,σ = 0.01)
-    P = LotkaVolterraPosterior(prob1, data, priors, t, Normal(0.0, σ))
+function dynamichmc_inference(prob::DEProblem,data,priors,t,transformation,σ = 0.01)
+    P = DynamicHMCPosterior(prob, data, priors, t, Normal(0.0, σ))
 
-    parameter_transformation = TransformationTuple((bridge(ℝ, ℝ⁺, ))) # assuming a > 0
+    parameter_transformation = TransformationTuple((transformation)) # assuming a > 0
 
     PT = TransformLogLikelihood(P, parameter_transformation)
-    PTG = ForwardGradientWrapper(PT, zeros(1));
+    PTG = ForwardGradientWrapper(PT, zeros(length(priors)));
 
-# NOTE: starting from correct parameter is important, otherwise stepsize
-# adaptation is not handled well. would probably maximize PT in a real-life
-# setting.
-    PO = OnceDifferentiable(x -> -P(x), [2.0])
-    a₀ = Optim.minimizer(optimize(a -> -P([a]), 0, 10))
+    # NOTE: starting from correct parameter is important, otherwise stepsize
+    # adaptation is not handled well. would probably maximize PT in a real-life
+    # setting
+    a₀ = Optim.minimizer(optimize(a -> -P([a]), P.problem.tspan[1], P.problem.tspan[2]))
     sample, _ = NUTS_init_tune_mcmc(PTG,
                                 inverse(parameter_transformation, (a₀, )),
                                 1000)

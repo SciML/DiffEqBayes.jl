@@ -18,7 +18,7 @@ function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
     p_tmp = problem_new_parameters(prob, theta); sol_tmp = solve(p_tmp,alg;saveat=t,kwargs...)
 
     for i = 1:length(t)
-      res = sol_tmp(t[i])
+      res = sol_tmp.u[i]
       # x[:,i] ~ MvNormal(res, σ*ones(2))
       Turing.observe(
         sampler,

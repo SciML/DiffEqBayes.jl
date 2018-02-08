@@ -39,8 +39,12 @@ function dynamichmc_inference(prob::DEProblem,data,priors,t,transformations,init
     # NOTE: starting from correct parameter is important, otherwise stepsize
     # adaptation is not handled well. would probably maximize PT in a real-life
     # setting
-    lower_bound = fill(P.problem.tspan[1],length(initial))
-    upper_bound = fill(P.problem.tspan[2],length(initial))
+    lower_bound = Float64[]
+    upper_bound = Float64[]
+    for i in priors
+        push!(lower_bound,minimum(i))
+        push!(upper_bound,maximum(i))
+    end
     optimized = Optim.minimizer(optimize(a -> -P(a),initial,lower_bound,upper_bound,Fminbox{GradientDescent}()))
     #inverse_transforms = Float64[]
     #for i in 1:length(initial)

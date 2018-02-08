@@ -5,3 +5,7 @@ Stan
 Distributions
 Turing
 MacroTools
+Optim
+RecursiveArrayTools
+ParameterizedFunctions
+OrdinaryDiffEq

@@ -23,7 +23,6 @@ script:
   - julia -e 'Pkg.clone("https://github.com/tpapp/DiffWrappers.jl.git"); Pkg.build("DiffWrappers")'
   - julia -e 'Pkg.clone("https://github.com/tpapp/DynamicHMC.jl.git"); Pkg.build("DynamicHMC")'
   - julia -e 'Pkg.clone("https://github.com/tpapp/MCMCDiagnostics.jl.git"); Pkg.build("MCMCDiagnostics")'
-  - julia -e 'Pkg.clone("https://github.com/mauro3/Parameters.jl.git"); Pkg.build("Parameters")'
   - julia -e 'Pkg.test("DiffEqBayes"; coverage=true)'
 after_success:
   # push coverage results to Coveralls

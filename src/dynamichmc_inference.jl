@@ -46,14 +46,14 @@ function dynamichmc_inference(prob::DEProblem,data,priors,t,transformations,init
         push!(upper_bound,maximum(i))
     end
     optimized = Optim.minimizer(optimize(a -> -P(a),initial,lower_bound,upper_bound,Fminbox{GradientDescent}()))
-    #inverse_transforms = Float64[]
-    #for i in 1:length(initial)
-    #    para = TransformationTuple(transformations[i])
-    #    push!(inverse_transforms,inverse(para, (optimized[i], ))[1])
-    #end
+    inverse_transforms = Float64[]
+    for i in 1:length(initial)
+       para = TransformationTuple(transformations[i])
+       push!(inverse_transforms,inverse(para, (optimized[i], ))[1])
+    end
     #println(inverse_transforms)
     sample, _ = NUTS_init_tune_mcmc(PTG,
-                                optimized,
+                                inverse_transforms,
                                 1000)
     
     posterior = ungrouping_map(Vector, get_transformation(PT) ∘ get_position, sample)

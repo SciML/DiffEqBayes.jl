@@ -18,7 +18,7 @@ randomized = VectorOfArray([(sol(t[i]) + σ * randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 
 bayesian_result = dynamichmc_inference(prob1, data, [Normal(1.5, 1)], t, [bridge(ℝ, ℝ⁺, )], [2.0])
-@test mean(bayesian_result) ≈ 1.5 atol=1e-1
+@test mean(bayesian_result[1]) ≈ 1.5 atol=1e-1
 
 f1 = @ode_def_nohes LotkaVolterraTest4 begin
   dx = a*x - b*x*y

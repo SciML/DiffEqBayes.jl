@@ -21,7 +21,7 @@ script:
   - julia -e 'Pkg.clone(pwd()); Pkg.build("DiffEqBayes")'
   - julia -e 'Pkg.clone("https://github.com/tpapp/ContinuousTransformations.jl.git"); Pkg.build("ContinuousTransformations")'
   - julia -e 'Pkg.clone("https://github.com/tpapp/DiffWrappers.jl.git"); Pkg.build("DiffWrappers")'
-  - julia -e 'Pkg.clone("https://github.com/tpapp/DynamicHMC.jl.git"); Pkg.build("DynamicHMC")
+  - julia -e 'Pkg.clone("https://github.com/tpapp/DynamicHMC.jl.git"); Pkg.build("DynamicHMC")'
   - julia -e 'Pkg.test("DiffEqBayes"; coverage=true)'
 after_success:
   # push coverage results to Coveralls

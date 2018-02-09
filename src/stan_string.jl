@@ -87,7 +87,7 @@ function stan_string(p::Union{Type{Laplace},Laplace})
 		return string("double_exponential")
 	end
 end
-function stan_string(p::Union{Type{Logistic},Logistic}) 
+function stan_string(p::Union{Type{Distributions.Logistic},Distributions.Logistic}) 
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("logistic$parameters")

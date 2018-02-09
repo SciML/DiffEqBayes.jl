@@ -31,8 +31,8 @@ println("Starting the test")
 @test stan_string(Laplace(0,1)) == "double_exponential(0.0, 1.0)"
 @test stan_string(Laplace) == "double_exponential"
 
-@test stan_string(Logistic(0,1)) == "logistic(0.0, 1.0)"
-@test stan_string(Logistic) == "logistic"
+@test stan_string(Distributions.Logistic(0,1)) == "logistic(0.0, 1.0)"
+@test stan_string(Distributions.Logistic) == "logistic"
 
 @test stan_string(Gumbel(0,1)) == "gumbel(0.0, 1.0)"
 @test stan_string(Gumbel) == "gumbel"

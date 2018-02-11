@@ -28,7 +28,7 @@ function (P::DynamicHMCPosterior)(θ)
     ℓ + logpdf_sum
 end
 
-function dynamichmc_inference(prob::DEProblem,data,priors,t,transformations,initial,σ = 0.01)
+function dynamichmc_inference(prob::DEProblem,data,priors,t,transformations;σ = 0.01,ϵ=0.001,initial=Float64[])
     P = DynamicHMCPosterior(prob, data, priors, t, Normal(0.0, σ))
     
     transformations_tuple = Tuple(transformations)
@@ -36,11 +36,15 @@ function dynamichmc_inference(prob::DEProblem,data,priors,t,transformations,init
     PT = TransformLogLikelihood(P, parameter_transformation)
     PTG = ForwardGradientWrapper(PT, zeros(length(priors)));
 
-    # NOTE: starting from correct parameter is important, otherwise stepsize
-    # adaptation is not handled well. would probably maximize PT in a real-life
-    # setting
+    if length(initial) == 0
+        for i in priors
+            push!(initial,mean(i))
+        end
+    end
+
     lower_bound = Float64[]
     upper_bound = Float64[]
+
     for i in priors
         push!(lower_bound,minimum(i))
         push!(upper_bound,maximum(i))
@@ -54,9 +58,9 @@ function dynamichmc_inference(prob::DEProblem,data,priors,t,transformations,init
     #println(inverse_transforms)
     sample, _ = NUTS_init_tune_mcmc(PTG,
                                 inverse_transforms,
-                                1000)
+                                1000,ϵ=ϵ)
     
     posterior = ungrouping_map(Vector, get_transformation(PT) ∘ get_position, sample)
 
-    posterior
+    (posterior, sample, _)
 end

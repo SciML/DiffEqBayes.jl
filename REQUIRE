@@ -10,3 +10,8 @@ RecursiveArrayTools
 ParameterizedFunctions
 OrdinaryDiffEq
 Parameters
+Requires
+MCMCDiagnostics
+DiffWrappers
+ContinuousTransformations
+DynamicHMC

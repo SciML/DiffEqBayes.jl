@@ -1,5 +1,5 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
-using DynamicHMC, MCMCDiagnostics, DiffWrappers, ContinuousTransformations
+using DynamicHMC, DiffWrappers, ContinuousTransformations
 using Parameters, Distributions, Optim
 
 f1 = @ode_def_nohes LotkaVolterraTest1 begin
@@ -39,4 +39,4 @@ bayesian_result = dynamichmc_inference(prob1, data, priors, t, [bridge(ℝ, ℝ�
 @test mean(bayesian_result[1][1]) ≈ 1.5 atol=1e-1
 @test mean(bayesian_result[1][2]) ≈ 1.0 atol=1e-1
 @test mean(bayesian_result[1][3]) ≈ 3.0 atol=1e-1
-@test mean(bayesian_result[1][4]) ≈ 1.0 atol=1e-1 
+@test mean(bayesian_result[1][4]) ≈ 1.0 atol=1e-1

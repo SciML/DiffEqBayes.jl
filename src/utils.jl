@@ -6,3 +6,12 @@ function plot_chain(bayesian_result::StanModel,filename=nothing)
 		return Mamba.draw(p, filename=filename)
 	end
 end
+
+function plot_chain(bayesian_result::Turing.Chain,filename=nothing)
+	p = Mamba.plot(bayesian_result)
+	if filename == nothing
+		return Mamba.draw(p)
+	else
+		return Mamba.draw(p, filename=filename)
+	end
+end

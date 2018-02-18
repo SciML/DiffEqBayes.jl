@@ -28,7 +28,7 @@ function (P::DynamicHMCPosterior)(θ)
     ℓ + logpdf_sum
 end
 
-function dynamichmc_inference(prob::DEProblem,data,priors,t,transformations;σ = 0.01,ϵ=0.001,initial=Float64[])
+function dynamichmc_inference(prob::DEProblem,data,priors,t,transformations;σ = 0.01,ϵ=0.001,initial=Float64[],iterations=1000)
     P = DynamicHMCPosterior(prob, data, priors, t, Normal(0.0, σ))
     
     transformations_tuple = Tuple(transformations)
@@ -58,7 +58,7 @@ function dynamichmc_inference(prob::DEProblem,data,priors,t,transformations;σ =
     #println(inverse_transforms)
     sample, _ = NUTS_init_tune_mcmc(PTG,
                                 inverse_transforms,
-                                1000,ϵ=ϵ)
+                                iterations,ϵ=ϵ)
     
     posterior = ungrouping_map(Vector, get_transformation(PT) ∘ get_position, sample)
 

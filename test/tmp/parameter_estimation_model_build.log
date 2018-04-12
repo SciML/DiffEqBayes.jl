@@ -1,0 +1,41 @@
+DIAGNOSTIC(S) FROM PARSER:
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): Comments beginning with # are deprecated.  Please use // in place of # for line comments.
+Warning (non-fatal): assignment operator <- deprecated in the Stan language; use = instead.
+Warning (non-fatal): assignment operator <- deprecated in the Stan language; use = instead.
+Warning (non-fatal): assignment operator <- deprecated in the Stan language; use = instead.
+Warning (non-fatal): assignment operator <- deprecated in the Stan language; use = instead.
+Warning (non-fatal):
+Left-hand side of sampling statement (~) may contain a non-linear transform of a parameter or local variable.
+If it does, you need to include a target += statement with the log absolute determinant of the Jacobian of the transform.
+Left-hand-side of sampling statement:
+    theta[1] ~ normal(...)
+Warning (non-fatal):
+Left-hand side of sampling statement (~) may contain a non-linear transform of a parameter or local variable.
+If it does, you need to include a target += statement with the log absolute determinant of the Jacobian of the transform.
+Left-hand-side of sampling statement:
+    theta[2] ~ normal(...)
+Warning (non-fatal):
+Left-hand side of sampling statement (~) may contain a non-linear transform of a parameter or local variable.
+If it does, you need to include a target += statement with the log absolute determinant of the Jacobian of the transform.
+Left-hand-side of sampling statement:
+    theta[3] ~ normal(...)
+Warning (non-fatal):
+Left-hand side of sampling statement (~) may contain a non-linear transform of a parameter or local variable.
+If it does, you need to include a target += statement with the log absolute determinant of the Jacobian of the transform.
+Left-hand-side of sampling statement:
+    theta[4] ~ normal(...)
+

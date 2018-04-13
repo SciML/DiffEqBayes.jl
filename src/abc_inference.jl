@@ -1,7 +1,7 @@
 function createabcfunction(prob, t, distancefunction, alg, kwargs...)
     function simfunc(params, constants, targetdata)
-        sol = solve(problem_new_parameters(prob, params), alg, saveat = t, kwargs...)
-        data = convert(Array, sol)[:, 2:end]
+        sol = solve(problem_new_parameters(prob, params), alg, saveat = t, save_start = false, kwargs...)
+        data = convert(Array, sol)
         distancefunction(targetdata, data), data
     end
 end

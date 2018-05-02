@@ -31,19 +31,13 @@ function (P::DynamicHMCPosterior)(θ)
 end
 
 function dynamichmc_inference(prob::DEProblem, alg, t, data, priors, transformations;
-                              σ=0.01, ϵ=0.001, initial=Float64[], iterations=1000, kwargs...)
+                              σ=0.01, ϵ=0.001, initial=Float64[], num_samples=1000, kwargs...)
     P = DynamicHMCPosterior(prob, data, priors, t, Normal(0.0, σ), alg, kwargs)
 
     transformations_tuple = Tuple(transformations)
     parameter_transformation = TransformationTuple(transformations_tuple) # assuming a > 0
     PT = TransformLogLikelihood(P, parameter_transformation)
     PTG = ForwardGradientWrapper(PT, zeros(length(priors)));
-
-    if length(initial) == 0
-        for i in priors
-            push!(initial,mean(i))
-        end
-    end
 
     lower_bound = Float64[]
     upper_bound = Float64[]
@@ -53,16 +47,23 @@ function dynamichmc_inference(prob::DEProblem, alg, t, data, priors, transformat
         push!(upper_bound,maximum(i))
     end
 
-    optimized = Optim.minimizer(optimize(a -> -P(a),initial,lower_bound,upper_bound,Fminbox{GradientDescent}()))
-    inverse_transforms = Float64[]
+    if length(initial) == 0
+        # If no initial position is given use local minimum near expectation of priors.
+        for i in priors
+            push!(initial,mean(i))
+        end
+        initial = Optim.minimizer(optimize(a -> -P(a),initial,lower_bound,upper_bound,Fminbox{GradientDescent}()))
+    end
+
+    initial_inverse_transformed = Float64[]
     for i in 1:length(initial)
        para = TransformationTuple(transformations[i])
-       push!(inverse_transforms,inverse(para, (optimized[i], ))[1])
+       push!(initial_inverse_transformed,inverse(para, (initial[i], ))[1])
     end
-    #println(inverse_transforms)
+    #println(initial_inverse_transformed)
     sample, NUTS_tuned = NUTS_init_tune_mcmc(PTG,
-                                         inverse_transforms,
-                                         iterations,ϵ=ϵ)
+                                             initial_inverse_transformed,
+                                             num_samples, ϵ=ϵ)
 
     posterior = ungrouping_map(Vector, get_transformation(PT) ∘ get_position, sample)
 

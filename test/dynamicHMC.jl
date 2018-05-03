@@ -21,15 +21,15 @@ bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, [Normal(1.5, 1)]
 @test mean(bayesian_result[1][1]) ≈ 1.5 atol=1e-1
 
 # With hand-code likelihood function
-weights = ones(data) # weighted data
+weights_ = ones(data) # weighted data
 for i = 1:3:length(data)
-    weights[i] = 0
+    weights_[i] = 0
     data[i] = 1e20 # to test that those points are indeed not used
 end
 likelihood = function (sol)
     l = 0.0
     for (i, t) in enumerate(t)
-        l += sum(logpdf.(Normal(0.0, σ), sol(t) - data[:, i]) .* weights[:,i])
+        l += sum(logpdf.(Normal(0.0, σ), sol(t) - data[:, i]) .* weights_[:,i])
     end
     return l
 end

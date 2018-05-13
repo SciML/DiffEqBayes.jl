@@ -16,12 +16,12 @@ function (f::MAP)(p)
       push!(sol.u,fill(Inf,size(sol[1])))
     end
     ll = 0.0
-    if eltype(priors) <: UnivariateDistribution
+    if eltype(f.priors) <: UnivariateDistribution
         for j in 1:length(f.priors)
-            ll -= logpdf(priors[j],f.prob.p[i])
+            ll -= logpdf(f.priors[j],f.prob.p[j])
         end
     else
-        ll -= logpdf(priors,f.prob.p)
+        ll -= logpdf(f.priors,f.prob.p)
     end
       
     if eltype(distributions) <: UnivariateDistribution

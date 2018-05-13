@@ -2,6 +2,7 @@ using DiffEqBayes
 using Base.Test
 
 tic()
+@time @testset "MAP" begin include("map_inference_test.jl") end
 @time @testset "DynamicHMC" begin include("dynamicHMC.jl") end
 @time @testset "Stan_String" begin include("stan_string.jl") end
 @time @testset "Stan" begin include("stan.jl") end

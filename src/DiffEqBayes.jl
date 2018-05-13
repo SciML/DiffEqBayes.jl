@@ -12,7 +12,7 @@ include("stan_string.jl")
 include("utils.jl")
 include("dynamichmc_inference.jl")
 include("abc_inference.jl")
-
-export StanModel, stan_inference, turing_inference, stan_string, StanODEData, plot_chain, dynamichmc_inference, LotkaVolterraPosterior, abc_inference
+include("map_inference.jl")
+export StanModel, stan_inference, turing_inference, stan_string, StanODEData, plot_chain, dynamichmc_inference, LotkaVolterraPosterior, abc_inference, map_inference
 
 end # module

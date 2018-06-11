@@ -5,13 +5,13 @@ function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
     N = length(priors)
     _theta = Vector(N)
     for i in 1:length(priors)
-      _theta[i] = Turing.assume(sampler,
+      _theta[i], = Turing.assume(sampler,
                           priors[i],
                           Turing.VarName(vi, [:bif, Symbol("theta$i")], ""),
                           vi)
     end
     theta = convert(Array{typeof(first(_theta))},_theta)
-    σ = Turing.assume(sampler,
+    σ, = Turing.assume(sampler,
                     InverseGamma(2, 3),
                     Turing.VarName(vi, [:bif, :σ], ""),
                     vi)

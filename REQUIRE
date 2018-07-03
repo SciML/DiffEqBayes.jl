@@ -3,7 +3,7 @@ DiffEqBase 1.7.0
 Mamba
 Stan
 Distributions
-Turing
+Turing 0.4.3
 MacroTools
 Optim
 RecursiveArrayTools

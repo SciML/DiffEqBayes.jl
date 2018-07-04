@@ -2,31 +2,41 @@ function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
                             num_samples=1000, epsilon = 0.02, tau = 4, kwargs...)
 
   bif(vi, sampler, x=data) = begin
+    _lp = 0.0
     N = length(priors)
     _theta = Vector(N)
+
     for i in 1:length(priors)
-      _theta[i] = Turing.assume(sampler,
+      _theta[i], __lp = Turing.assume(sampler,
                           priors[i],
                           Turing.VarName(vi, [:bif, Symbol("theta$i")], ""),
                           vi)
+      _lp += __lp
     end
+
     theta = convert(Array{typeof(first(_theta))},_theta)
-    σ = Turing.assume(sampler,
+
+    σ, __lp = Turing.assume(sampler,
                     InverseGamma(2, 3),
                     Turing.VarName(vi, [:bif, :σ], ""),
                     vi)
+    _lp += __lp
+
     p_tmp = problem_new_parameters(prob, theta); sol_tmp = solve(p_tmp,alg;saveat=t,kwargs...)
 
     for i = 1:length(t)
       res = sol_tmp.u[i]
       # x[:,i] ~ MvNormal(res, σ*ones(2))
-      Turing.observe(
+      __lp = Turing.observe(
         sampler,
         MvNormal(res, σ*ones(length(prob.u0))),   # Distribution
         x[:,i],    # Data point
         vi
       )
+      _lp += __lp
     end
+    
+    vi.logp = _lp
     vi
   end
 

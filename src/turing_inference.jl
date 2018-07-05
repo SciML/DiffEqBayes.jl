@@ -1,5 +1,5 @@
 function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
-                            num_samples=1000, epsilon = 0.02, tau = 4, kwargs...)
+                          num_samples=1000, delta=0.65, kwargs...)
 
   bif(vi, sampler, x=data) = begin
     _lp = 0.0
@@ -42,5 +42,5 @@ function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
 
   bif() = bif(Turing.VarInfo(), nothing)
 
-  chn = sample(bif, Turing.HMC(num_samples, epsilon, tau))
+  chn = sample(bif, Turing.NUTS(num_samples, delta))
 end

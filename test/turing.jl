@@ -14,7 +14,7 @@ randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 priors = [Normal(1.5,0.01)]
 
-bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500,epsilon = 0.001)
+bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500)
 
 @show mean(bayesian_result[:theta1][50:end])
 
@@ -36,7 +36,7 @@ data = convert(Array,randomized)
 priors = [Truncated(Normal(1.5,0.01),0,2),Truncated(Normal(1.0,0.01),0,1.5),
           Truncated(Normal(3.0,0.01),0,4),Truncated(Normal(1.0,0.01),0,2)]
 
-bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500,epsilon = 0.001)
+bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500)
 
 @show mean(bayesian_result[:theta1][50:end])
 @show mean(bayesian_result[:theta2][50:end])

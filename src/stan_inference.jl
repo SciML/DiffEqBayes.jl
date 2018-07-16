@@ -97,7 +97,7 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
   differential_equation = generate_differential_equation(f)
   priors_string = string(generate_priors(f,priors))
   stan_likelihood = stan_string(likelihood)
-  const parameter_estimation_model = "
+  parameter_estimation_model = "
   functions {
     real[] sho(real t,real[] internal_var___u,real[] theta,real[] x_r,int[] x_i) {
       real internal_var___du[$length_of_y];
@@ -135,7 +135,7 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
   }
   "
   stanmodel = Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model);
-  const parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => data', "t0" => prob.tspan[1], "ts" => t)
+  parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => data', "t0" => prob.tspan[1], "ts" => t)
   return_code, chain_results = stan(stanmodel, [parameter_estimation_data]; CmdStanDir=CMDSTAN_HOME)
   return StanModel(return_code,chain_results)
 end

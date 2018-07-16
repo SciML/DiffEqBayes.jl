@@ -207,7 +207,7 @@ function stan_string(p::Union{Type{VonMises},VonMises})
 		return string("von_mises")
 	end
 end
-function stan_string{T<:Truncated}(p::T)
+function stan_string(p::T) where T<:Truncated
 	lower = p.lower
 	upper = p.upper
 	raw_string = stan_string(p.untruncated)

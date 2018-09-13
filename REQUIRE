@@ -1,6 +1,6 @@
 julia 0.6
 DiffEqBase 1.7.0
-Mamba
+#Mamba
 Stan
 Distributions
 Turing 0.4.3

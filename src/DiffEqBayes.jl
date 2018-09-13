@@ -1,5 +1,5 @@
 module DiffEqBayes
-using DiffEqBase, Mamba, Stan, Distributions, Turing, MacroTools
+using DiffEqBase, Stan, Distributions, Turing, MacroTools
 using OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using DynamicHMC, DiffWrappers, ContinuousTransformations
 using Parameters, Distributions, Optim
@@ -9,7 +9,7 @@ using Distances, ApproxBayes
 include("stan_inference.jl")
 include("turing_inference.jl")
 include("stan_string.jl")
-include("utils.jl")
+# include("utils.jl") No Mamba for plots
 include("dynamichmc_inference.jl")
 include("abc_inference.jl")
 

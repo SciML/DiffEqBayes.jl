@@ -19,7 +19,7 @@ script:
   - cd $HOME/cmdstan; git checkout v2.16.0; make stan-update; make build
   - export CMDSTAN_HOME=$HOME/cmdstan
   - cd $TRAVIS_BUILD_DIR
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("DiffEqBayes")'
+  - julia -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("DiffEqBayes")'
   - julia -e 'Pkg.test("DiffEqBayes"; coverage=true)'
 after_success:
   # push coverage results to Coveralls

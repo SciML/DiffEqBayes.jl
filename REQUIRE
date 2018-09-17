@@ -3,7 +3,7 @@ DiffEqBase 1.7.0
 #Mamba
 Stan
 Distributions
-Turing 0.4.3
+Turing 0.5.0
 MacroTools
 Optim
 RecursiveArrayTools
@@ -11,7 +11,7 @@ ParameterizedFunctions
 OrdinaryDiffEq
 Parameters
 DiffWrappers 0.0.1 0.1.0
-ContinuousTransformations 0.0.1 0.1.0
-DynamicHMC 0.0.1 0.1.0
+ContinuousTransformations 1.0.0
+DynamicHMC 0.1.1
 Distances
 ApproxBayes

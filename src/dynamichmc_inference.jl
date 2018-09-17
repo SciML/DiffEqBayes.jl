@@ -28,18 +28,18 @@ function (P::DynamicHMCPosterior)(a)
 end
 
 
-function dynamichmc_inference(prob::DEProblem, alg, t, data, priors, transformations;
+function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors, transformations;
                               σ=0.01, ϵ=0.001, initial=Float64[], num_samples=1000,
                               kwargs...)
     likelihood = sol -> sum( sum(logpdf.(Normal(0.0, σ), sol(t) .- data[:, i]))
                              for (i, t) in enumerate(t) )
 
-    dynamichmc_inference(prob::DEProblem, alg, likelihood, priors, transformations;
+    dynamichmc_inference(prob, alg, likelihood, priors, transformations;
                          ϵ=ϵ, initial=initial, num_samples=num_samples,
                          kwargs...)
 end
 
-function dynamichmc_inference(prob::DEProblem, alg, likelihood, priors, transformations;
+function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, likelihood, priors, transformations;
                               ϵ=0.001, initial=Float64[], num_samples=1000,
                               kwargs...)
     P = DynamicHMCPosterior(alg, prob, likelihood, priors, kwargs)

@@ -3,7 +3,6 @@ using DiffEqBase, Stan, Distributions, Turing, MacroTools
 using OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using DynamicHMC, DiffWrappers, ContinuousTransformations
 using Parameters, Distributions, Optim
-using Compat
 using Distances, ApproxBayes
 
 include("stan_inference.jl")

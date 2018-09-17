@@ -1,4 +1,4 @@
-function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
+function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors = nothing;
                           num_samples=1000, delta=0.65, kwargs...)
 
   bif(vi, sampler, x=data) = begin
@@ -35,7 +35,7 @@ function turing_inference(prob::DEProblem,alg,t,data,priors = nothing;
       )
       _lp += __lp
     end
-    
+
     vi.logp = _lp
     vi
   end

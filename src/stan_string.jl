@@ -63,7 +63,7 @@ function stan_string(p::Union{Type{Normal},Normal})
 		return string("normal")
 	end
 end
-function stan_string(p::Union{Type{TDist},TDist}) 
+function stan_string(p::Union{Type{TDist},TDist})
 	try
 		parameters = (params(p)[1])
 		return string("student_t($parameters,0,1)")
@@ -71,15 +71,15 @@ function stan_string(p::Union{Type{TDist},TDist})
 		return string("student_t")
 	end
 end
-function stan_string(p::Union{Type{Cauchy},Cauchy}) 
-	try	
+function stan_string(p::Union{Type{Cauchy},Cauchy})
+	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("cauchy$parameters")
 	catch
 		return string("cauchy")
 	end
 end
-function stan_string(p::Union{Type{Laplace},Laplace}) 
+function stan_string(p::Union{Type{Laplace},Laplace})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("double_exponential$parameters")
@@ -87,7 +87,7 @@ function stan_string(p::Union{Type{Laplace},Laplace})
 		return string("double_exponential")
 	end
 end
-function stan_string(p::Union{Type{Distributions.Logistic},Distributions.Logistic}) 
+function stan_string(p::Union{Type{Distributions.Logistic},Distributions.Logistic})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("logistic$parameters")
@@ -95,7 +95,7 @@ function stan_string(p::Union{Type{Distributions.Logistic},Distributions.Logisti
 		return string("logistic")
 	end
 end
-function stan_string(p::Union{Type{Gumbel},Gumbel}) 
+function stan_string(p::Union{Type{Gumbel},Gumbel})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("gumbel$parameters")
@@ -103,7 +103,7 @@ function stan_string(p::Union{Type{Gumbel},Gumbel})
 		return string("gumbel")
 	end
 end
-function stan_string(p::Union{Type{LogNormal},LogNormal}) 
+function stan_string(p::Union{Type{LogNormal},LogNormal})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("lognormal$parameters")
@@ -111,7 +111,7 @@ function stan_string(p::Union{Type{LogNormal},LogNormal})
 		return string("lognormal")
 	end
 end
-function stan_string(p::Union{Type{Chisq},Chisq}) 
+function stan_string(p::Union{Type{Chisq},Chisq})
 	try
 		parameters = (params(p)[1])
 		return string("chi_square($parameters)")
@@ -119,7 +119,7 @@ function stan_string(p::Union{Type{Chisq},Chisq})
 		return string("chi_square")
 	end
 end
-function stan_string(p::Union{Type{Exponential},Exponential}) 
+function stan_string(p::Union{Type{Exponential},Exponential})
 	try
 		parameters = (params(p)[1])
 		return string("exponential($parameters)")
@@ -127,7 +127,7 @@ function stan_string(p::Union{Type{Exponential},Exponential})
 		return string("exponential")
 	end
 end
-function stan_string(p::Union{Type{Gamma},Gamma}) 
+function stan_string(p::Union{Type{Gamma},Gamma})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("gamma$parameters")
@@ -135,7 +135,7 @@ function stan_string(p::Union{Type{Gamma},Gamma})
 		return string("gamma")
 	end
 end
-function stan_string(p::Union{Type{InverseGamma},InverseGamma}) 
+function stan_string(p::Union{Type{InverseGamma},InverseGamma})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("inv_gamma$parameters")
@@ -143,7 +143,7 @@ function stan_string(p::Union{Type{InverseGamma},InverseGamma})
 		return string("inv_gamma")
 	end
 end
-function stan_string(p::Union{Type{Weibull},Weibull}) 
+function stan_string(p::Union{Type{Weibull},Weibull})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("weibull$parameters")
@@ -151,7 +151,7 @@ function stan_string(p::Union{Type{Weibull},Weibull})
 		return string("weibull")
 	end
 end
-function stan_string(p::Union{Type{Frechet},Frechet}) 
+function stan_string(p::Union{Type{Frechet},Frechet})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("frechet$parameters")
@@ -159,7 +159,7 @@ function stan_string(p::Union{Type{Frechet},Frechet})
 		return string("frechet")
 	end
 end
-function stan_string(p::Union{Type{Rayleigh},Rayleigh}) 
+function stan_string(p::Union{Type{Rayleigh},Rayleigh})
 	try
 		parameters = (params(p)[1])
 		return string("rayleigh($parameters)")
@@ -167,7 +167,7 @@ function stan_string(p::Union{Type{Rayleigh},Rayleigh})
 		return string("rayleigh")
 	end
 end
-function stan_string(p::Union{Type{Pareto},Pareto}) 
+function stan_string(p::Union{Type{Pareto},Pareto})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("pareto$parameters")
@@ -175,7 +175,7 @@ function stan_string(p::Union{Type{Pareto},Pareto})
 		return string("pareto")
 	end
 end
-function stan_string(p::Union{Type{GeneralizedPareto},GeneralizedPareto}) 
+function stan_string(p::Union{Type{GeneralizedPareto},GeneralizedPareto})
 	try
 		parameters = (params(p)[1],params(p)[2],params(p)[3])
 		return string("pareto_type_2$parameters")
@@ -183,7 +183,7 @@ function stan_string(p::Union{Type{GeneralizedPareto},GeneralizedPareto})
 		return string("pareto_type_2")
 	end
 end
-function stan_string(p::Union{Type{Beta},Beta}) 
+function stan_string(p::Union{Type{Beta},Beta})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("beta$parameters")
@@ -191,7 +191,7 @@ function stan_string(p::Union{Type{Beta},Beta})
 		return string("beta")
 	end
 end
-function stan_string(p::Union{Type{Uniform},Uniform}) 
+function stan_string(p::Union{Type{Uniform},Uniform})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("uniform$parameters")
@@ -199,7 +199,7 @@ function stan_string(p::Union{Type{Uniform},Uniform})
 		return string("uniform")
 	end
 end
-function stan_string(p::Union{Type{VonMises},VonMises}) 
+function stan_string(p::Union{Type{VonMises},VonMises})
 	try
 		parameters = (params(p)[1],params(p)[2])
 		return string("von_mises$parameters")
@@ -207,7 +207,7 @@ function stan_string(p::Union{Type{VonMises},VonMises})
 		return string("von_mises")
 	end
 end
-function stan_string{T<:Truncated}(p::T)
+function stan_string(p::T) where {T<:Truncated}
 	lower = p.lower
 	upper = p.upper
 	raw_string = stan_string(p.untruncated)

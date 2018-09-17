@@ -62,7 +62,7 @@ function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, likelihood, prior
         for i in priors
             push!(initial, mean(i))
         end
-        initial = Optim.minimizer(optimize(a -> -P(a),initial,lower_bound,upper_bound,Fminbox{GradientDescent}()))
+        initial = Optim.minimizer(optimize(a -> -P(a),initial,lower_bound,upper_bound,Fminbox(GradientDescent())))
     end
 
     initial_inverse_transformed = Float64[]

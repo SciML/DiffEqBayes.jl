@@ -12,7 +12,7 @@ tspan = (0.0,10.0)
 prob1 = ODEProblem(f1,u0,tspan,p)
 
 σ = 0.01                         # noise, fixed for now
-t = collect(linspace(1,10,10))   # observation times
+t = collect(range(1,stop=10,length=10))   # observation times
 sol = solve(prob1,Tsit5())
 randomized = VectorOfArray([(sol(t[i]) + σ * randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
@@ -46,7 +46,7 @@ tspan = (0.0,10.0)
 p = [1.5,1.0,3.0,1.0]
 prob1 = ODEProblem(f1,u0,tspan,p)
 sol = solve(prob1,Tsit5())
-t = collect(linspace(1,10,10))
+t = collect(range(1,stop=10,length=10))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 priors = [Truncated(Normal(1.5,0.01),0,2),Truncated(Normal(1.0,0.01),0,1.5),

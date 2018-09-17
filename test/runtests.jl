@@ -1,5 +1,5 @@
 using DiffEqBayes
-using Base.Test
+using Test
 
 tic()
 @time @testset "DynamicHMC" begin include("dynamicHMC.jl") end

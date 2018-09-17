@@ -1,5 +1,5 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, Distances, StatsBase, RecursiveArrayTools
-using Base.Test
+using Test
 
 # One parameter case
 f1 = @ode_def_nohes LotkaVolterraTest1 begin

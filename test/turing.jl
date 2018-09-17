@@ -1,5 +1,5 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
-using Base.Test
+using Test
 println("One parameter case")
 f1 = @ode_def_nohes LotkaVolterraTest1 begin
   dx = a*x - x*y

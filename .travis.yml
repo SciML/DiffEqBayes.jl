@@ -20,7 +20,7 @@ script:
   - export CMDSTAN_HOME=$HOME/cmdstan
   - cd $TRAVIS_BUILD_DIR
   - julia -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("DiffEqBayes")'
-  - julia -e 'Pkg.test("DiffEqBayes"; coverage=true)'
+  - julia -e 'using Pkg; Pkg.test("DiffEqBayes"; coverage=true)'
 after_success:
   # push coverage results to Coveralls
   - julia -e 'cd(Pkg.dir("DiffEqBayes")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'

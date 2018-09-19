@@ -62,13 +62,13 @@ function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, likelihood, prior
         for i in priors
             push!(initial, mean(i))
         end
-        initial = Optim.minimizer(optimize(a -> -P(a),initial,lower_bound,upper_bound,Fminbox(GradientDescent())))
+        initial_opt = Optim.minimizer(optimize(a -> -P(a),lower_bound,upper_bound,initial,Fminbox(GradientDescent())))
     end
 
     initial_inverse_transformed = Float64[]
-    for i in 1:length(initial)
+    for i in 1:length(initial_opt)
        para = TransformationTuple(transformations[i])
-       push!(initial_inverse_transformed,inverse(para, (initial[i], ))[1])
+       push!(initial_inverse_transformed,inverse(para, (initial_opt[i], ))[1])
     end
     #println(initial_inverse_transformed)
     sample, NUTS_tuned = NUTS_init_tune_mcmc(PTG,

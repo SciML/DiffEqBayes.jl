@@ -1,7 +1,7 @@
 module DiffEqBayes
 using DiffEqBase, Stan, Distributions, Turing, MacroTools
 using OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
-using DynamicHMC, DiffWrappers, ContinuousTransformations
+using DynamicHMC, ContinuousTransformations
 using Parameters, Distributions, Optim
 using Distances, ApproxBayes
 

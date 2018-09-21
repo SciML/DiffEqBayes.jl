@@ -10,7 +10,7 @@ RecursiveArrayTools
 ParameterizedFunctions
 OrdinaryDiffEq
 Parameters
-DiffWrappers 0.0.1 0.1.0
+#DiffWrappers
 ContinuousTransformations 1.0.0
 DynamicHMC 0.1.1
 Distances

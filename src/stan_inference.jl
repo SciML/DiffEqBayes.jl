@@ -93,7 +93,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
       setup_params = string(setup_params,"row_vector<lower=0>[$length_of_y] sigma$(i-1);")
     end
   end
-  tuple_hyper_params = tuple_hyper_params[1:endof(tuple_hyper_params)-1]
+  tuple_hyper_params = tuple_hyper_params[1:length(tuple_hyper_params)-1]
   differential_equation = generate_differential_equation(f)
   priors_string = string(generate_priors(f,priors))
   stan_likelihood = stan_string(likelihood)

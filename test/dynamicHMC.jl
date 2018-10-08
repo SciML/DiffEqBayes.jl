@@ -1,8 +1,8 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
-using DynamicHMC, DiffWrappers, ContinuousTransformations
+using DynamicHMC, ContinuousTransformations
 using Parameters, Distributions, Optim
 
-f1 = @ode_def_nohes LotkaVolterraTest1 begin
+f1 = @ode_def LotkaVolterraTest1 begin
   dx = a*x - x*y
   dy = -3*y + x*y
 end a
@@ -37,7 +37,7 @@ bayesian_result = dynamichmc_inference(prob1, Tsit5(), likelihood, [Truncated(No
 @test mean(bayesian_result[1][1]) ≈ 1.5 atol=1e-1
 
 
-f1 = @ode_def_nohes LotkaVolterraTest4 begin
+f1 = @ode_def LotkaVolterraTest4 begin
   dx = a*x - b*x*y
   dy = -c*y + d*x*y
 end a b c d

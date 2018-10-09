@@ -43,33 +43,11 @@ function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, likelihood, prior
                               ϵ=0.001, initial=Float64[], num_samples=1000,
                               kwargs...)
     P = DynamicHMCPosterior(alg, prob, likelihood, priors, kwargs)
-    println(typeof(transformations))
     prob_transform(P::DynamicHMCPosterior) = as((transformations))
+    
     PT = TransformedLogDensity(prob_transform(P), P)
     PTG = FluxGradientLogDensity(PT);
 
-    # lower_bound = Float64[]
-    # upper_bound = Float64[]
-
-    # for i in priors
-    #     push!(lower_bound, minimum(i))
-    #     push!(upper_bound, maximum(i))
-    # end
-
-    # # If no initial position is given use local minimum near expectation of priors.
-    # if length(initial) == 0
-    #     for i in priors
-    #         push!(initial, mean(i))
-    #     end
-    #     initial_opt = Optim.minimizer(optimize(a -> -P(a),lower_bound,upper_bound,initial,Fminbox(GradientDescent())))
-    # end
-
-    # initial_inverse_transformed = Float64[]
-    # for i in 1:length(initial_opt)
-    #    para = TransformationTuple(transformations[i])
-    #    push!(initial_inverse_transformed,inverse(para, (initial_opt[i], ))[1])
-    # end
-    # #println(initial_inverse_transformed)
     chain, NUTS_tuned = NUTS_init_tune_mcmc(PTG,num_samples, ϵ=ϵ)
     posterior = transform.(Ref(PTG.transformation), get_position.(chain));
 

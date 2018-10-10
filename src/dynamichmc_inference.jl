@@ -43,9 +43,7 @@ function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, likelihood, prior
                               ϵ=0.001, initial=Float64[], num_samples=1000,
                               kwargs...)
     P = DynamicHMCPosterior(alg, prob, likelihood, priors, kwargs)
-    prob_transform(P::DynamicHMCPosterior) = as((transformations))
-    
-    PT = TransformedLogDensity(prob_transform(P), P)
+    PT = TransformedLogDensity(transformations, P)
     PTG = FluxGradientLogDensity(PT);
 
     chain, NUTS_tuned = NUTS_init_tune_mcmc(PTG,num_samples, ϵ=ϵ)

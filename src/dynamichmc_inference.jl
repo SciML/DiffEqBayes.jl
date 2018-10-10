@@ -33,7 +33,6 @@ function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors, 
                               kwargs...)
     likelihood = sol -> sum( sum(logpdf.(Normal(0.0, σ), sol(t) .- data[:, i]))
                              for (i, t) in enumerate(t) )
-    println(typeof(transformations))
     dynamichmc_inference(prob, alg, likelihood, priors, transformations;
                          ϵ=ϵ, initial=initial, num_samples=num_samples,
                          kwargs...)

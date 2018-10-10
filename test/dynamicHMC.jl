@@ -15,11 +15,8 @@ prob1 = ODEProblem(f1,u0,tspan,p)
 t = collect(range(1,stop=10,length=10))   # observation times
 sol = solve(prob1,Tsit5())
 randomized = VectorOfArray([(sol(t[i]) + σ * randn(2)) for i in 1:length(t)])
-data = convert(Array,randomized)
-function transform(p)
-    as((a = asℝ₊,))
-end
-bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, [Normal(1.5, 1)], transform)
+data = convert(Array,randomized) 
+bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, [Normal(1.5, 1)], as((a = asℝ₊,)))
 @test mean(bayesian_result[1][1]) ≈ 1.5 atol=1e-1
 
 # With hand-code likelihood function

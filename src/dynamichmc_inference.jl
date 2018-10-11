@@ -9,7 +9,7 @@ end
 function (P::DynamicHMCPosterior)(a)
     @unpack alg, problem, likelihood, priors, kwargs = P
 
-    prob = problem_new_parameters(problem, a)
+    prob = remake(problem,u0=Flux.Tracker.TrackedArray(problem.u0),p=a)
     sol = solve(prob, alg; kwargs...)
     if any((s.retcode != :Success for s in sol))
         ℓ = -Inf

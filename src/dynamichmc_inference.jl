@@ -8,9 +8,10 @@ end
 
 function (P::DynamicHMCPosterior)(a)
     @unpack alg, problem, likelihood, priors, kwargs = P
-
-    prob = remake(problem,u0=Flux.Tracker.TrackedArray(problem.u0),p=a)
-    sol = solve(prob, alg; kwargs...)
+    u0_new = Flux.Tracker.TrackedReal.(problem.u0)
+    tspan_new = Flux.Tracker.TrackedReal.(problem.tspan)
+    prob = remake(problem,u0 = u0_new,tspan = tspan_new,p=a.a)
+    sol = solve(prob, alg,dtmin = 1e-4; kwargs...)
     if any((s.retcode != :Success for s in sol))
         ℓ = -Inf
     else
@@ -43,6 +44,7 @@ function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, likelihood, prior
                               kwargs...)
     P = DynamicHMCPosterior(alg, prob, likelihood, priors, kwargs)
     PT = TransformedLogDensity(transformations, P)
+    println(typeof(PT))
     PTG = FluxGradientLogDensity(PT);
 
     chain, NUTS_tuned = NUTS_init_tune_mcmc(PTG,num_samples, ϵ=ϵ)

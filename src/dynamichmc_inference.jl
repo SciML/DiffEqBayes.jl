@@ -8,8 +8,7 @@ end
 
 function (P::DynamicHMCPosterior)(a)
     @unpack alg, problem, likelihood, priors, kwargs = P
-    u0_new = Flux.Tracker.TrackedReal.(problem.u0)
-    prob = remake(problem,u0 = u0_new,p=a.a)
+    prob = remake(problem,u0 = convert.(eltype(a.a),problem.u0),p=a.a)
     sol = solve(prob, alg; kwargs...)
     if any((s.retcode != :Success for s in sol))
         ℓ = -Inf

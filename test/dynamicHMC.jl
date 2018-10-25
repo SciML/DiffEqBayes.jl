@@ -18,7 +18,7 @@ sol = solve(prob1,Tsit5())
 randomized = VectorOfArray([(sol(t[i]) + σ * randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, [Normal(1.5, 1)], as((a = asℝ₊,)))
-@test mean(bayesian_result[1][1]) ≈ 1.5 atol=1e-1
+@test mean(a.a for a in bayesian_result[1]) ≈ 1.5 atol=1e-1
 
 # With hand-code likelihood function
 weights_ = ones(data) # weighted data

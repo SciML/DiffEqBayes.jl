@@ -11,15 +11,12 @@ function (P::DynamicHMCPosterior)(a)
     prob = remake(problem,u0 = convert.(eltype(a.a),problem.u0),p=a.a)
     sol = solve(prob, alg; kwargs...)
     if any((s.retcode != :Success for s in sol))
-        ℓ = -Inf
+        ℓ = LogDensityProblems.reject_logdensity()
     else
         ℓ = likelihood(sol)
     end
 
-    if !isfinite(ℓ) && (ℓ ≠ -Inf)
-        ℓ = -Inf                # protect against NaN etc, is it needed?
-    end
-    logpdf_sum = 0
+    logpdf_sum = 0.0
     for i in length(a)
         logpdf_sum += logpdf(priors[i], a[i])
     end
@@ -30,8 +27,10 @@ end
 function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors, transformations;
                               σ=0.01, ϵ=0.001, initial=Float64[], num_samples=1000,
                               kwargs...)
-    likelihood = sol -> sum( sum(logpdf.(Normal(0.0, σ), sol(t) .- data[:, i]))
-                             for (i, t) in enumerate(t) )
+    likelihood = function (sol)
+      sum( sum(logpdf.(Normal(0.0, σ), sol(t) .- data[:, i]))
+                               for (i, t) in enumerate(t) )
+    end
     dynamichmc_inference(prob, alg, likelihood, priors, transformations;
                          ϵ=ϵ, initial=initial, num_samples=num_samples,
                          kwargs...)
@@ -42,7 +41,7 @@ function dynamichmc_inference(prob::DiffEqBase.DEProblem, alg, likelihood, prior
                               kwargs...)
     P = DynamicHMCPosterior(alg, prob, likelihood, priors, kwargs)
     PT = TransformedLogDensity(transformations, P)
-    PTG = FluxGradientLogDensity(PT);
+    PTG = LogDensityProblems.FluxGradientLogDensity(PT);
 
     chain, NUTS_tuned = NUTS_init_tune_mcmc(PTG,num_samples, ϵ=ϵ)
     posterior = transform.(Ref(PTG.transformation), get_position.(chain));

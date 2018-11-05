@@ -3,7 +3,7 @@ using DiffEqBase, Stan, Distributions, Turing, MacroTools
 using OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using DynamicHMC, TransformVariables, LogDensityProblems
 using Parameters, Distributions, Optim
-using Distances, ApproxBayes, Flux
+using Distances, ApproxBayes
 
 include("stan_inference.jl")
 include("turing_inference.jl")

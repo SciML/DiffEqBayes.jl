@@ -11,7 +11,7 @@ function (P::DynamicHMCPosterior)(a)
     prob = remake(problem,u0 = convert.(eltype(a.a),problem.u0),p=a.a)
     sol = solve(prob, alg; kwargs...)
     if any((s.retcode != :Success for s in sol))
-        ℓ = LogDensityProblems.reject_logdensity()
+        ℓ = -Inf
     else
         ℓ = likelihood(sol)
     end

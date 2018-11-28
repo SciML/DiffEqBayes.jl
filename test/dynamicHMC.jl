@@ -20,7 +20,7 @@ data = convert(Array,randomized)
 bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, [Normal(1.5, 1)], as((a = asℝ₊,)))
 @test_broken mean(a.a for a in bayesian_result[1]) ≈ 1.5 atol=1e-1
 
-# bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, [Normal(1.5, 1)], as((a = as(Real,0,10),)))
+#bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, [Normal(1.5, 1)], as((a = as(Real,0,10),)))
 
 # With hand-code likelihood function
 weights_ = ones(size(data)) # weighted data
@@ -35,7 +35,7 @@ likelihood = function (sol)
     end
     return l
 end
-bayesian_result = dynamichmc_inference(prob1, Tsit5(), likelihood, [Truncated(Normal(1.5, 1), 0, 2)], as((a = asℝ₊,)))
+@test_broken bayesian_result = dynamichmc_inference(prob1, Tsit5(), likelihood, [Truncated(Normal(1.5, 1), 0, 2)], as((a = asℝ₊,)))
 @test_broken mean(bayesian_result[1][1]) ≈ 1.5 atol=1e-1
 
 
@@ -54,7 +54,7 @@ data = convert(Array,randomized)
 priors = [Truncated(Normal(1.5,0.01),0,2),Truncated(Normal(1.0,0.01),0,1.5),
           Truncated(Normal(3.0,0.01),0,4),Truncated(Normal(1.0,0.01),0,2)]
 
-bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, priors, [bridge(ℝ, ℝ⁺, ),bridge(ℝ, ℝ⁺, ),bridge(ℝ, ℝ, ),bridge(ℝ, ℝ⁺, )])
+@test_broken bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, priors, [as((a = asℝ₊,)),as((a = asℝ₊,)),as((a = asℝ₊,)),as((a = asℝ₊,))])
 @test_broken mean(bayesian_result[1][1]) ≈ 1.5 atol=1e-1
 @test_broken mean(bayesian_result[1][2]) ≈ 1.0 atol=1e-1
 @test_broken mean(bayesian_result[1][3]) ≈ 3.0 atol=1e-1

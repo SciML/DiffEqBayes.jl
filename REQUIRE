@@ -1,5 +1,5 @@
-julia 0.7
-DiffEqBase 1.7.0
+julia 1.0
+DiffEqBase 4.28.1
 #Mamba
 Stan
 Distributions
@@ -10,8 +10,8 @@ RecursiveArrayTools
 ParameterizedFunctions
 OrdinaryDiffEq
 Parameters
-#DiffWrappers
-ContinuousTransformations 1.0.0
-DynamicHMC 0.1.1
+DynamicHMC
 Distances
 ApproxBayes
+TransformVariables
+LogDensityProblems

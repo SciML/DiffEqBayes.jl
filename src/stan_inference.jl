@@ -60,7 +60,7 @@ function generate_theta(n,priors)
   return theta
 end
 
-function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
+function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:rk45,
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
                             abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,
                             vars=(StanODEData(),InverseGamma(3,3)))
@@ -93,11 +93,11 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
       setup_params = string(setup_params,"row_vector<lower=0>[$length_of_y] sigma$(i-1);")
     end
   end
-  tuple_hyper_params = tuple_hyper_params[1:endof(tuple_hyper_params)-1]
+  tuple_hyper_params = tuple_hyper_params[1:length(tuple_hyper_params)-1]
   differential_equation = generate_differential_equation(f)
   priors_string = string(generate_priors(f,priors))
   stan_likelihood = stan_string(likelihood)
-  const parameter_estimation_model = "
+  parameter_estimation_model = "
   functions {
     real[] sho(real t,real[] internal_var___u,real[] theta,real[] x_r,int[] x_i) {
       real internal_var___du[$length_of_y];
@@ -135,7 +135,7 @@ function stan_inference(prob::DEProblem,t,data,priors = nothing;alg=:rk45,
   }
   "
   stanmodel = Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model);
-  const parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => data', "t0" => prob.tspan[1], "ts" => t)
+  parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => data', "t0" => prob.tspan[1], "ts" => t)
   return_code, chain_results = stan(stanmodel, [parameter_estimation_data]; CmdStanDir=CMDSTAN_HOME)
   return StanModel(return_code,chain_results)
 end

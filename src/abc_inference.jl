@@ -6,7 +6,7 @@ function createabcfunction(prob, t, distancefunction, alg; kwargs...)
     end
 end
 
-function abc_inference(prob::DEProblem, alg, t, data, priors; ϵ=0.001,
+function abc_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors; ϵ=0.001,
                        distancefunction = euclidean, ABCalgorithm = ABCSMC, progress = false,
                        num_samples = 500, maxiterations = 10^5, kwargs...)
 

@@ -2,7 +2,7 @@ using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions,
       RecursiveArrayTools, Distributions, Test
 
 println("One parameter case")
-f1 = @ode_def LotkaVolterraTest1 begin
+f1 = @ode_def begin
   dx = a*x - x*y
   dy = -3y + x*y
 end a
@@ -25,7 +25,7 @@ theta1 = bayesian_result.chain_results[:,["theta.1"],:]
 
 
 println("Four parameter case")
-f1 = @ode_def LotkaVolterraTest2 begin
+f1 = @ode_def begin
   dx = a*x - b*x*y
   dy = -c*y + d*x*y
 end a b c d

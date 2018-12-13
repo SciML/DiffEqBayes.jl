@@ -1,7 +1,7 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using Test, Distributions
 println("One parameter case")
-f1 = @ode_def LotkaVolterraTest3 begin
+f1 = @ode_def begin
   dx = a*x - x*y
   dy = -3y + x*y
 end a
@@ -21,7 +21,7 @@ bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500)
 @test mean(bayesian_result[:theta1][50:end]) ≈ 1.5 atol=0.1
 
 println("Four parameter case")
-f1 = @ode_def LotkaVolterraTest4 begin
+f1 = @ode_def begin
   dx = a*x - b*x*y
   dy = -c*y + d*x*y
 end a b c d

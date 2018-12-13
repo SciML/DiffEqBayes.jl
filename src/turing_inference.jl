@@ -22,9 +22,9 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors = nothing
                     vi)
     _lp += __lp
 
-    p_tmp = remake(prob, u0=convert.(eltype(theta),(prob.u0)),p=theta); sol_tmp = solve(p_tmp,alg;saveat=t,kwargs...)
-
-    for i = 1:length(t)
+    p_tmp = remake(prob, u0=convert.(eltype(theta),(prob.u0)),p=theta) 
+    sol_tmp = solve(p_tmp,alg;saveat=t,kwargs...)
+    for i = 1:length(sol_tmp.u)
       res = sol_tmp.u[i]
       # x[:,i] ~ MvNormal(res, σ*ones(2))
       __lp = Turing.observe(

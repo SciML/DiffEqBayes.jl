@@ -2,7 +2,7 @@ using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, Distances, StatsBase,
 using Test
 
 # One parameter case
-f1 = @ode_def LotkaVolterraTest1 begin
+f1 = @ode_def begin
   dx = a*x - x*y
   dy = -3y + x*y
 end a
@@ -21,7 +21,7 @@ bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors;
 @test mean(bayesian_result.parameters, weights(bayesian_result.weights)) ≈ 1.5 atol=0.1
 
 # custom distance-function
-weights_ = ones(data) # weighted data
+weights_ = ones(size(data)) # weighted data
 for i = 1:3:length(data)
     weights_[i] = 0
     data[i] = 1e20 # to test that those points are indeed not used
@@ -40,7 +40,7 @@ bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors;
 @test mean(bayesian_result.parameters, weights(bayesian_result.weights)) ≈ 1.5 atol=0.1
 
 # Four parameter case
-f1 = @ode_def LotkaVolterraTest4 begin
+f1 = @ode_def begin
   dx = a*x - b*x*y
   dy = -c*y + d*x*y
 end a b c d

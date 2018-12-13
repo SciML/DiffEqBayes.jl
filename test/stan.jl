@@ -25,7 +25,7 @@ theta1 = bayesian_result.chain_results[:,["theta.1"],:]
 
 
 println("Four parameter case")
-f1 = @ode_def LotkaVolterraTest4 begin
+f1 = @ode_def LotkaVolterraTest2 begin
   dx = a*x - b*x*y
   dy = -c*y + d*x*y
 end a b c d

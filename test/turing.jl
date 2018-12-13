@@ -1,7 +1,7 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using Test, Distributions
 println("One parameter case")
-f1 = @ode_def LotkaVolterraTest1 begin
+f1 = @ode_def LotkaVolterraTest3 begin
   dx = a*x - x*y
   dy = -3y + x*y
 end a

@@ -24,7 +24,15 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors = nothing
 
     p_tmp = remake(prob, u0=convert.(eltype(theta),(prob.u0)),p=theta) 
     sol_tmp = solve(p_tmp,alg;saveat=t,kwargs...)
-    for i = 1:length(sol_tmp.u)
+    fill_length = length(t)-length(sol_tmp.u)
+    for i in 1:fill_length
+      if eltype(sol_tmp.u) <: Number
+        push!(sol_tmp.u,Inf)
+      else
+        push!(sol_tmp.u,fill(Inf,size(sol_tmp[1])))
+      end
+    end
+    for i = 1:length(t)
       res = sol_tmp.u[i]
       # x[:,i] ~ MvNormal(res, σ*ones(2))
       __lp = Turing.observe(

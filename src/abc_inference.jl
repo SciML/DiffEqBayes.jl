@@ -1,6 +1,6 @@
 function createabcfunction(prob, t, distancefunction, alg; kwargs...)
     function simfunc(params, constants, data)
-        sol = solve(problem_new_parameters(prob, params), alg; saveat = t, kwargs...)
+        sol = solve(STANDARD_PROB_GENERATOR(prob, params), alg; saveat = t, kwargs...)
         simdata = convert(Array, sol)
         distancefunction(data, simdata), nothing
     end

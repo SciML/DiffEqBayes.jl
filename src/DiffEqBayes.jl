@@ -3,7 +3,7 @@ using DiffEqBase, Stan, Distributions, Turing, MacroTools
 using OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using DynamicHMC, TransformVariables, LogDensityProblems
 using Parameters, Distributions, Optim
-using Distances, ApproxBayes
+using Distances, ApproxBayes, StatsPlots
 
 STANDARD_PROB_GENERATOR(prob,p) = remake(prob;u0=eltype(p).(prob.u0),p=p)
 STANDARD_PROB_GENERATOR(prob::MonteCarloProblem,p) = MonteCarloProblem(remake(prob.prob;u0=eltype(p).(prob.prob.u0),p=p))

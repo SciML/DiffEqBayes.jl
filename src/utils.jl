@@ -9,6 +9,6 @@ function plot_chain(bayesian_result::StanModel,filename=nothing)
 	end
 end
 
-function plot_chain(bayesian_result::Turing.Utilities.Chain,filename=nothing)
+function plot_chain(bayesian_result::T,filename=nothing) where {T<:MCMCChains.Chains}
 	StatsPlots.plot(bayesian_result)
 end

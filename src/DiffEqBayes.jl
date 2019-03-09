@@ -11,7 +11,7 @@ STANDARD_PROB_GENERATOR(prob::MonteCarloProblem,p) = MonteCarloProblem(remake(pr
 include("stan_inference.jl")
 include("turing_inference.jl")
 include("stan_string.jl")
-# include("utils.jl") No Mamba for plots
+include("utils.jl")
 include("dynamichmc_inference.jl")
 include("abc_inference.jl")
 

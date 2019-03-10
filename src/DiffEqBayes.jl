@@ -1,5 +1,5 @@
 module DiffEqBayes
-using DiffEqBase, Stan, Distributions, Turing, MacroTools
+using DiffEqBase, Stan, Distributions, Turing, MacroTools, Mamba
 using OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using DynamicHMC, TransformVariables, LogDensityProblems
 using Parameters, Distributions, Optim

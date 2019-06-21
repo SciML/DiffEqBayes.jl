@@ -5,19 +5,17 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors = nothing
   kwargs...)
 
   N = length(priors)
-  _theta = Vector{Real}(undef, N)
-  _σ = Vector{Real}(undef, length(likelihood_dist_priors))
   @model bif(x) = begin
+    val ~ priors[1]
+    theta = Vector{typeof(val)}(undef,length(priors))
     for i in 1:length(priors)
-      _theta[i] ~ priors[i]
+      theta[i] ~ priors[i]
     end
+    val2 ~ likelihood_dist_priors[1]
+    σ = Vector{typeof(val)}(undef,length(priors))
     for i in 1:length(likelihood_dist_priors)
-      _σ[i] ~ likelihood_dist_priors[i]
+      σ[i] ~ likelihood_dist_priors[i]
     end
-
-    theta = convert(Array{typeof(first(_theta))}, _theta)
-    σ = convert(Array{typeof(first(_σ))}, _σ)
-
     p_tmp = remake(prob, u0 = convert.(eltype(theta), (prob.u0)), p = theta)
     sol_tmp = solve(p_tmp, alg; saveat = t, kwargs...)
 

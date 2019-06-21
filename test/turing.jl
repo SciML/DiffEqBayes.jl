@@ -14,11 +14,12 @@ randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 priors = [Normal(1.5,0.01)]
 
-bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500)
+bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500,
+                                   syms=[:a])
 
-@show bayesian_result 
+@show bayesian_result
 
-@test mean(bayesian_result.value[:,1,1]) ≈ 1.5 atol=0.1
+@test mean(get(bayesian_result,:a)[1]) ≈ 1.5 atol=3e-1
 
 println("Four parameter case")
 f2 = @ode_def begin
@@ -36,11 +37,12 @@ data = convert(Array,randomized)
 priors = [Truncated(Normal(1.5,0.01),0,2),Truncated(Normal(1.0,0.01),0,1.5),
           Truncated(Normal(3.0,0.01),0,4),Truncated(Normal(1.0,0.01),0,2)]
 
-bayesian_result = turing_inference(prob2,Tsit5(),t,data,priors;num_samples=500)
+bayesian_result = turing_inference(prob2,Tsit5(),t,data,priors;num_samples=500,
+                                   syms = [:a,:b,:c,:d])
 
 @show bayesian_result
 
-@test mean(bayesian_result.value[:,1,1]) ≈ 1.5 atol=3e-1
-@test mean(bayesian_result.value[:,2,1]) ≈ 1.0 atol=3e-1
-@test mean(bayesian_result.value[:,3,1]) ≈ 3.0 atol=3e-1
-@test mean(bayesian_result.value[:,4,1]) ≈ 1.0 atol=3e-1
+@test mean(get(bayesian_result,:a)[1]) ≈ 1.5 atol=3e-1
+@test mean(get(bayesian_result,:b)[1]) ≈ 1.0 atol=3e-1
+@test mean(get(bayesian_result,:c)[1]) ≈ 3.0 atol=3e-1
+@test mean(get(bayesian_result,:d)[1]) ≈ 1.0 atol=3e-1

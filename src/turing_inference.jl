@@ -1,7 +1,8 @@
 function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors = nothing;
   likelihood_dist_priors = [InverseGamma(2, 3)],
   likelihood = (u,p,t,σ) -> MvNormal(u, σ[1]*ones(length(u))),
-  num_samples=1000, delta=0.65, kwargs...)
+  num_samples=1000, sampler = Turing.NUTS(num_samples, 0.65),
+  kwargs...)
 
   N = length(priors)
   _theta = Vector{Real}(undef, N)
@@ -11,7 +12,7 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors = nothing
       _theta[i] ~ priors[i]
     end
     for i in 1:length(likelihood_dist_priors)
-      _σ[i] ~ InverseGamma(2, 3)
+      _σ[i] ~ likelihood_dist_priors[i]
     end
 
     theta = convert(Array{typeof(first(_theta))}, _theta)
@@ -19,8 +20,8 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors = nothing
 
     p_tmp = remake(prob, u0 = convert.(eltype(theta), (prob.u0)), p = theta)
     sol_tmp = solve(p_tmp, alg; saveat = t, kwargs...)
-    fill_length = length(t) - length(sol_tmp.u)
 
+    fill_length = length(t) - length(sol_tmp.u)
     for i in 1:fill_length
       if eltype(sol_tmp.u) <: Number
         push!(sol_tmp.u, Inf)
@@ -28,6 +29,7 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors = nothing
         push!(sol_tmp.u, fill(Inf, size(sol_tmp[1])))
       end
     end
+
     for i = 1:length(t)
       res = sol_tmp.u[i]
       _t   = sol_tmp.t[i]
@@ -36,5 +38,5 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors = nothing
   end
 
   model = bif(data)
-  chn = sample(model, Turing.IS(num_samples))
+  chn = sample(model, sampler)
 end

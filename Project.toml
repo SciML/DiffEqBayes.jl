@@ -5,6 +5,7 @@ version = "1.2.0"
 
 [deps]
 ApproxBayes = "f5f396d3-230c-5e07-80e6-9fadf06146cc"
+CmdStan = "593b3428-ca2f-500c-ae53-031589ec8ddd"
 DiffEqBase = "2b5f629d-d688-5b77-993f-72d75c75574e"
 DiffResults = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
@@ -24,7 +25,6 @@ ParameterizedFunctions = "65888b18-ceab-5e60-b2b9-181511a3b968"
 Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 RecursiveArrayTools = "731186ca-8d62-57ce-b412-fbd966d074cd"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
-Stan = "682df890-35be-576f-97d0-3d8c8b33a550"
 StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 TransformVariables = "84d833dd-6860-57f9-a1a7-6da5db126cff"
@@ -35,8 +35,8 @@ julia = "1"
 
 [extras]
 OrdinaryDiffEq = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
-SteadyStateDiffEq = "9672c7b4-1e72-59bd-8a11-6ac3964bc41f"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+SteadyStateDiffEq = "9672c7b4-1e72-59bd-8a11-6ac3964bc41f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]

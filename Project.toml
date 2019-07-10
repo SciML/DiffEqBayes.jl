@@ -1,0 +1,43 @@
+name = "DiffEqBayes"
+uuid = "ebbdde9d-f333-5424-9be2-dbf1e9acfb5e"
+authors = ["Vaibhavdixit02 <vaibhavyashdixit@gmail.com>"]
+version = "1.2.0"
+
+[deps]
+ApproxBayes = "f5f396d3-230c-5e07-80e6-9fadf06146cc"
+CmdStan = "593b3428-ca2f-500c-ae53-031589ec8ddd"
+DiffEqBase = "2b5f629d-d688-5b77-993f-72d75c75574e"
+DiffResults = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
+Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
+Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+DynamicHMC = "bbc10e6e-7c05-544b-b16e-64fede858acb"
+ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
+LabelledArrays = "2ee39098-c373-598a-b85f-a56591580800"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+LogDensityProblems = "6fdf6af0-433a-55f7-b3ed-c6c6e0b8df7c"
+MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
+Mamba = "5424a776-8be3-5c5b-a13f-3551f69ba0e6"
+Missings = "e1d29d7a-bbdc-5cf2-9ac0-f12de2c33e28"
+Optim = "429524aa-4258-5aef-a3af-852621145aeb"
+PDMats = "90014a1f-27ba-587c-ab20-58faa44d9150"
+ParameterizedFunctions = "65888b18-ceab-5e60-b2b9-181511a3b968"
+Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
+RecursiveArrayTools = "731186ca-8d62-57ce-b412-fbd966d074cd"
+Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
+StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
+StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
+TransformVariables = "84d833dd-6860-57f9-a1a7-6da5db126cff"
+Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
+
+[compat]
+julia = "1"
+
+[extras]
+OrdinaryDiffEq = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+SteadyStateDiffEq = "9672c7b4-1e72-59bd-8a11-6ac3964bc41f"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test", "OrdinaryDiffEq", "StatsBase", "SteadyStateDiffEq"]

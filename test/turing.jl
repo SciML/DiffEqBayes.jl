@@ -1,5 +1,5 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
-using Test, Distributions
+using Test, Distributions, SteadyStateDiffEq
 println("One parameter case")
 f1 = @ode_def begin
   dx = a*x - x*y
@@ -46,3 +46,28 @@ bayesian_result = turing_inference(prob2,Tsit5(),t,data,priors;num_samples=500,
 @test mean(get(bayesian_result,:b)[1]) ≈ 1.0 atol=3e-1
 @test mean(get(bayesian_result,:c)[1]) ≈ 3.0 atol=3e-1
 @test mean(get(bayesian_result,:d)[1]) ≈ 1.0 atol=3e-1
+
+println("Steady state problem")
+function f(du,u,p,t)
+    α = p[1]
+    du[1] = 2 -  α*u[1]
+    du[2] = u[1] - 4u[2]
+end
+
+p = [2.0]
+u0 = zeros(2)
+s_prob = SteadyStateProblem(f,u0,p)
+s_sol = solve(s_prob,SSRootfind())
+s_sol = solve(s_prob,DynamicSS(Tsit5(),abstol=1e-4,reltol=1e-3))
+
+
+# true data is 1.00, 0.25
+data = [1.05, 0.23]
+priors = [Truncated(Normal(2.0,0.2),0,3)]
+bayesian_result = turing_inference(s_prob,DynamicSS(Tsit5(),abstol=1e-4,reltol=1e-3),
+                                   nothing,data,priors;
+                                   num_samples=500,
+                                   maxiters = 1e6,
+                                   syms = [:α])
+                                   
+@test mean(get(bayesian_result,:α)[1]) ≈ 2.0 atol=3e-1

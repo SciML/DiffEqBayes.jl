@@ -12,13 +12,16 @@ git:
 matrix:
   allow_failures:
   - julia: nightly
-script:
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - cd $HOME; if [[ ! -d cmdstan ]]; then git clone https://github.com/stan-dev/cmdstan.git; fi
-  - cd $HOME/cmdstan; git checkout v2.16.0; make stan-update; make build
-  - export CMDSTAN_HOME=$HOME/cmdstan
-  - cd $TRAVIS_BUILD_DIR
-  - julia -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("DiffEqBayes"); Pkg.test("DiffEqBayes"; coverage=true)'
+dist: xenial
+env:
+  - JULIA_CMDSTAN_HOME="$HOME/cmdstan-2.19.1/"
+before_install:
+  - OLDWD=`pwd`
+  - cd ~
+  - wget https://github.com/stan-dev/cmdstan/releases/download/v2.19.1/cmdstan-2.19.1.tar.gz
+  - tar -xzpf cmdstan-2.19.1.tar.gz
+  - make -C $JULIA_CMDSTAN_HOME build
+  - cd $OLDWD
 after_success:
   # push coverage results to Coveralls
   - julia -e 'using Pkg; cd(Pkg.dir("DiffEqBayes")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'

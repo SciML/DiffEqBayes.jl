@@ -1,8 +1,12 @@
 function createabcfunction(prob, t, distancefunction, alg; kwargs...)
     function simfunc(params, constants, data)
         sol = solve(STANDARD_PROB_GENERATOR(prob, params), alg; saveat = t, kwargs...)
-        simdata = convert(Array, sol)
-        distancefunction(data, simdata), nothing
+        if any((s.retcode != :Success for s in sol)) && any((s.retcode != :Terminated for s in sol))
+            return Inf,nothing
+        else
+            simdata = convert(Array, sol)
+            return distancefunction(data, simdata), nothing
+        end
     end
 end
 

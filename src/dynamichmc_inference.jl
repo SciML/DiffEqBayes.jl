@@ -10,7 +10,7 @@ function (P::DynamicHMCPosterior)(a)
     @unpack alg, problem, likelihood, priors, kwargs = P
     prob = remake(problem,u0 = convert.(eltype(a.a),problem.u0),p=a.a)
     sol = solve(prob, alg; kwargs...)
-    if any((s.retcode != :Success for s in sol))
+    if any((s.retcode != :Success for s in sol)) && any((s.retcode != :Terminated for s in sol))
         ℓ = -Inf
     else
         ℓ = likelihood(sol)

@@ -39,39 +39,38 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors;
     _saveat = t === nothing ? Float64[] : t
     sol_tmp = solve(p_tmp, alg; saveat = _saveat, kwargs...)
 
-    if sol_tmp isa DiffEqBase.AbstractNoTimeSolution
-      res = sol_tmp.u
-      __lp = Turing.observe(
-        sampler,
-        likelihood(res,theta,Inf,σ),   # Distribution
-        x,    # Data point
-        vi
-      )
-      vi.logp += __lp
+    if sol_tmp isa DiffEqBase.AbstractEnsembleSolution
+      failure = any((s.retcode != :Success for s in sol_tmp)) && any((s.retcode != :Terminated for s in sol_tmp))
     else
-      fill_length = length(t) - length(sol_tmp.u)
-      for i in 1:fill_length
-        if eltype(sol_tmp.u) <: Number
-          push!(sol_tmp.u, Inf)
-        else
-          push!(sol_tmp.u, fill(Inf, size(sol_tmp[1])))
-        end
-        push!(sol_tmp.t, Inf)
-      end
+      failure = sol_tmp.retcode != :Success && sol_tmp != :Terminated
+    end
 
-      for i = 1:length(t)
-        res = sol_tmp.u[i]
-        _t   = sol_tmp.t[i]
+    if failure
+      vi.logp -= Inf
+    else
+      if sol_tmp isa DiffEqBase.AbstractNoTimeSolution
+        res = sol_tmp.u
         __lp = Turing.observe(
           sampler,
-          likelihood(res,theta,_t,σ),   # Distribution
-          x[:,i],    # Data point
+          likelihood(res,theta,Inf,σ),   # Distribution
+          x,    # Data point
           vi
         )
         vi.logp += __lp
+      else
+        for i = 1:length(t)
+          res = sol_tmp.u[i]
+          _t   = sol_tmp.t[i]
+          __lp = Turing.observe(
+            sampler,
+            likelihood(res,theta,_t,σ),   # Distribution
+            x[:,i],    # Data point
+            vi
+          )
+          vi.logp += __lp
+        end
       end
     end
-
     vi
   end
 

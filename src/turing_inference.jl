@@ -39,7 +39,13 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors;
     _saveat = t === nothing ? Float64[] : t
     sol_tmp = solve(p_tmp, alg; saveat = _saveat, kwargs...)
 
-    if any((s.retcode != :Success for s in sol_tmp)) && any((s.retcode != :Terminated for s in sol_tmp))
+    if sol_tmp isa DiffEqBase.AbstractEnsembleSolution
+      failure = any((s.retcode != :Success for s in sol_tmp)) && any((s.retcode != :Terminated for s in sol_tmp))
+    else
+      failure = sol_tmp.retcode != :Success && sol_tmp != :Terminated
+    end
+
+    if failure
       vi.logp -= Inf
     else
       if sol_tmp isa DiffEqBase.AbstractNoTimeSolution

@@ -6,7 +6,7 @@ using Parameters, Distributions, Optim, Requires
 using Distances, ApproxBayes, StatsPlots
 
 STANDARD_PROB_GENERATOR(prob,p) = remake(prob;u0=eltype(p).(prob.u0),p=p)
-STANDARD_PROB_GENERATOR(prob::MonteCarloProblem,p) = MonteCarloProblem(remake(prob.prob;u0=eltype(p).(prob.prob.u0),p=p))
+STANDARD_PROB_GENERATOR(prob::EnsembleProblem,p) = EnsembleProblem(remake(prob.prob;u0=eltype(p).(prob.prob.u0),p=p))
 
 include("turing_inference.jl")
 include("utils.jl")

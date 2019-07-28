@@ -1,4 +1,4 @@
-using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions,
+using CmdStan, DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions,
       RecursiveArrayTools, Distributions, Test
 
 println("One parameter case")

@@ -1,7 +1,7 @@
 module DiffEqBayes
 using DiffEqBase, CmdStan, Distributions, Turing, MacroTools, Mamba
 using ParameterizedFunctions, RecursiveArrayTools
-using DynamicHMC, TransformVariables, LogDensityProblems
+#using DynamicHMC, TransformVariables, LogDensityProblems
 using Parameters, Distributions, Optim, Requires
 using Distances, ApproxBayes, StatsPlots
 
@@ -10,7 +10,7 @@ STANDARD_PROB_GENERATOR(prob::EnsembleProblem,p) = EnsembleProblem(remake(prob.p
 
 include("turing_inference.jl")
 include("utils.jl")
-include("dynamichmc_inference.jl")
+#include("dynamichmc_inference.jl")
 include("abc_inference.jl")
 
 function __init__()

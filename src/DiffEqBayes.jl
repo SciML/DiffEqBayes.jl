@@ -17,10 +17,10 @@ function __init__()
     @require Stan="593b3428-ca2f-500c-ae53-031589ec8ddd" begin
         include("stan_inference.jl")
         include("stan_string.jl")
-        export StanModel, stan_inference
+        export StanModel, stan_inference, stan_string, StanODEData
     end
 end
 
-export turing_inference, stan_string, StanODEData, plot_chain, dynamichmc_inference, LotkaVolterraPosterior, abc_inference
+export turing_inference, plot_chain, dynamichmc_inference, abc_inference
 
 end # module

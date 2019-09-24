@@ -15,13 +15,13 @@ function __init__()
         using CmdStan
         include("stan_inference.jl")
         include("stan_string.jl")
-        export StanModel, stan_inference, stan_string, StanODEData
+        export stan_inference
     end
 
     @require DynamicHMC="bbc10e6e-7c05-544b-b16e-64fede858acb" begin
         using DynamicHMC, TransformVariables, LogDensityProblems
         include("dynamichmc_inference.jl")
-        export dynamichmc_inference, DynamicHMCPosterior
+        export dynamichmc_inference
     end
 
     @require StatsPlots="f3b207a7-027a-5e70-b257-86293d7955fd" begin

@@ -17,8 +17,7 @@ data = convert(Array,randomized)
 priors = [Truncated(Normal(1.5,0.1),0,2)]
 
 bayesian_result = stan_inference(prob1,t,data,priors;num_samples=300,
-                                 num_warmup=500,likelihood=Normal,
-                                 vars =(StanODEData(),InverseGamma(3,2)))
+                                 num_warmup=500,likelihood=Normal)
 
 theta1 = bayesian_result.chain_results[:,["theta.1"],:]
 @test mean(theta1.value) ≈ 1.5 atol=3e-1
@@ -40,7 +39,7 @@ data = convert(Array,randomized)
 priors = [Truncated(Normal(1.5,0.01),0,2),Truncated(Normal(1.0,0.01),0,1.5),
           Truncated(Normal(3.0,0.01),0,4),Truncated(Normal(1.0,0.01),0,2)]
 
-bayesian_result = stan_inference(prob1,t,data,priors;num_samples=100,num_warmup=500,vars =(StanODEData(),InverseGamma(4,1)))
+bayesian_result = stan_inference(prob1,t,data,priors;num_samples=100,num_warmup=500,vars =(DiffEqBayes.StanODEData(),InverseGamma(4,1)))
 theta1 = bayesian_result.chain_results[:,["theta.1"],:]
 theta2 = bayesian_result.chain_results[:,["theta.2"],:]
 theta3 = bayesian_result.chain_results[:,["theta.3"],:]

@@ -2,7 +2,7 @@ module DiffEqBayes
 using DiffEqBase, Distributions, Turing, MacroTools, Mamba
 using ParameterizedFunctions, RecursiveArrayTools
 using Parameters, Distributions, Optim, Requires
-using Distances, ApproxBayes
+using Distances, ApproxBayes, DocStringExtensions, Random
 
 STANDARD_PROB_GENERATOR(prob,p) = remake(prob;u0=eltype(p).(prob.u0),p=p)
 STANDARD_PROB_GENERATOR(prob::EnsembleProblem,p) = EnsembleProblem(remake(prob.prob;u0=eltype(p).(prob.prob.u0),p=p))
@@ -21,7 +21,7 @@ function __init__()
     @require DynamicHMC="bbc10e6e-7c05-544b-b16e-64fede858acb" begin
         using DynamicHMC, TransformVariables, LogDensityProblems
         include("dynamichmc_inference.jl")
-        export dynamichmc_inference
+        export dynamichmc_inference, DynamicHMCPosterior
     end
 
     @require StatsPlots="f3b207a7-027a-5e70-b257-86293d7955fd" begin

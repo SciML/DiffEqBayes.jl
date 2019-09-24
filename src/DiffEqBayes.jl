@@ -12,6 +12,7 @@ include("abc_inference.jl")
 
 function __init__()
     @require CmdStan="593b3428-ca2f-500c-ae53-031589ec8ddd" begin
+        using CmdStan
         include("stan_inference.jl")
         include("stan_string.jl")
         export StanModel, stan_inference, stan_string, StanODEData

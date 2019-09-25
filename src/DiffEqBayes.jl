@@ -15,7 +15,7 @@ function __init__()
         using CmdStan
         include("stan_inference.jl")
         include("stan_string.jl")
-        export stan_inference
+        export stan_inference, stan_string
     end
 
     @require DynamicHMC="bbc10e6e-7c05-544b-b16e-64fede858acb" begin

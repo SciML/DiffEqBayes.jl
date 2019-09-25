@@ -1,5 +1,5 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
-using DynamicHMC, TransformVariables
+using DynamicHMC, TransformVariables, LinearAlgebra
 using Parameters, Distributions, Optim
 using Test
 

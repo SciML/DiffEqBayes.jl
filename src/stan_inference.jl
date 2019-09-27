@@ -1,6 +1,7 @@
-struct StanModel{R,C}
+struct StanModel{R,C,N}
   return_code::R
-  chain_results::C
+  chains::C
+  cnames::N
 end
 
 struct StanODEData
@@ -63,7 +64,7 @@ end
 function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:rk45,
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
                             abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,
-                            vars=(StanODEData(),InverseGamma(3,3)))
+                            vars=(StanODEData(),InverseGamma(3,3)),nchains=1)
   length_of_y = length(prob.u0)
   length_of_params = length(vars)
   f = prob.f
@@ -134,17 +135,17 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
       }
   }
   "
-  stanmodel = CmdStan.Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model);
+  stanmodel = CmdStan.Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model, nchains=nchains);
   parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => data', "t0" => prob.tspan[1], "ts" => t)
-  return_code, chain_results = CmdStan.stan(stanmodel, [parameter_estimation_data]; CmdStanDir=CMDSTAN_HOME)
-  return CmdStan.StanModel(return_code,chain_results)
+  return_code, chains, cnames = CmdStan.stan(stanmodel, [parameter_estimation_data]; CmdStanDir=CMDSTAN_HOME)
+  return StanModel(return_code, chains, cnames)
 end
 
 get_plot_object(bayesian_result::StanModel) = Mamba.plot(bayesian_result.chain_results)
 
 function plot_chain(bayesian_result::StanModel,filename=nothing)
 	p = get_plot_object(bayesian_result)
-	if filename == nothing
+	if filename === nothing
 		return Mamba.draw(p)
 	else
 		return Mamba.draw(p, filename=filename)

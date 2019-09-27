@@ -3,6 +3,8 @@ using DynamicHMC, TransformVariables, LinearAlgebra
 using Parameters, Distributions, Optim
 using Test
 
+reporter = LogProgressReport(nothing, 100, 60.0) 
+
 f1 = @ode_def LotkaVolterraTest1 begin
   dx = a*x - x*y
   dy = -3*y + x*y
@@ -17,8 +19,9 @@ t = collect(range(1,stop=10,length=10))   # observation times
 sol = solve(prob1,Tsit5())
 randomized = VectorOfArray([(sol(t[i]) + σ * randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
+mcmc_kwargs = (initialization = (q = zeros(1 + 2),), reporter = reporter)
 bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, (Normal(1.5, 1), ),
-                                           as(Vector, asℝ₊, 1))
+                                           as(Vector, asℝ₊, 1),mcmc_kwargs=mcmc_kwargs)
 @test mean(p.parameters[1] for p in bayesian_result.posterior) ≈ p[1] atol = 0.1
 
 # With hand-code likelihood function
@@ -54,6 +57,7 @@ priors = (a = Truncated(Normal(1.5,0.01), 0, 2),
               b = Truncated(Normal(1.0,0.01), 0, 1.5),
               c = Truncated(Normal(3.0,0.01), 0, 4),
               d = Truncated(Normal(1.0, 0.01), 0, 2))
+mcmc_kwargs = (initialization = (q = zeros(4 + 2),), reporter = reporter)
 bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, priors,
-          as(Vector, asℝ₊, 4))
+          as(Vector, asℝ₊, 4),mcmc_kwargs = mcmc_kwargs)
 @test norm(mean([p.parameters for p in bayesian_result.posterior]) .- p, Inf) ≤ 0.1

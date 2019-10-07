@@ -1,7 +1,7 @@
 function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors;
   likelihood_dist_priors = [InverseGamma(2, 3)],
   likelihood = (u,p,t,σ) -> MvNormal(u, σ[1]*ones(length(u))),
-  num_samples=1000, sampler = Turing.NUTS(num_samples, 0.65),
+  num_samples=1000, sampler = Turing.NUTS(0.65),
   syms = [Symbol("theta$i") for i in 1:length(priors)],
   kwargs...)
 
@@ -82,5 +82,5 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors;
   # Instantiate a Model object.
   model = Turing.Model{bigtup, Tuple{:x}}(mf, data, defaults)
 
-  chn = sample(model, sampler)
+  chn = sample(model, sampler, num_samples)
 end

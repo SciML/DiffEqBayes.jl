@@ -32,6 +32,7 @@ TransformVariables = "84d833dd-6860-57f9-a1a7-6da5db126cff"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
 [compat]
+Optim = "0.19"
 julia = "1"
 
 [extras]

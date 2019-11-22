@@ -21,14 +21,14 @@ stan_inference(prob::ODEProblem,t,data,priors = nothing;alg=:rk45,
                vars=(StanODEData(),InverseGamma(2,3)))
 ```
 
-`stan_inference` uses [Stan.jl](http://goedman.github.io/Stan.jl/latest/INTRO.html)
+`stan_inference` uses [Stan.jl](http://goedman.github.io/Stan.jl/dev/INTRO.html)
 to perform the Bayesian inference. The
-[Stan installation process](http://goedman.github.io/Stan.jl/latest/INSTALLATION.html)
+[Stan installation process](http://goedman.github.io/Stan.jl/dev/INSTALLATION.html)
 is required to use this function. The input requires that the function is defined
 by a `ParameterizedFunction` with the `@ode_def` macro. `t` is the array of time
 and `data` is the array where the first dimension (columns) corresponds to the
 array of system values. `priors` is an array of prior distributions for each
-parameter, specified via a [Distributions.jl](https://juliastats.github.io/Distributions.jl/latest/)
+parameter, specified via a [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/)
 type. `alg` is a choice between `:rk45` and `:bdf`, the two internal integrators
 of Stan. `num_samples` is the number of samples to take per chain, and `num_warmup`
 is the number of MCMC warmup steps. `abstol` and `reltol` are the keyword
@@ -52,7 +52,7 @@ perform its parameter inference. `prob` can be any `DEProblem` with a correspond
 observations for the differential equation system at time point `t[i]` (or higher
 dimensional). `priors` is an array of prior distributions for each
 parameter, specified via a
-[Distributions.jl](https://juliastats.github.io/Distributions.jl/latest/)
+[Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/)
 type. `num_samples` is the number of samples per MCMC chain. The extra `kwargs` are given to the internal differential
 equation solver.
 
@@ -66,7 +66,7 @@ dynamichmc_inference(prob::DEProblem,data,priors,t,transformations;
 `dynamichmc_inference` uses [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) to
  perform the bayesian parameter estimation. `prob` can be any `DEProblem`, `data` is the set
  of observations for our model which is to be used in the Bayesian Inference process. `priors` represent the
- choice of prior distributions for the parameters to be determined, passed as an array of [Distributions.jl](https://juliastats.github.io/Distributions.jl/latest/) distributions. `t` is the array of time points. `transformations`
+ choice of prior distributions for the parameters to be determined, passed as an array of [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/) distributions. `t` is the array of time points. `transformations`
  is an array of [Tranformations](https://github.com/tpapp/ContinuousTransformations.jl) imposed for constraining the
  parameter values to specific domains. `initial` values for the parameters can be passed, if not passed the means of the
  `priors` are used. `ϵ` can be used as a kwarg to pass the initial step size for the NUTS algorithm.
@@ -85,7 +85,7 @@ perform its parameter inference. `prob` can be any `DEProblem` with a correspond
 observations for the differential equation system at time point `t[i]` (or higher
 dimensional). `priors` is an array of prior distributions for each
 parameter, specified via a
-[Distributions.jl](https://juliastats.github.io/Distributions.jl/latest/)
+[Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/)
 type. `num_samples` is the number of posterior samples. `ϵ` is the target
 distance between the data and simulated data. `distancefunction` is a distance metric specified from the
 [Distances.jl](https://github.com/JuliaStats/Distances.jl)

@@ -1,4 +1,4 @@
-using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, Distances, StatsBase, RecursiveArrayTools
+using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, Distances, StatsBase, Distributions, RecursiveArrayTools
 using Test
 
 # One parameter case

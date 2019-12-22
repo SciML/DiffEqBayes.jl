@@ -15,6 +15,7 @@ git:
 dist: xenial
 env:
   - GROUP=Core
+    - JULIA_CMDSTAN_HOME="$HOME/cmdstan-2.20.0/"
   - GROUP=Stan
     - JULIA_CMDSTAN_HOME="$HOME/cmdstan-2.20.0/"
 before_install:

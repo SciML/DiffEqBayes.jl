@@ -17,7 +17,6 @@ env:
   - GROUP=Core
   - GROUP=Stan
 before_install:
-  if: env(GROUP) == Stan
   - JULIA_CMDSTAN_HOME="$HOME/cmdstan-2.20.0/"
   - OLDWD=`pwd`
   - cd ~

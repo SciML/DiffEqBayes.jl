@@ -3,18 +3,20 @@ language: julia
 os:
   - linux
 julia:
-  - 1.1
-  - nightly
+  - 1
+#  - nightly
 notifications:
   email: false
 git:
   depth: 99999999
-matrix:
-  allow_failures:
-  - julia: nightly
+#matrix:
+#  allow_failures:
+#  - julia: nightly
 dist: xenial
 env:
-  - JULIA_CMDSTAN_HOME="$HOME/cmdstan-2.20.0/"
+  - GROUP=Core
+  - GROUP=Stan
+    - JULIA_CMDSTAN_HOME="$HOME/cmdstan-2.20.0/"
 before_install:
   - OLDWD=`pwd`
   - cd ~

@@ -1,9 +1,9 @@
 module DiffEqBayes
-using DiffEqBase, Distributions, Turing, MacroTools, Mamba
+using DiffEqBase, Distributions, MacroTools, Mamba
 using ParameterizedFunctions, RecursiveArrayTools
 using Parameters, Distributions, Optim, Requires
 using Distances, ApproxBayes, DocStringExtensions, Random
-
+import Turing
 STANDARD_PROB_GENERATOR(prob,p) = remake(prob;u0=eltype(p).(prob.u0),p=p)
 STANDARD_PROB_GENERATOR(prob::EnsembleProblem,p) = EnsembleProblem(remake(prob.prob;u0=eltype(p).(prob.prob.u0),p=p))
 

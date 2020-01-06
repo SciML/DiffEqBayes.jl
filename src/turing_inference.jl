@@ -82,5 +82,5 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors;
   # Instantiate a Model object.
   model = Turing.Model{bigtup, Tuple{:x}}(mf, data, defaults)
 
-  chn = sample(model, sampler, num_samples)
+  chn = Turing.sample(model, sampler, num_samples)
 end

@@ -1,4 +1,5 @@
-using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
+using DiffEqBayes, ParameterizedFunctions, RecursiveArrayTools
+import OrdinaryDiffEq
 using Test, Distributions, SteadyStateDiffEq, Random
 
 println("One parameter case")

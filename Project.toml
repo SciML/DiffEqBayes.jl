@@ -1,7 +1,7 @@
 name = "DiffEqBayes"
 uuid = "ebbdde9d-f333-5424-9be2-dbf1e9acfb5e"
 authors = ["Vaibhavdixit02 <vaibhavyashdixit@gmail.com>"]
-version = "2.3.0"
+version = "2.4.0"
 
 [deps]
 ApproxBayes = "f5f396d3-230c-5e07-80e6-9fadf06146cc"
@@ -49,7 +49,7 @@ Optim = "0.19"
 PDMats = "0.9"
 ParameterizedFunctions = "4.2"
 Parameters = "0.12"
-RecursiveArrayTools = "1.0"
+RecursiveArrayTools = "1,2"
 Reexport = "0.2"
 Requires = "0.5, 1.0"
 StructArrays = "0.4"

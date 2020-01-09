@@ -30,8 +30,8 @@ end
 function (P::DynamicHMCPosterior)(θ)
     @unpack parameters, σ = θ
     @unpack algorithm, problem, data, t, parameter_priors, σ_priors, solve_kwargs = P
-    prob = remake(problem, u0 = convert.(eltype(parameters), problem.u0), p = parameters)
-    solution = solve(prob, algorithm; solve_kwargs...)
+    prob = DiffEqBase.remake(problem, u0 = convert.(eltype(parameters), problem.u0), p = parameters)
+    solution = DiffEqBase.solve(prob, algorithm; solve_kwargs...)
     any((s.retcode ≠ :Success && s.retcode ≠ :Terminated) for s in solution) && return -Inf
     log_likelihood = sum(sum(logpdf.(Normal.(0.0, σ), solution(t) .- data[:, i]))
                          for (i, t) in enumerate(t))

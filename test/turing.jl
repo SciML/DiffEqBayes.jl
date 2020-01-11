@@ -10,13 +10,13 @@ end a
 u0 = [1.0,1.0]
 tspan = (0.0,10.0)
 prob1 = ODEProblem(f1,u0,tspan,[1.5])
-sol = solve(prob1,Tsit5())
+sol = solve(prob1,OrdinaryDiffEq.Tsit5())
 t = collect(range(1,stop=10,length=10))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 priors = [Normal(1.5,0.01)]
 Random.seed!(123)
-bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=5000,
+bayesian_result = turing_inference(prob1,OrdinaryDiffEq.Tsit5(),t,data,priors;num_samples=5000,
                                    syms=[:a])
 
 @show bayesian_result

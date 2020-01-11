@@ -16,8 +16,8 @@ randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 priors = [Normal(1.5,0.01)]
 Random.seed!(123)
-bayesian_result = turing_inference(prob1,OrdinaryDiffEq.Tsit5(),t,data,priors;num_samples=5000,
-                                   syms=[:a])
+bayesian_result = turing_inference(prob1,OrdinaryDiffEq.Tsit5(),t,data,priors;
+                                   num_samples=5000,syms=[:a])
 
 @show bayesian_result
 
@@ -32,14 +32,14 @@ u0 = [1.0,1.0]
 tspan = (0.0,10.0)
 p = [1.5,1.0,3.0,1.0]
 prob2 = ODEProblem(f2,u0,tspan,p)
-sol = solve(prob2,Tsit5())
+sol = solve(prob2,OrdinaryDiffEq.Tsit5())
 t = collect(range(1,stop=10,length=10))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 priors = [Truncated(Normal(1.5,0.01),0,2),Truncated(Normal(1.0,0.01),0,1.5),
           Truncated(Normal(3.0,0.01),0,4),Truncated(Normal(1.0,0.01),0,2)]
 Random.seed!(123)
-bayesian_result = turing_inference(prob2,Tsit5(),t,data,priors;num_samples=5000,
+bayesian_result = turing_inference(prob2,OrdinaryDiffEq.Tsit5(),t,data,priors;num_samples=5000,
                                    syms = [:a,:b,:c,:d])
 
 @show bayesian_result
@@ -59,14 +59,14 @@ end
 p = [2.0]
 u0 = zeros(2)
 s_prob = SteadyStateProblem(f,u0,p)
-s_sol = solve(s_prob,SSRootfind())
-s_sol = solve(s_prob,DynamicSS(Tsit5(),abstol=1e-4,reltol=1e-3))
+s_sol = solve(s_prob,SteadyStateDiffEq.SSRootfind())
+s_sol = solve(s_prob,SteadyStateDiffEq.DynamicSS(OrdinaryDiffEq.Tsit5(),abstol=1e-4,reltol=1e-3))
 
 
 # true data is 1.00, 0.25
 data = [1.05, 0.23]
 priors = [Truncated(Normal(2.0,0.2),0,3)]
-bayesian_result = turing_inference(s_prob,DynamicSS(Tsit5(),abstol=1e-4,reltol=1e-3),
+bayesian_result = turing_inference(s_prob,SteadyStateDiffEq.DynamicSS(OrdinaryDiffEq.Tsit5(),abstol=1e-4,reltol=1e-3),
                                    nothing,data,priors;
                                    num_samples=1000,
                                    maxiters = 1e6,

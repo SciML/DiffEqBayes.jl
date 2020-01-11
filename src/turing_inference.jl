@@ -57,7 +57,7 @@ function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors;
         __lp = Turing.Inference.dot_tilde(ctx,
           sampler,
           likelihood(res,theta,Inf,σ),   # Distribution
-          x[:,:],    # Data point
+          x[:],    # Data point
           vi
         )
         vi.logp += __lp

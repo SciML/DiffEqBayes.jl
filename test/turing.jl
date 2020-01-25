@@ -2,8 +2,8 @@ using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using Test, Distributions, SteadyStateDiffEq
 println("One parameter case")
 f1 = @ode_def begin
-  dx = a*x - x*y
-  dy = -3y + x*y
+    dx = a*x - x*y
+    dy = -3y + x*y
 end a
 u0 = [1.0,1.0]
 tspan = (0.0,10.0)
@@ -23,8 +23,8 @@ bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500,
 
 println("Four parameter case")
 f2 = @ode_def begin
-  dx = a*x - b*x*y
-  dy = -c*y + d*x*y
+    dx = a*x - b*x*y
+    dy = -c*y + d*x*y
 end a b c d
 u0 = [1.0,1.0]
 tspan = (0.0,10.0)
@@ -34,8 +34,8 @@ sol = solve(prob2,Tsit5())
 t = collect(range(1,stop=10,length=10))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
-priors = [Truncated(Normal(1.5,0.01),0,2),Truncated(Normal(1.0,0.01),0,1.5),
-          Truncated(Normal(3.0,0.01),0,4),Truncated(Normal(1.0,0.01),0,2)]
+priors = [truncated(Normal(1.5,0.01),0,2),truncated(Normal(1.0,0.01),0,1.5),
+          truncated(Normal(3.0,0.01),0,4),truncated(Normal(1.0,0.01),0,2)]
 
 bayesian_result = turing_inference(prob2,Tsit5(),t,data,priors;num_samples=500,
                                    syms = [:a,:b,:c,:d])
@@ -63,7 +63,7 @@ s_sol = solve(s_prob,DynamicSS(Tsit5(),abstol=1e-4,reltol=1e-3))
 
 # true data is 1.00, 0.25
 data = [1.05, 0.23]
-priors = [Truncated(Normal(2.0,0.2),0,3)]
+priors = [truncated(Normal(2.0,0.2),0,3)]
 bayesian_result = turing_inference(s_prob,DynamicSS(Tsit5(),abstol=1e-4,reltol=1e-3),
                                    nothing,data,priors;
                                    num_samples=500,

@@ -7,7 +7,7 @@ For a common use case, see [`dynamichmc_inference`](@ref).
 # Fields
 $(FIELDS)
 """
-Base.@kwdef struct DynamicHMCPosterior{TA,TP,TD,TT,TR,TS,TK}
+Base.@kwdef struct DynamicHMCPosterior{TA,TP,TD,TT,TR,TS,TO,TK}
     "Algorithm for the ODE solver."
     algorithm::TA
     "An ODE problem definition (`DiffEqBase.DEProblem`)."
@@ -23,17 +23,19 @@ Base.@kwdef struct DynamicHMCPosterior{TA,TP,TD,TT,TR,TS,TK}
     one for each variable.
     """
     σ_priors::TS
+    "Observerbles"
+    obsvbls::TO
     "Keyword arguments passed on the the ODE solver `solve`."
     solve_kwargs::TK
 end
 
 function (P::DynamicHMCPosterior)(θ)
     @unpack parameters, σ = θ
-    @unpack algorithm, problem, data, t, parameter_priors, σ_priors, solve_kwargs = P
+    @unpack algorithm, problem, data, t, parameter_priors, σ_priors, obsvbls, solve_kwargs = P
     prob = remake(problem, u0 = convert.(eltype(parameters), problem.u0), p = parameters)
     solution = solve(prob, algorithm; solve_kwargs...)
     any((s.retcode ≠ :Success && s.retcode ≠ :Terminated) for s in solution) && return -Inf
-    log_likelihood = sum(sum(logpdf.(Normal.(0.0, σ), solution(t) .- data[:, i]))
+    log_likelihood = sum(sum(logpdf.(Normal.(0.0, σ), solution(t)[obsvbls] .- data[:, i]))
                          for (i, t) in enumerate(t))
     log_prior_parameters = sum(map(logpdf, parameter_priors, parameters))
     log_prior_σ = sum(map(logpdf, σ_priors, σ))
@@ -64,13 +66,14 @@ posterior values (transformed from `ℝⁿ`).
 """
 function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
                               parameter_priors, parameter_transformations;
+                              obsvbls = size(data, 1),
                               σ_priors = fill(Normal(0, 5), size(data, 1)),
                               rng = Random.GLOBAL_RNG, num_samples = 1000,
                               AD_gradient_kind = Val(:ForwardDiff),
                               solve_kwargs = (), mcmc_kwargs = ())
     P = DynamicHMCPosterior(; algorithm = algorithm, problem = problem, t = t, data = data,
-                            parameter_priors = parameter_priors, σ_priors = σ_priors,
-                            solve_kwargs = solve_kwargs)
+                            parameter_priors = parameter_priors, σ_priors = σ_priors, 
+                            obsvbls = obsvbls, solve_kwargs = solve_kwargs)
     trans = as((parameters = parameter_transformations,
                 σ = as(Vector, asℝ₊, length(σ_priors))))
     ℓ = TransformedLogDensity(trans, P)

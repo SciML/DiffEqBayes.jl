@@ -4,6 +4,7 @@ function turing_inference(
     t,
     data,
     priors;
+    obsvbls = 1:size(data, 1),
     likelihood_dist_priors = [InverseGamma(2, 3)],
     likelihood = (u,p,t,σ) -> MvNormal(u, σ[1]*ones(length(u))),
     num_samples=1000, sampler = Turing.NUTS(0.65),
@@ -40,7 +41,7 @@ function turing_inference(
         else
             u = sol_tmp.u
             for i = 1:length(t)
-                res = sol_tmp.u[i]
+                res = sol_tmp.u[i][obsvbls]
                 _t = sol_tmp.t[i]
                 x[:,i] ~ likelihood(res, theta, _t, σ)
             end

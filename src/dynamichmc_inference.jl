@@ -7,7 +7,7 @@ For a common use case, see [`dynamichmc_inference`](@ref).
 # Fields
 $(FIELDS)
 """
-Base.@kwdef struct DynamicHMCPosterior{TA,TP,TD,TT,TR,TS,TO,TK}
+Base.@kwdef struct DynamicHMCPosterior{TA,TP,TD,TT,TR,TS,TK,TO}
     "Algorithm for the ODE solver."
     algorithm::TA
     "An ODE problem definition (`DiffEqBase.DEProblem`)."
@@ -23,17 +23,20 @@ Base.@kwdef struct DynamicHMCPosterior{TA,TP,TD,TT,TR,TS,TO,TK}
     one for each variable.
     """
     σ_priors::TS
-    "Observerbles"
-    obsvbls::TO
     "Keyword arguments passed on the the ODE solver `solve`."
     solve_kwargs::TK
+    obsvbls::TO
+    sample_u0::Bool
 end
 
 function (P::DynamicHMCPosterior)(θ)
     @unpack parameters, σ = θ
-    @unpack algorithm, problem, data, t, parameter_priors, σ_priors, obsvbls, solve_kwargs = P
-    prob = remake(problem, u0 = convert.(eltype(parameters), problem.u0), p = parameters)
-    solution = solve(prob, algorithm; solve_kwargs...)
+    @unpack algorithm, problem, data, t, parameter_priors, σ_priors, solve_kwargs, obsvbls, sample_u0 = P
+    nu, T = length(problem.u0), eltype(parameters)
+    u0 = convert.(T, sample_u0 ? parameters[1:nu] : problem.u0)
+    p = convert.(T, sample_u0 ? parameters[(nu + 1):end] : parameters)
+    prob = remake(problem, u0 = u0, p = p)
+    solution = concrete_solve(prob, algorithm; solve_kwargs...)
     any((s.retcode ≠ :Success && s.retcode ≠ :Terminated) for s in solution) && return -Inf
     log_likelihood = sum(sum(logpdf.(Normal.(0.0, σ), solution(t)[obsvbls] .- data[:, i]))
                          for (i, t) in enumerate(t))
@@ -66,14 +69,14 @@ posterior values (transformed from `ℝⁿ`).
 """
 function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
                               parameter_priors, parameter_transformations;
-                              obsvbls = 1:size(data, 1),
                               σ_priors = fill(Normal(0, 5), size(data, 1)),
                               rng = Random.GLOBAL_RNG, num_samples = 1000,
                               AD_gradient_kind = Val(:ForwardDiff),
-                              solve_kwargs = (), mcmc_kwargs = ())
+                              solve_kwargs = (), mcmc_kwargs = (),
+                              obsvbls = 1:size(data, 1), sample_u0 = false)
     P = DynamicHMCPosterior(; algorithm = algorithm, problem = problem, t = t, data = data,
                             parameter_priors = parameter_priors, σ_priors = σ_priors, 
-                            obsvbls = obsvbls, solve_kwargs = solve_kwargs)
+                            solve_kwargs = solve_kwargs, obsvbls = obsvbls, sample_u0 = sample_u0)
     trans = as((parameters = parameter_transformations,
                 σ = as(Vector, asℝ₊, length(σ_priors))))
     ℓ = TransformedLogDensity(trans, P)

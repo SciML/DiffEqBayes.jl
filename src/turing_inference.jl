@@ -1,3 +1,5 @@
+using Turing: Tracker
+
 function turing_inference(
     prob::DiffEqBase.DEProblem,
     alg,
@@ -25,9 +27,14 @@ function turing_inference(
         nu = length(prob.u0)
         u0 = convert.(T, sample_u0 ? theta[1:nu] : prob.u0)
         p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
-        p_tmp = remake(prob, u0 = u0, p = p)
         _saveat = t === nothing ? Float64[] : t
-        sol_tmp = concrete_solve(p_tmp, alg; saveat = _saveat, kwargs...)
+        p_tmp = remake(prob, u0 = Tracker.data.(u0), p = Tracker.data.(p))
+        sol_tmp = solve(p_tmp, alg; saveat = _saveat, kwargs...)
+        if T <: Tracker.TrackedReal || Turing.ADBACKEND[] == :zygote
+            sol_tmp′ = concrete_solve(prob, alg, u0, p; saveat = _saveat, kwargs...)
+        else
+            sol_tmp′ = sol_tmp
+        end
 
         if sol_tmp isa DiffEqBase.AbstractEnsembleSolution
             failure = any((s.retcode != :Success for s in sol_tmp)) && any((s.retcode != :Terminated for s in sol_tmp))
@@ -40,14 +47,13 @@ function turing_inference(
             return
         end
         if sol_tmp isa DiffEqBase.AbstractNoTimeSolution
-            res = sol_tmp.u[obsvbls]
+            res = sol_tmp′[obsvbls]
             x ~ likelihood(res, theta, Inf, σ)
         else
-            u = sol_tmp.u
             for i = 1:length(t)
-                res = sol_tmp.u[i][obsvbls]
+                res = sol_tmp′[obsvbls, i]
                 _t = sol_tmp.t[i]
-                x[:,i] ~ likelihood(res, theta, _t, σ)
+                x[:, i] ~ likelihood(res, theta, _t, σ)
             end
         end
         return 

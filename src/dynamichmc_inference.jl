@@ -1,3 +1,5 @@
+using Turing: Tracker
+
 """
 $(TYPEDEF)
 Defines a callable that returns the log density for given parameter values when called with
@@ -7,7 +9,7 @@ For a common use case, see [`dynamichmc_inference`](@ref).
 # Fields
 $(FIELDS)
 """
-Base.@kwdef struct DynamicHMCPosterior{TA,TP,TD,TT,TR,TS,TK,TO}
+Base.@kwdef struct DynamicHMCPosterior{TA,TP,TD,TT,TR,TS,TK,TO,AD}
     "Algorithm for the ODE solver."
     algorithm::TA
     "An ODE problem definition (`DiffEqBase.DEProblem`)."
@@ -27,19 +29,26 @@ Base.@kwdef struct DynamicHMCPosterior{TA,TP,TD,TT,TR,TS,TK,TO}
     solve_kwargs::TK
     obsvbls::TO
     sample_u0::Bool
+    adkind::AD
 end
 
 function (P::DynamicHMCPosterior)(θ)
     @unpack parameters, σ = θ
-    @unpack algorithm, problem, data, t, parameter_priors, σ_priors, solve_kwargs, obsvbls, sample_u0 = P
+    @unpack algorithm, problem, data, t, parameter_priors = P
+    @unpack σ_priors, solve_kwargs, obsvbls, sample_u0, adkind = P
     nu, T = length(problem.u0), eltype(parameters)
     u0 = convert.(T, sample_u0 ? parameters[1:nu] : problem.u0)
     p = convert.(T, sample_u0 ? parameters[(nu + 1):end] : parameters)
-    prob = remake(problem, u0 = u0, p = p)
-    solution = concrete_solve(prob, algorithm; solve_kwargs...)
-    any((s.retcode ≠ :Success && s.retcode ≠ :Terminated) for s in solution) && return -Inf
-    log_likelihood = sum(sum(logpdf.(Normal.(0.0, σ), solution(t)[obsvbls] .- data[:, i]))
-                         for (i, t) in enumerate(t))
+    _saveat = t === nothing ? Float64[] : t
+    prob = remake(problem, u0 = Tracker.data.(u0), p = Tracker.data.(p))
+    solution = solve(prob, algorithm; saveat = _saveat, solve_kwargs...)
+    if T <: Tracker.TrackedReal || adkind == Val(:Zygote)
+        solution′ = concrete_solve(problem, algorithm, u0, p; saveat = _saveat, solve_kwargs...)
+    else
+        solution′ = solution
+    end
+    any((s.retcode ≠ :Success && s.retcode ≠ :Terminated) for s in solution) && return -1e5
+    log_likelihood = sum(sum(map(logpdf, Normal.(0.0, σ), solution′[obsvbls, i] .- data[:, i])) for (i, t) in enumerate(t))
     log_prior_parameters = sum(map(logpdf, parameter_priors, parameters))
     log_prior_σ = sum(map(logpdf, σ_priors, σ))
     log_likelihood + log_prior_parameters + log_prior_σ
@@ -76,7 +85,8 @@ function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
                               obsvbls = 1:size(data, 1), sample_u0 = false)
     P = DynamicHMCPosterior(; algorithm = algorithm, problem = problem, t = t, data = data,
                             parameter_priors = parameter_priors, σ_priors = σ_priors, 
-                            solve_kwargs = solve_kwargs, obsvbls = obsvbls, sample_u0 = sample_u0)
+                            solve_kwargs = solve_kwargs, obsvbls = obsvbls, sample_u0 = sample_u0,
+                            adkind = AD_gradient_kind)
     trans = as((parameters = parameter_transformations,
                 σ = as(Vector, asℝ₊, length(σ_priors))))
     ℓ = TransformedLogDensity(trans, P)

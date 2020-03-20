@@ -47,7 +47,7 @@ function (P::DynamicHMCPosterior)(θ)
     else
         solution′ = solution
     end
-    any((s.retcode ≠ :Success && s.retcode ≠ :Terminated) for s in solution) && return -1e5
+    any((s.retcode ≠ :Success && s.retcode ≠ :Terminated) for s in solution) && return -Inf
     log_likelihood = sum(sum(map(logpdf, Normal.(0.0, σ), solution′[obsvbls, i] .- data[:, i])) for (i, t) in enumerate(t))
     log_prior_parameters = sum(map(logpdf, parameter_priors, parameters))
     log_prior_σ = sum(map(logpdf, σ_priors, σ))

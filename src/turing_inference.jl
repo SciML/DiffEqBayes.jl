@@ -43,7 +43,7 @@ function turing_inference(
         end
 
         if failure
-            @logpdf() = T(-Inf)
+            @logpdf() = T(0) * sum(x) + T(-1e10)
             return
         end
         if sol_tmp isa DiffEqBase.AbstractNoTimeSolution

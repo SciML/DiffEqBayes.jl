@@ -37,9 +37,9 @@ function generate_priors(f,priors)
   priors_string
 end
 
-function generate_param(name, priors)
+function generate_theta(n,priors)
   theta = ""
-  for i in 1:length(priors)
+  for i in 1:n
     upper_bound = ""
     lower_bound = ""
     if maximum(priors[i]) != Inf
@@ -49,13 +49,13 @@ function generate_param(name, priors)
       lower_bound = string("lower=",minimum(priors[i]))
     end
     if lower_bound != "" && upper_bound != ""
-      theta = string(theta,"real","<$lower_bound",",","$upper_bound>"," $name$i",";")
+      theta = string(theta,"real","<$lower_bound",",","$upper_bound>"," theta$i",";")
     elseif lower_bound != ""
-      theta = string(theta,"real","<$lower_bound",">"," $name$i",";")
+      theta = string(theta,"real","<$lower_bound",">"," theta$i",";")
     elseif upper_bound != ""
-      theta = string(theta,"real","<","$upper_bound>"," $name$i",";")
+      theta = string(theta,"real","<","$upper_bound>"," theta$i",";")
     else
-      theta = string(theta,"real"," $name$i",";")
+      theta = string(theta,"real"," theta$i",";")
     end
   end
   return theta
@@ -80,17 +80,10 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   hyper_params = ""
   tuple_hyper_params = ""
   setup_params = ""
-  u0s = ""
   thetas = ""
-  nu = sample_u0 ? length(prob.u0) : 0
-  u0_string = generate_param("u0", priors[1:nu])
-  theta_string = generate_param("theta", priors[(nu + 1):end])
+  theta_string = generate_theta(length(priors),priors)
   for i in 1:length(priors)
-    if i <= nu
-      u0s = string(u0s,"u0[$i] <- u0$i",";")
-    else
-      thetas = string(thetas,"theta[$i] <- theta$i",";")
-    end
+    thetas = string(thetas,"theta[$i] <- theta$i",";")
   end
   for i in 1:length_of_params
     if isa(vars[i],StanODEData)
@@ -106,6 +99,11 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   differential_equation = generate_differential_equation(f)
   priors_string = string(generate_priors(f,priors))
   stan_likelihood = stan_string(likelihood)
+  if sample_u0
+    integral_string = "u_hat = $algorithm(sho, theta[1:$nu], t0, ts, theta[$(nu+1):$length_of_parameter], x_r, x_i, $reltol, $abstol, $maxiter);"
+  else
+    integral_string = "u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);"
+  end
   parameter_estimation_model = "
   functions {
     real[] sho(real t,real[] internal_var___u,real[] theta,real[] x_r,int[] x_i) {
@@ -115,6 +113,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
       }
     }
   data {
+    real u0[$length_of_y];
     int<lower=1> T;
     real internal_var___u[T,$length_of_y];
     real t0;
@@ -129,15 +128,14 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
     $theta_string
   }
   transformed parameters{
-    real u0[$length_of_y];
     real theta[$length_of_parameter];
-    $u0s $thetas
+    $thetas
   }
   model{
     real u_hat[T,$length_of_y];
     $hyper_params
     $priors_string
-    u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);
+    $integral_string
     for (t in 1:T){
       internal_var___u[t,$obsvbls] ~ $stan_likelihood($tuple_hyper_params);
       }

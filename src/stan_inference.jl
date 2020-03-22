@@ -7,21 +7,6 @@ end
 struct StanODEData
 end
 
-function generate_differential_equation(f)
-  theta_ex = MacroTools.postwalk(f.fex) do x
-    if typeof(x) <: Expr && x.args[1] == :internal_var___p
-      return Symbol("theta[$(x.args[2])]")
-    else
-      return x
-    end
-  end
-  differential_equation = ""
-  for i in 1:length(theta_ex.args)-1
-    differential_equation = string(differential_equation,theta_ex.args[i], ";\n")
-  end
-  return differential_equation
-end
-
 function generate_priors(f,priors)
   priors_string = ""
   params = f.params
@@ -95,17 +80,16 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
     end
   end
   tuple_hyper_params = tuple_hyper_params[1:length(tuple_hyper_params)-1]
-  differential_equation = generate_differential_equation(f)
+  differential_equation = ModelingToolkit.build_function(f.sys.eqs,f.sys.vars,
+  														 f.sys.params,f.sys.iv,
+														 fname = :sho,
+														 target = ModelingToolkit.StanTarget())
   priors_string = string(generate_priors(f,priors))
   stan_likelihood = stan_string(likelihood)
   parameter_estimation_model = "
   functions {
-    real[] sho(real t,real[] internal_var___u,real[] theta,real[] x_r,int[] x_i) {
-      real internal_var___du[$length_of_y];
-      $differential_equation
-      return internal_var___du;
-      }
-    }
+    $differential_equation
+  }
   data {
     real u0[$length_of_y];
     int<lower=1> T;

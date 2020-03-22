@@ -1,6 +1,6 @@
 module DiffEqBayes
-using DiffEqBase, Distributions, Turing, MacroTools#, Mamba
-using ParameterizedFunctions, RecursiveArrayTools
+using DiffEqBase, Distributions, Turing, MacroTools, Mamba
+using RecursiveArrayTools, ModelingToolkit
 using Parameters, Distributions, Optim, Requires
 using Distances, ApproxBayes, DocStringExtensions, Random
 

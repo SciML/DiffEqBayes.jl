@@ -53,7 +53,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   length_of_y = length(prob.u0)
   length_of_params = length(vars)
   sys = ModelingToolkit.modelingtoolkitize(prob)
-  length_of_parameter = string(length(f.params))
+  length_of_parameter = string(length(sys.ps))
   if alg ==:rk45
     algorithm = "integrate_ode_rk45"
   elseif alg == :bdf

@@ -7,24 +7,9 @@ end
 struct StanODEData
 end
 
-function generate_differential_equation(f)
-  theta_ex = MacroTools.postwalk(f.fex) do x
-    if typeof(x) <: Expr && x.args[1] == :internal_var___p
-      return Symbol("theta[$(x.args[2])]")
-    else
-      return x
-    end
-  end
-  differential_equation = ""
-  for i in 1:length(theta_ex.args)-1
-    differential_equation = string(differential_equation,theta_ex.args[i], ";\n")
-  end
-  return differential_equation
-end
-
-function generate_priors(f,priors)
+function generate_priors(sys,priors)
   priors_string = ""
-  params = f.params
+  params = sys.ps
   if priors==nothing
     for i in 1:length(params)
       priors_string = string(priors_string,"theta[$i] ~ normal(0, 1)", " ; ")
@@ -67,8 +52,8 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
                             vars=(StanODEData(),InverseGamma(3,3)),nchains=1)
   length_of_y = length(prob.u0)
   length_of_params = length(vars)
-  f = prob.f
-  length_of_parameter = string(length(f.params))
+  sys = first(ModelingToolkit.modelingtoolkitize(prob))
+  length_of_parameter = string(length(sys.ps))
   if alg ==:rk45
     algorithm = "integrate_ode_rk45"
   elseif alg == :bdf
@@ -95,17 +80,16 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
     end
   end
   tuple_hyper_params = tuple_hyper_params[1:length(tuple_hyper_params)-1]
-  differential_equation = generate_differential_equation(f)
-  priors_string = string(generate_priors(f,priors))
+  differential_equation = ModelingToolkit.build_function(sys.eqs,sys.dvs,
+										  sys.ps,sys.iv,
+										  fname = :sho,
+										  target = ModelingToolkit.StanTarget())
+  priors_string = string(generate_priors(sys,priors))
   stan_likelihood = stan_string(likelihood)
   parameter_estimation_model = "
   functions {
-    real[] sho(real t,real[] internal_var___u,real[] theta,real[] x_r,int[] x_i) {
-      real internal_var___du[$length_of_y];
-      $differential_equation
-      return internal_var___du;
-      }
-    }
+    $differential_equation
+  }
   data {
     real u0[$length_of_y];
     int<lower=1> T;

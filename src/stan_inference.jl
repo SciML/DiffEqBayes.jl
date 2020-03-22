@@ -80,10 +80,10 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
     end
   end
   tuple_hyper_params = tuple_hyper_params[1:length(tuple_hyper_params)-1]
-  differential_equation = ModelingToolkit.build_function(f.sys.eqs,f.sys.vars,
-  														 f.sys.params,f.sys.iv,
-														 fname = :sho,
-														 target = ModelingToolkit.StanTarget())
+  differential_equation = ModelingToolkit.build_function(sys.eqs,sys.dvs,
+										  sys.ps,sys.iv,
+										  fname = :sho,
+										  target = ModelingToolkit.StanTarget())
   priors_string = string(generate_priors(f,priors))
   stan_likelihood = stan_string(likelihood)
   parameter_estimation_model = "

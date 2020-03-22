@@ -7,9 +7,9 @@ end
 struct StanODEData
 end
 
-function generate_priors(f,priors)
+function generate_priors(sys,priors)
   priors_string = ""
-  params = f.params
+  params = sys.ps
   if priors==nothing
     for i in 1:length(params)
       priors_string = string(priors_string,"theta[$i] ~ normal(0, 1)", " ; ")
@@ -52,7 +52,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
                             vars=(StanODEData(),InverseGamma(3,3)),nchains=1)
   length_of_y = length(prob.u0)
   length_of_params = length(vars)
-  f = prob.f
+  sys = ModelingToolkit.modelingtoolkitize(prob)
   length_of_parameter = string(length(f.params))
   if alg ==:rk45
     algorithm = "integrate_ode_rk45"
@@ -84,7 +84,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
 										  sys.ps,sys.iv,
 										  fname = :sho,
 										  target = ModelingToolkit.StanTarget())
-  priors_string = string(generate_priors(f,priors))
+  priors_string = string(generate_priors(sys,priors))
   stan_likelihood = stan_string(likelihood)
   parameter_estimation_model = "
   functions {

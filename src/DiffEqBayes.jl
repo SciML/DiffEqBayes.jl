@@ -23,11 +23,6 @@ function __init__()
         include("dynamichmc_inference.jl")
         export dynamichmc_inference
     end
-
-    @require StatsPlots="f3b207a7-027a-5e70-b257-86293d7955fd" begin
-        include("utils.jl")
-        export plot_chain
-    end
 end
 
 export turing_inference, abc_inference

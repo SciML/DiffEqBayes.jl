@@ -52,8 +52,8 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
                             obsvbls = 1:size(data, 1), sample_u0 = false, diffeq_string = "")
   length_of_y = length(prob.u0)
   length_of_params = length(vars)
-  sys = first(ModelingToolkit.modelingtoolkitize(prob))
-  if hasproperty(sys, :ps)
+  if isempty(diffeq_string)
+    sys = first(ModelingToolkit.modelingtoolkitize(prob))
     length_of_parameter = string(length(sys.ps))
   else
     length_of_parameter = length(prob.p) + sample_u0 * length(prob.u0)
@@ -71,7 +71,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   thetas = ""
   theta_string = generate_theta(length_of_parameter,priors)
   for i in 1:length_of_parameter
-    thetas = string(thetas,"theta[$i] <- theta$i",";")
+    thetas = string(thetas,"theta[$i] = theta$i",";")
   end
   for i in 1:length_of_params
     if isa(vars[i],StanODEData)
@@ -92,6 +92,23 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   else
     integral_string = "u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);"
   end
+  binsearch_string = """
+    int bin_search(real x, int min_val, int max_val){
+      int range = (max_val - min_val + 1) / 2
+      int mid_pt = min_val + range;
+      int out;
+      while (range > 0) {
+          if (x == mid_pt) {
+              out = mid_pt;
+              range = 0;
+          } else {
+              range = (range + 1) / 2; 
+              mid_pt = x > mid_pt ? mid_pt + range: mid_pt - range; 
+          }
+      }
+      return out;
+  }
+  """
   if isempty(diffeq_string)
     diffeq_string = ModelingToolkit.build_function(
         sys.eqs,sys.dvs,
@@ -102,6 +119,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   end
   parameter_estimation_model = "
   functions {
+    $binsearch_string
     $diffeq_string
   }
   data {

@@ -7,21 +7,6 @@ end
 struct StanODEData
 end
 
-function generate_differential_equation(f)
-  theta_ex = MacroTools.postwalk(f.fex) do x
-    if typeof(x) <: Expr && x.args[1] == :internal_var___p
-      return Symbol("theta[$(x.args[2])]")
-    else
-      return x
-    end
-  end
-  differential_equation = ""
-  for i in 1:length(theta_ex.args)-1
-    differential_equation = string(differential_equation,theta_ex.args[i], ";\n")
-  end
-  return differential_equation
-end
-
 function generate_priors(n,priors)
   priors_string = ""
   if priors==nothing
@@ -67,9 +52,9 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
                             obsvbls = 1:size(data, 1), sample_u0 = false, diffeq_string = "")
   length_of_y = length(prob.u0)
   length_of_params = length(vars)
-  f = prob.f
-  if hasproperty(f, :params)
-    length_of_parameter = string(length(f.params))
+  sys = first(ModelingToolkit.modelingtoolkitize(prob))
+  if hasproperty(sys, :ps)
+    length_of_parameter = string(length(sys.ps))
   else
     length_of_parameter = length(prob.p) + sample_u0 * length(prob.u0)
   end
@@ -108,14 +93,12 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
     integral_string = "u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);"
   end
   if isempty(diffeq_string)
-    differential_equation = 
-    diffeq_string = "
-    real[] sho(real t,real[] internal_var___u,real[] theta,real[] x_r,int[] x_i) {
-      real internal_var___du[$length_of_y];
-      $(generate_differential_equation(f))
-      return internal_var___du;
-      }
-    "
+    diffeq_string = ModelingToolkit.build_function(
+        sys.eqs,sys.dvs,
+        sys.ps,sys.iv,
+        fname = :sho,
+        target = ModelingToolkit.StanTarget()
+    )
   end
   parameter_estimation_model = "
   functions {

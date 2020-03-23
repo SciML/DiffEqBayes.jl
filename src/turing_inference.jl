@@ -12,6 +12,7 @@ function turing_inference(
     syms = [Turing.@varname(theta[i]) for i in 1:length(priors)],
     obsvbls = 1:size(data, 1),
     sample_u0 = false, 
+    progress = false, 
     kwargs...,
 )
     N = length(priors)
@@ -29,13 +30,12 @@ function turing_inference(
         p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
         _saveat = t === nothing ? Float64[] : t
         p_tmp = remake(prob, u0 = Tracker.data.(u0), p = Tracker.data.(p))
-        sol_tmp = solve(p_tmp, alg; saveat = _saveat, kwargs...)
+        sol_tmp = solve(p_tmp, alg; saveat = _saveat, progress = progress, kwargs...)
         if T <: Tracker.TrackedReal || Turing.ADBACKEND[] == :zygote
             sol_tmp′ = concrete_solve(prob, alg, u0, p; saveat = _saveat, kwargs...)
         else
             sol_tmp′ = sol_tmp
         end
-
         if sol_tmp isa DiffEqBase.AbstractEnsembleSolution
             failure = any((s.retcode != :Success for s in sol_tmp)) && any((s.retcode != :Terminated for s in sol_tmp))
         else
@@ -61,6 +61,6 @@ function turing_inference(
 
     # Instantiate a Model object.
     model = mf(data)
-    chn = sample(model, sampler, num_samples)
+    chn = sample(model, sampler, num_samples; progress = progress)
     return chn
 end

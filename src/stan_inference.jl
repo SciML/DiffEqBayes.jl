@@ -94,7 +94,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   end
   binsearch_string = """
     int bin_search(real x, int min_val, int max_val){
-      int range = (max_val - min_val + 1) / 2
+      int range = (max_val - min_val + 1) / 2;
       int mid_pt = min_val + range;
       int out;
       while (range > 0) {

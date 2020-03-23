@@ -22,15 +22,14 @@ function generate_differential_equation(f)
   return differential_equation
 end
 
-function generate_priors(f,priors)
+function generate_priors(n,priors)
   priors_string = ""
-  params = f.params
   if priors==nothing
-    for i in 1:length(params)
+    for i in 1:n
       priors_string = string(priors_string,"theta[$i] ~ normal(0, 1)", " ; ")
     end
   else
-    for i in 1:length(params)
+    for i in 1:n
       priors_string = string(priors_string,"theta[$i] ~",stan_string(priors[i]),";")
     end
   end
@@ -42,10 +41,10 @@ function generate_theta(n,priors)
   for i in 1:n
     upper_bound = ""
     lower_bound = ""
-    if maximum(priors[i]) != Inf
+    if !isnothing(priors) && maximum(priors[i]) != Inf
       upper_bound = string("upper=",maximum(priors[i]))
     end
-    if minimum(priors[i]) != -Inf
+    if !isnothing(priors) && minimum(priors[i]) != -Inf
       lower_bound = string("lower=",minimum(priors[i]))
     end
     if lower_bound != "" && upper_bound != ""
@@ -65,11 +64,15 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
                             abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,
                             vars=(StanODEData(),InverseGamma(3,3)),nchains=1,
-                            obsvbls = 1:size(data, 1), sample_u0 = false)
+                            obsvbls = 1:size(data, 1), sample_u0 = false, diffeq_string = "")
   length_of_y = length(prob.u0)
   length_of_params = length(vars)
   f = prob.f
-  length_of_parameter = string(length(f.params))
+  if hasproperty(f, :params)
+    length_of_parameter = string(length(f.params))
+  else
+    length_of_parameter = length(prob.p) + sample_u0 * length(prob.u0)
+  end
   if alg ==:rk45
     algorithm = "integrate_ode_rk45"
   elseif alg == :bdf
@@ -81,41 +84,47 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   tuple_hyper_params = ""
   setup_params = ""
   thetas = ""
-  theta_string = generate_theta(length(priors),priors)
-  for i in 1:length(priors)
+  theta_string = generate_theta(length_of_parameter,priors)
+  for i in 1:length_of_parameter
     thetas = string(thetas,"theta[$i] <- theta$i",";")
   end
   for i in 1:length_of_params
     if isa(vars[i],StanODEData)
-      tuple_hyper_params = string(tuple_hyper_params,"u_hat[t,:]",",")
+      tuple_hyper_params = string(tuple_hyper_params,"u_hat[t,$obsvbls]",",")
     else
       dist = stan_string(vars[i])
       hyper_params = string(hyper_params,"sigma$(i-1) ~ $dist;")
       tuple_hyper_params = string(tuple_hyper_params,"sigma$(i-1)",",")
-      setup_params = string(setup_params,"row_vector<lower=0>[$length_of_y] sigma$(i-1);")
+      setup_params = string(setup_params,"row_vector<lower=0>[$(length(obsvbls))] sigma$(i-1);")
     end
   end
   tuple_hyper_params = tuple_hyper_params[1:length(tuple_hyper_params)-1]
-  differential_equation = generate_differential_equation(f)
-  priors_string = string(generate_priors(f,priors))
+  priors_string = string(generate_priors(length_of_parameter,priors))
   stan_likelihood = stan_string(likelihood)
   if sample_u0
+    nu = length(prob.u0)
     integral_string = "u_hat = $algorithm(sho, theta[1:$nu], t0, ts, theta[$(nu+1):$length_of_parameter], x_r, x_i, $reltol, $abstol, $maxiter);"
   else
     integral_string = "u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);"
   end
-  parameter_estimation_model = "
-  functions {
+  if isempty(diffeq_string)
+    differential_equation = 
+    diffeq_string = "
     real[] sho(real t,real[] internal_var___u,real[] theta,real[] x_r,int[] x_i) {
       real internal_var___du[$length_of_y];
-      $differential_equation
+      $(generate_differential_equation(f))
       return internal_var___du;
       }
-    }
+    "
+  end
+  parameter_estimation_model = "
+  functions {
+    $diffeq_string
+  }
   data {
     real u0[$length_of_y];
     int<lower=1> T;
-    real internal_var___u[T,$length_of_y];
+    real internal_var___u[T,$(length(obsvbls))];
     real t0;
     real ts[T];
   }
@@ -137,12 +146,12 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
     $priors_string
     $integral_string
     for (t in 1:T){
-      internal_var___u[t,$obsvbls] ~ $stan_likelihood($tuple_hyper_params);
+      internal_var___u[t,:] ~ $stan_likelihood($tuple_hyper_params);
       }
   }
   "
   stanmodel = CmdStan.Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model, nchains=nchains);
-  parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => data', "t0" => prob.tspan[1], "ts" => t)
+  parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => data[:, 1:length(t)]', "t0" => prob.tspan[1], "ts" => t)
   return_code, chains, cnames = CmdStan.stan(stanmodel, [parameter_estimation_data]; CmdStanDir=CMDSTAN_HOME)
   return StanModel(return_code, chains, cnames)
 end

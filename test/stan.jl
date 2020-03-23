@@ -19,8 +19,8 @@ priors = [Truncated(Normal(1.5,0.1),0,2)]
 bayesian_result = stan_inference(prob1,t,data,priors;num_samples=300,
                                  num_warmup=500,likelihood=Normal)
 
-@test mean(get(bayesian_result.chains,:theta1).theta1') ≈ 1.5 atol=3e-1
-
+sdf  = CmdStan.read_summary(bayesian_result.model)
+@test sdf[sdf.parameters .== :theta1, :mean][1] ≈ 1.5 atol=3e-1
 
 println("Four parameter case")
 f1 = @ode_def begin
@@ -39,7 +39,8 @@ priors = [Truncated(Normal(1.5,0.01),0,2),Truncated(Normal(1.0,0.01),0,1.5),
           Truncated(Normal(3.0,0.01),0,4),Truncated(Normal(1.0,0.01),0,2)]
 
 bayesian_result = stan_inference(prob1,t,data,priors;num_samples=100,num_warmup=500,vars =(DiffEqBayes.StanODEData(),InverseGamma(4,1)))
-@test mean(get(bayesian_result.chains,:theta1).theta1') ≈ 1.5 atol=1e-1
-@test mean(get(bayesian_result.chains,:theta2).theta2') ≈ 1.0 atol=1e-1
-@test mean(get(bayesian_result.chains,:theta3).theta3') ≈ 3.0 atol=1e-1
-@test mean(get(bayesian_result.chains,:theta4).theta4') ≈ 1.0 atol=1e-1
+sdf  = CmdStan.read_summary(bayesian_result.model)
+@test sdf[sdf.parameters .== :theta1, :mean][1] ≈ 1.5 atol=1e-1
+@test sdf[sdf.parameters .== :theta2, :mean][1] ≈ 1.0 atol=1e-1
+@test sdf[sdf.parameters .== :theta3, :mean][1] ≈ 3.0 atol=1e-1
+@test sdf[sdf.parameters .== :theta4, :mean][1] ≈ 1.0 atol=1e-1

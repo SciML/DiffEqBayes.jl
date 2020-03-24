@@ -1,5 +1,10 @@
 using Turing: Tracker
 
+function _concrete_solve(prob::DiffEqBase.AbstractSteadyStateProblem,alg::DiffEqBase.DEAlgorithm, 
+                        u0 = prob.u0, p = prob.p, args...; kwargs...)
+    solve(remake(prob,u0 = u0, p = p), alg, args...; kwargs...)
+end
+
 function turing_inference(
     prob::DiffEqBase.DEProblem,
     alg,
@@ -29,13 +34,13 @@ function turing_inference(
         p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
         _saveat = isnothing(t) ? Float64[] : t
         sol = concrete_solve(prob, alg, u0, p; saveat = _saveat, progress = progress, kwargs...)
-        failure = size(sol, 2) != length(_saveat)
+        failure = size(sol, 2) < length(_saveat)
 
         if failure
             @logpdf() = T(0) * sum(x) + T(-1e10)
             return
         end
-        if sol isa DiffEqBase.AbstractNoTimeSolution
+        if ndims(sol) == 1
             x ~ likelihood(sol[:], theta, Inf, σ)
         else
             for i = 1:length(t)

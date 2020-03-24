@@ -39,7 +39,7 @@ function (P::DynamicHMCPosterior)(θ)
     p = convert.(T, sample_u0 ? parameters[(nu + 1):end] : parameters)
     _saveat = t === nothing ? Float64[] : t
     sol = concrete_solve(problem, algorithm, u0, p; saveat = _saveat, solve_kwargs...)
-    failure = size(sol, 2) != length(_saveat)
+    failure = size(sol, 2) < length(_saveat)
     failure && return T(0) * sum(σ) + T(-1e10)
     log_likelihood = sum(sum(map(logpdf, Normal.(0.0, σ), sol[:, i] .- data[:, i])) for (i, t) in enumerate(t))
     log_prior_parameters = sum(map(logpdf, parameter_priors, parameters))

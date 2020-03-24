@@ -1,4 +1,5 @@
-struct StanModel{R,C,N}
+struct StanModel{M,R,C,N}
+  model::M
   return_code::R
   chains::C
   cnames::N
@@ -53,9 +54,9 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   length_of_y = length(prob.u0)
   save_idxs = something(save_idxs, 1:length_of_y)
   length_of_params = length(vars)
-  if isempty(diffeq_string)
+  if isnothing(diffeq_string)
     sys = first(ModelingToolkit.modelingtoolkitize(prob))
-    length_of_parameter = string(length(sys.ps))
+    length_of_parameter = length(sys.ps)
   else
     length_of_parameter = length(prob.p) + sample_u0 * length(prob.u0)
   end
@@ -155,5 +156,5 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   stanmodel = CmdStan.Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model, nchains=nchains);
   parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => view(data, :, 1:length(t))', "t0" => prob.tspan[1], "ts" => t)
   return_code, chains, cnames = CmdStan.stan(stanmodel, [parameter_estimation_data]; CmdStanDir=CMDSTAN_HOME)
-  return StanModel(return_code, chains, cnames)
+  return StanModel(stanmodel, return_code, chains, cnames)
 end

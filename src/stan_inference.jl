@@ -49,8 +49,9 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
                             abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,
                             vars=(StanODEData(),InverseGamma(3,3)),nchains=1,
-                            obsvbls = 1:size(data, 1), sample_u0 = false, diffeq_string = "")
+                            sample_u0 = false, save_idxs = nothing, diffeq_string = nothing)
   length_of_y = length(prob.u0)
+  save_idxs = something(save_idxs, 1:length_of_y)
   length_of_params = length(vars)
   if isempty(diffeq_string)
     sys = first(ModelingToolkit.modelingtoolkitize(prob))
@@ -75,12 +76,12 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   end
   for i in 1:length_of_params
     if isa(vars[i],StanODEData)
-      tuple_hyper_params = string(tuple_hyper_params,"u_hat[t,$obsvbls]",",")
+      tuple_hyper_params = string(tuple_hyper_params,"u_hat[t,$save_idxs]",",")
     else
       dist = stan_string(vars[i])
       hyper_params = string(hyper_params,"sigma$(i-1) ~ $dist;")
       tuple_hyper_params = string(tuple_hyper_params,"sigma$(i-1)",",")
-      setup_params = string(setup_params,"row_vector<lower=0>[$(length(obsvbls))] sigma$(i-1);")
+      setup_params = string(setup_params,"row_vector<lower=0>[$(length(save_idxs))] sigma$(i-1);")
     end
   end
   tuple_hyper_params = tuple_hyper_params[1:length(tuple_hyper_params)-1]
@@ -109,7 +110,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
       return out;
   }
   """
-  if isempty(diffeq_string)
+  if isnothing(diffeq_string)
     diffeq_string = ModelingToolkit.build_function(
         sys.eqs,sys.dvs,
         sys.ps,sys.iv,
@@ -125,7 +126,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   data {
     real u0[$length_of_y];
     int<lower=1> T;
-    real internal_var___u[T,$(length(obsvbls))];
+    real internal_var___u[T,$(length(save_idxs))];
     real t0;
     real ts[T];
   }
@@ -152,7 +153,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   }
   "
   stanmodel = CmdStan.Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model, nchains=nchains);
-  parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => data[:, 1:length(t)]', "t0" => prob.tspan[1], "ts" => t)
+  parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => view(data, :, 1:length(t))', "t0" => prob.tspan[1], "ts" => t)
   return_code, chains, cnames = CmdStan.stan(stanmodel, [parameter_estimation_data]; CmdStanDir=CMDSTAN_HOME)
   return StanModel(return_code, chains, cnames)
 end

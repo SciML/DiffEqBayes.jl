@@ -10,7 +10,6 @@ function turing_inference(
     likelihood = (u,p,t,σ) -> MvNormal(u, σ[1]*ones(length(u))),
     num_samples=1000, sampler = Turing.NUTS(0.65),
     syms = [Turing.@varname(theta[i]) for i in 1:length(priors)],
-    obsvbls = 1:size(data, 1),
     sample_u0 = false, 
     progress = false, 
     kwargs...,
@@ -28,35 +27,22 @@ function turing_inference(
         nu = length(prob.u0)
         u0 = convert.(T, sample_u0 ? theta[1:nu] : prob.u0)
         p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
-        _saveat = t === nothing ? Float64[] : t
-        p_tmp = remake(prob, u0 = Tracker.data.(u0), p = Tracker.data.(p))
-        sol_tmp = solve(p_tmp, alg; saveat = _saveat, progress = progress, kwargs...)
-        if T <: Tracker.TrackedReal || Turing.ADBACKEND[] == :zygote
-            sol_tmp′ = concrete_solve(prob, alg, u0, p; saveat = _saveat, kwargs...)
-        else
-            sol_tmp′ = sol_tmp
-        end
-        if sol_tmp isa DiffEqBase.AbstractEnsembleSolution
-            failure = any((s.retcode != :Success for s in sol_tmp)) && any((s.retcode != :Terminated for s in sol_tmp))
-        else
-            failure = sol_tmp.retcode != :Success && sol_tmp != :Terminated
-        end
+        _saveat = isnothing(t) ? Float64[] : t
+        sol = concrete_solve(prob, alg, u0, p; saveat = _saveat, progress = progress, kwargs...)
+        failure = size(sol, 2) != length(_saveat)
 
         if failure
             @logpdf() = T(0) * sum(x) + T(-1e10)
             return
         end
-        if sol_tmp isa DiffEqBase.AbstractNoTimeSolution
-            res = sol_tmp′[obsvbls]
-            x ~ likelihood(res, theta, Inf, σ)
+        if sol isa DiffEqBase.AbstractNoTimeSolution
+            x ~ likelihood(sol[:], theta, Inf, σ)
         else
             for i = 1:length(t)
-                res = sol_tmp′[obsvbls, i]
-                _t = sol_tmp.t[i]
-                x[:, i] ~ likelihood(res, theta, _t, σ)
+                x[:, i] ~ likelihood(sol[:, i], theta, sol.t[i], σ)
             end
         end
-        return 
+        return
     end
 
     # Instantiate a Model object.

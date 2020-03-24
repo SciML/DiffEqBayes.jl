@@ -1,7 +1,7 @@
 using Turing: Tracker
 
-function _concrete_solve(prob::DiffEqBase.AbstractSteadyStateProblem,alg::DiffEqBase.DEAlgorithm, 
-                        u0 = prob.u0, p = prob.p, args...; kwargs...)
+function DiffEqBase._concrete_solve(prob::DiffEqBase.AbstractSteadyStateProblem,
+    alg::DiffEqBase.DEAlgorithm, u0 = prob.u0, p = prob.p, args...; kwargs...)
     solve(remake(prob,u0 = u0, p = p), alg, args...; kwargs...)
 end
 

@@ -40,12 +40,25 @@ function (P::DynamicHMCPosterior)(θ)
     _saveat = t === nothing ? Float64[] : t
     sol = concrete_solve(problem, algorithm, u0, p; saveat = _saveat, solve_kwargs...)
     failure = size(sol, 2) < length(_saveat)
-    failure && return T(0) * sum(σ) + T(-1e10)
+    failure && return T(0) * sum(σ) + T(-Inf)
     log_likelihood = sum(sum(map(logpdf, Normal.(0.0, σ), sol[:, i] .- data[:, i])) for (i, t) in enumerate(t))
     log_prior_parameters = sum(map(logpdf, parameter_priors, parameters))
     log_prior_σ = sum(map(logpdf, σ_priors, σ))
     log_likelihood + log_prior_parameters + log_prior_σ
 end
+
+# function (P::DynamicHMCPosterior)(θ)
+#   @unpack parameters, σ = θ
+#   @unpack algorithm, problem, data, t, parameter_priors, σ_priors, solve_kwargs = P
+#   prob = remake(problem, u0 = convert.(eltype(parameters), problem.u0), p = parameters)
+#   solution = solve(prob, algorithm; solve_kwargs...)
+#   any((s.retcode ≠ :Success && s.retcode ≠ :Terminated) for s in solution) && return -Inf
+#   log_likelihood = sum(sum(logpdf.(Normal.(0.0, σ), solution(t) .- data[:, i]))
+#                        for (i, t) in enumerate(t))
+#   log_prior_parameters = sum(map(logpdf, parameter_priors, parameters))
+#   log_prior_σ = sum(map(logpdf, σ_priors, σ))
+#   log_likelihood + log_prior_parameters + log_prior_σ
+# end
 
 """
 $(SIGNATURES)

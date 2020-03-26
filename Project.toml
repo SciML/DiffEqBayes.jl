@@ -1,7 +1,7 @@
 name = "DiffEqBayes"
 uuid = "ebbdde9d-f333-5424-9be2-dbf1e9acfb5e"
 authors = ["Vaibhavdixit02 <vaibhavyashdixit@gmail.com>"]
-version = "2.8.0"
+version = "2.9.0"
 
 [deps]
 ApproxBayes = "f5f396d3-230c-5e07-80e6-9fadf06146cc"

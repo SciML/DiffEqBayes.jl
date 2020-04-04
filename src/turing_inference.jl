@@ -15,7 +15,8 @@ function turing_inference(
     likelihood = (u,p,t,σ) -> MvNormal(u, σ[1]*ones(length(u))),
     num_samples=1000, sampler = Turing.NUTS(0.65),
     syms = [Turing.@varname(theta[i]) for i in 1:length(priors)],
-    sample_u0 = false, 
+    sample_u0 = false,
+    save_idxs = nothing, 
     progress = false, 
     kwargs...,
 )
@@ -33,7 +34,7 @@ function turing_inference(
         u0 = convert.(T, sample_u0 ? theta[1:nu] : prob.u0)
         p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
         _saveat = isnothing(t) ? Float64[] : t
-        sol = concrete_solve(prob, alg, u0, p; saveat = _saveat, progress = progress, kwargs...)
+        sol = concrete_solve(prob, alg, u0, p; saveat = _saveat, progress = progress, save_idxs = save_idxs, kwargs...)
         failure = size(sol, 2) < length(_saveat)
 
         if failure

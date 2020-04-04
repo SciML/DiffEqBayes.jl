@@ -125,4 +125,21 @@ equation solver.
  bayesian_result_hmc = dynamichmc_inference(prob1, Tsit5(), t, data, priors)
 
  bayesian_result_abc = abc_inference(prob1, Tsit5(), t, data, priors)
+```
+### Using save_idxs for using latent variables 
+
+```julia
+ sol = solve(prob1,Tsit5(),save_idxs=[1])
+ randomized = VectorOfArray([(sol(t[i]) + σ * randn(1)) for i in 1:length(t)])
+ data = convert(Array,randomized)
+
+ using CmdStan #required for using the Stan backend
+ bayesian_result_stan = stan_inference(prob1,t,data,priors,save_idxs=[1])
+
+ bayesian_result_turing = turing_inference(prob1,Tsit5(),t,data,priors,save_idxs=[1])
+ 
+ using DynamicHMC
+ bayesian_result_hmc = dynamichmc_inference(prob1,Tsit5(),t,data,priors),save_idxs=[1]
+
+ bayesian_result_abc = abc_inference(prob1,Tsit5(),t,data,priors,save_idxs=[1])
  ```

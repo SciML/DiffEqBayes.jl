@@ -83,7 +83,7 @@ posterior values (transformed from `ℝⁿ`).
 - `mcmc_kwargs` are passed on as keyword arguments to `DynamicHMC.mcmc_with_warmup`
 """
 function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
-                              parameter_priors, parameter_transformations;
+                              parameter_priors, parameter_transformations=as(Vector, asℝ₊, length(parameter_priors));
                               σ_priors = fill(Normal(0, 5), size(data, 1)),
                               rng = Random.GLOBAL_RNG, num_samples = 1000,
                               AD_gradient_kind = Val(:ForwardDiff),

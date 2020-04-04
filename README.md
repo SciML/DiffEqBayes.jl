@@ -98,7 +98,8 @@ equation solver.
  ## Example
 
  ```julia
- f1 = @ode_def_nohes LotkaVolterraTest1 begin
+ using ParameterizedFunctions, OrdinaryDiffEq, RecursiveArrayTools, Distributions
+ f1 = @ode_def LotkaVolterra begin
   dx = a*x - x*y
   dy = -3*y + x*y
  end a
@@ -109,20 +110,19 @@ equation solver.
  prob1 = ODEProblem(f1,u0,tspan,p)
 
  σ = 0.01                         # noise, fixed for now
- t = collect(linspace(1,10,10))   # observation times
+ t = collect(1.:10.)   # observation times
  sol = solve(prob1,Tsit5())
-
+ priors = [Normal(1.5, 1)]
  randomized = VectorOfArray([(sol(t[i]) + σ * randn(2)) for i in 1:length(t)])
  data = convert(Array,randomized)
+ 
+ using CmdStan #required for using the Stan backend
+ bayesian_result_stan = stan_inference(prob1,t,data,priors)
 
- bayesian_result_stan = stan_inference(prob1,t,data,priors;num_samples=300,
-                                 num_warmup=500,likelihood=Normal,
-                                 vars =(StanODEData(),InverseGamma(3,2)))
+ bayesian_result_turing = turing_inference(prob1,Tsit5(),t,data,priors)
+ 
+ using DynamicHMC
+ bayesian_result_hmc = dynamichmc_inference(prob1, Tsit5(), t, data, priors)
 
- bayesian_result_turing = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500)
-
- bayesian_result_hmc = dynamichmc_inference(prob1, data, [Normal(1.5, 1)], t, [bridge(ℝ, ℝ⁺, )])
-
- bayesian_result_abc = abc_inference(prob1, Tsit5(), t, data, [Normal(1.5, 1)];
-                                 num_samples=500)
+ bayesian_result_abc = abc_inference(prob1, Tsit5(), t, data, priors)
  ```

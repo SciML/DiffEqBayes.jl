@@ -126,7 +126,7 @@ equation solver.
 
  bayesian_result_abc = abc_inference(prob1, Tsit5(), t, data, priors)
 ```
-### Using save_idxs for using latent variables 
+### Using save_idxs to declare observables
 
 ```julia
  sol = solve(prob1,Tsit5(),save_idxs=[1])

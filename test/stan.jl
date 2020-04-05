@@ -22,6 +22,16 @@ bayesian_result = stan_inference(prob1,t,data,priors;num_samples=300,
 sdf  = CmdStan.read_summary(bayesian_result.model)
 @test sdf[sdf.parameters .== :theta1, :mean][1] ≈ 1.5 atol=3e-1
 
+sol = solve(prob1,Tsit5(),save_idxs=[1])
+randomized = VectorOfArray([(sol(t[i]) + .01 * randn(1)) for i in 1:length(t)])
+data = convert(Array,randomized)
+
+bayesian_result = stan_inference(prob1,t,data,priors;num_samples=300,
+                                 num_warmup=500,likelihood=Normal,save_idxs=[1])
+
+sdf  = CmdStan.read_summary(bayesian_result.model)
+@test sdf[sdf.parameters .== :theta1, :mean][1] ≈ 1.5 atol=3e-1
+
 println("Four parameter case")
 f1 = @ode_def begin
   dx = a*x - b*x*y

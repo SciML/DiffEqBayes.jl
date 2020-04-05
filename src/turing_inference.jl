@@ -30,7 +30,7 @@ function turing_inference(
         for i in 1:length(likelihood_dist_priors)
             σ[i] ~ likelihood_dist_priors[i]
         end
-        nu = save_idxs === nothing ? length(prob.u0) : length(save_idxs)
+        nu = length(prob.u0)
         u0 = convert.(T, sample_u0 ? theta[1:nu] : prob.u0)
         p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
         _saveat = isnothing(t) ? Float64[] : t

@@ -22,6 +22,16 @@ bayesian_result = stan_inference(prob1,t,data,priors;num_samples=300,
 sdf  = CmdStan.read_summary(bayesian_result.model)
 @test sdf[sdf.parameters .== :theta1, :mean][1] ≈ 1.5 atol=3e-1
 
+
+priors = [Normal(1.,0.01),Normal(1.,0.01),Normal(1.5,0.01)]
+bayesian_result = stan_inference(prob1,t,data,priors;num_samples=300,
+                                 num_warmup=500,likelihood=Normal,sample_u0=true)
+
+sdf  = CmdStan.read_summary(bayesian_result.model)
+@test sdf[sdf.parameters .== :theta1, :mean][1] ≈ 1. atol=3e-1
+@test sdf[sdf.parameters .== :theta2, :mean][1] ≈ 1. atol=3e-1
+@test sdf[sdf.parameters .== :theta3, :mean][1] ≈ 1.5 atol=3e-1
+
 sol = solve(prob1,Tsit5(),save_idxs=[1])
 randomized = VectorOfArray([(sol(t[i]) + .01 * randn(1)) for i in 1:length(t)])
 data = convert(Array,randomized)

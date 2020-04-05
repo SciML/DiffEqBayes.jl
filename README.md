@@ -1,10 +1,10 @@
 # DiffEqBayes.jl
 
-[![Build Status](https://travis-ci.org/JuliaDiffEq/DiffEqBayes.jl.svg?branch=master)](https://travis-ci.org/JuliaDiffEq/DiffEqBayes.jl)
-[![Coverage Status](https://coveralls.io/repos/JuliaDiffEq/DiffEqBayes.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/JuliaDiffEq/DiffEqBayes.jl?branch=master)
-[![codecov.io](http://codecov.io/github/JuliaDiffEq/DiffEqBayes.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaDiffEq/DiffEqBayes.jl?branch=master)
+[![Build Status](https://travis-ci.org/JuliaDiffEq/DiffEqBayes.jl.svg?branch=master)](https://travis-ci.org/SciML/DiffEqBayes.jl)
+[![Coverage Status](https://coveralls.io/repos/JuliaDiffEq/DiffEqBayes.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/SciML/DiffEqBayes.jl?branch=master)
+[![codecov.io](http://codecov.io/github/JuliaDiffEq/DiffEqBayes.jl/coverage.svg?branch=master)](http://codecov.io/github/SciML/DiffEqBayes.jl?branch=master)
 
-This repository is a set of extension functionality for estimating the parameters of differential equations using Bayesian methods. It allows the choice of using [Stan.jl](https://github.com/goedman/Stan.jl), [Turing.jl](https://github.com/yebai/Turing.jl), [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) and [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl) to perform a Bayesian estimation of a differential equation problem specified via the [DifferentialEquations.jl](https://github.com/JuliaDiffEq/DifferentialEquations.jl) interface.
+This repository is a set of extension functionality for estimating the parameters of differential equations using Bayesian methods. It allows the choice of using [CmdStan.jl]((https://github.com/StanJulia/CmdStan.jl), [Turing.jl](https://github.com/TuringLang/Turing.jl), [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) and [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl) to perform a Bayesian estimation of a differential equation problem specified via the [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl) interface.
 
 To begin you first need to add this repository using the following command.
 ```julia
@@ -132,12 +132,16 @@ equation solver.
 
  bayesian_result_turing = turing_inference(prob1,Tsit5(),t,data,priors)
  
- using DynamicHMC
+ using DynamicHMC #required for DynamicHMC backend
  bayesian_result_hmc = dynamichmc_inference(prob1, Tsit5(), t, data, priors)
 
  bayesian_result_abc = abc_inference(prob1, Tsit5(), t, data, priors)
 ```
 ### Using save_idxs to declare observables
+
+You don't always have data for all of the variables of the model. In case of certain latent variables
+you can utilise the `save_idxs` kwarg to declare the oberved variables and run the inference using any 
+of the backends as shown below.
 
 ```julia
  sol = solve(prob1,Tsit5(),save_idxs=[1])
@@ -149,8 +153,8 @@ equation solver.
 
  bayesian_result_turing = turing_inference(prob1,Tsit5(),t,data,priors,save_idxs=[1])
  
- using DynamicHMC
- bayesian_result_hmc = dynamichmc_inference(prob1,Tsit5(),t,data,priors,solve_kwargs = (save_idxs = [1],))
+ using DynamicHMC #required for DynamicHMC backend
+ bayesian_result_hmc = dynamichmc_inference(prob1,Tsit5(),t,data,priors,save_idxs = [1])
 
  bayesian_result_abc = abc_inference(prob1,Tsit5(),t,data,priors,save_idxs=[1])
  ```

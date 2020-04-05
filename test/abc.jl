@@ -20,6 +20,15 @@ bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors;
 
 @test mean(bayesian_result.parameters, weights(bayesian_result.weights)) ≈ 1.5 atol=0.1
 
+sol = solve(prob1,Tsit5(),save_idxs=[1])
+randomized = VectorOfArray([(sol(t[i]) + .01randn(1)) for i in 1:length(t)])
+data = convert(Array,randomized)
+
+bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors;
+                                num_samples=500,ϵ = 0.001,save_idxs=[1])
+
+@test mean(bayesian_result.parameters, weights(bayesian_result.weights)) ≈ 1.5 atol=0.1
+
 # custom distance-function
 weights_ = ones(size(data)) # weighted data
 for i = 1:3:length(data)

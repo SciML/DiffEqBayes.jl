@@ -57,9 +57,9 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   length_of_params = length(vars)
   if isnothing(diffeq_string)
     sys = first(ModelingToolkit.modelingtoolkitize(prob))
-    length_of_parameter = length(sys.ps)
+    length_of_parameter = length(sys.ps) + sample_u0 * length(save_idxs)
   else
-    length_of_parameter = length(prob.p) + sample_u0 * length(prob.u0)
+    length_of_parameter = length(prob.p) + sample_u0 * length(save_idxs)
   end
   if alg ==:rk45
     algorithm = "integrate_ode_rk45"
@@ -90,8 +90,17 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   priors_string = string(generate_priors(length_of_parameter,priors))
   stan_likelihood = stan_string(likelihood)
   if sample_u0
-    nu = length(prob.u0)
-    integral_string = "u_hat = $algorithm(sho, theta[1:$nu], t0, ts, theta[$(nu+1):$length_of_parameter], x_r, x_i, $reltol, $abstol, $maxiter);"
+    nu = length(save_idxs)
+    if nu < length(prob.u0)
+      u0 = "{"
+      for u_ in prob.u0[nu+1:length(prob.u0)]
+        u0 = u0*string(u_)
+      end
+      u0 = u0*"}"
+      integral_string = "u_hat = $algorithm(sho, append_array(theta[1:$nu],$u0), t0, ts, theta[$(nu+1):$length_of_parameter], x_r, x_i, $reltol, $abstol, $maxiter);"
+    else 
+      integral_string = "u_hat = $algorithm(sho, theta[1:$nu], t0, ts, theta[$(nu+1):$length_of_parameter], x_r, x_i, $reltol, $abstol, $maxiter);"
+    end
   else
     integral_string = "u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);"
   end

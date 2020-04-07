@@ -36,9 +36,15 @@ function (P::DynamicHMCPosterior)(θ)
     @unpack algorithm, problem, data, t, parameter_priors = P
     @unpack σ_priors, solve_kwargs, sample_u0, save_idxs = P
     T = eltype(parameters)
-    nu = length(problem.u0)
+    nu = save_idxs == nothing ? length(problem.u0) : length(save_idxs)
     u0 = convert.(T, sample_u0 ? parameters[1:nu] : problem.u0)
     p = convert.(T, sample_u0 ? parameters[(nu + 1):end] : parameters)
+    if length(u0) < length(problem.u0)
+      # assumes u is ordered such that the observed variables are in the begining, consistent with ordered theta 
+      for i in length(u0):length(problem.u0)
+          push!(u0, convert(T,problem.u0[i]))
+      end
+    end
     _saveat = t === nothing ? Float64[] : t
     sol = concrete_solve(problem, algorithm, u0, p; saveat = _saveat, save_idxs = save_idxs, solve_kwargs...)
     failure = size(sol, 2) < length(_saveat)

@@ -42,6 +42,14 @@ bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, (Normal(1.5, 1),
                                            as(Vector, asℝ₊, 1),mcmc_kwargs=mcmc_kwargs, save_idxs = [1])
 @test mean(p.parameters[1] for p in bayesian_result.posterior) ≈ p[1] atol = 0.1
 
+priors = [Normal(1.,0.001),Normal(1.5,0.001)]
+mcmc_kwargs = (initialization = (q = zeros(2 + 1),), reporter = reporter)
+bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, priors,
+                                           as(Vector, asℝ₊, 2),mcmc_kwargs=mcmc_kwargs,save_idxs=[1],sample_u0=true)
+
+@test mean(p.parameters[1] for p in bayesian_result.posterior) ≈ 1. atol = 0.1
+@test mean(p.parameters[2] for p in bayesian_result.posterior) ≈ 1.5 atol = 0.1
+
 # With hand-code likelihood function
 weights_ = ones(size(data)) # weighted data
 for i = 1:3:length(data)

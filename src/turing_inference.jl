@@ -30,9 +30,15 @@ function turing_inference(
         for i in 1:length(likelihood_dist_priors)
             σ[i] ~ likelihood_dist_priors[i]
         end
-        nu = length(prob.u0)
+        nu = save_idxs === nothing ? length(prob.u0) : length(save_idxs)
         u0 = convert.(T, sample_u0 ? theta[1:nu] : prob.u0)
         p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
+        if length(u0) < length(prob.u0)
+            # assumes u is ordered such that the observed variables are in the begining, consistent with ordered theta 
+            for i in length(u0):length(prob.u0)
+                push!(u0, convert(T,prob.u0[i]))
+            end
+        end
         _saveat = isnothing(t) ? Float64[] : t
         sol = concrete_solve(prob, alg, u0, p; saveat = _saveat, progress = progress, save_idxs = save_idxs, kwargs...)
         failure = size(sol, 2) < length(_saveat)

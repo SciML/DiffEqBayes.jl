@@ -123,7 +123,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing;alg=:
   """
   if isnothing(diffeq_string)
     diffeq_string = ModelingToolkit.build_function(
-        sys.eqs,sys.dvs,
+        sys.eqs,sys.states,
         sys.ps,sys.iv,
         fname = :sho,
         target = ModelingToolkit.StanTarget()

@@ -21,6 +21,12 @@ bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500,
 
 @test mean(get(bayesian_result,:a)[1]) ≈ 1.5 atol=3e-1
 
+bayesian_result = turing_inference(prob1,Rosenbrock23(autodiff=false),t,data,priors;num_samples=500,
+                                   syms=[:a])
+
+bayesian_result = turing_inference(prob1,Rosenbrock23(),t,data,priors;num_samples=500,
+                                   syms=[:a])
+
 priors = [Normal(1.,0.01),Normal(1.,0.01),Normal(1.5,0.01)]
 bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500,sample_u0 =true,
                                    syms=[:u1,:u2,:a])
@@ -28,12 +34,6 @@ bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500,s
 @test mean(get(bayesian_result,:a)[1]) ≈ 1.5 atol=3e-1
 @test mean(get(bayesian_result,:u1)[1]) ≈ 1.0 atol=3e-1
 @test mean(get(bayesian_result,:u2)[1]) ≈ 1.0 atol=3e-1
-
-bayesian_result = turing_inference(prob1,Rosenbrock23(autodiff=false),t,data,priors;num_samples=500,
-                                   syms=[:a])
-
-bayesian_result = turing_inference(prob1,Rosenbrock23(),t,data,priors;num_samples=500,
-                                   syms=[:a])
 
 sol = solve(prob1,Tsit5(),save_idxs=[1])
 randomized = VectorOfArray([(sol(t[i]) + .01 * randn(1)) for i in 1:length(t)])

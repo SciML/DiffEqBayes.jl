@@ -11,7 +11,7 @@ tspan = (0.0,10.0)
 p = [1.5]
 prob1 = ODEProblem(f1,u0,tspan,p)
 sol = solve(prob1,Tsit5())
-t = collect(range(1,stop=10,length=10))
+t = collect(range(1,stop=10,length=50))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 priors = [truncated(Normal(1.5,0.1),0.5,2)]
@@ -61,7 +61,7 @@ tspan = (0.0,10.0)
 p = [1.5,1.0,3.0,1.0]
 prob1 = ODEProblem(f1,u0,tspan,p)
 sol = solve(prob1,Tsit5())
-t = collect(range(1,stop=10,length=10))
+t = collect(range(1,stop=10,length=50))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
 priors = [truncated(Normal(1.5,0.01),0.5,2),truncated(Normal(1.0,0.01),0.5,1.5),

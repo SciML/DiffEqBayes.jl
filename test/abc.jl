@@ -20,6 +20,33 @@ bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors;
 
 @test mean(bayesian_result.parameters, weights(bayesian_result.weights)) ≈ 1.5 atol=0.1
 
+priors = [Normal(1.,0.01),Normal(1.,0.01),Normal(1.5,0.01)]
+bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors;
+                                num_samples=500,ϵ = 0.001,sample_u0=true)
+
+meanvals = mean(bayesian_result.parameters, weights(bayesian_result.weights), 1)
+@test meanvals[1] ≈ 1. atol=0.1
+@test meanvals[2] ≈ 1. atol=0.1
+@test meanvals[3] ≈ 1.5 atol=0.1
+
+sol = solve(prob1,Tsit5(),save_idxs=[1])
+randomized = VectorOfArray([(sol(t[i]) + .01randn(1)) for i in 1:length(t)])
+data = convert(Array,randomized)
+priors = [Normal(1.5,0.01)]
+bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors;
+                                num_samples=500,ϵ = 0.001,save_idxs=[1])
+
+@test mean(bayesian_result.parameters, weights(bayesian_result.weights)) ≈ 1.5 atol=0.1
+
+priors = [Normal(1.,0.01),Normal(1.5,0.01)]
+bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors;
+                                num_samples=500,ϵ = 0.001,sample_u0=true,save_idxs=[1])
+
+meanvals = mean(bayesian_result.parameters, weights(bayesian_result.weights), 1)
+@test meanvals[1] ≈ 1. atol=0.1
+@test meanvals[2] ≈ 1.5 atol=0.1
+
+
 # custom distance-function
 weights_ = ones(size(data)) # weighted data
 for i = 1:3:length(data)
@@ -33,6 +60,7 @@ distfn = function (d1, d2)
     end
     return sqrt(d)
 end
+priors = [Normal(1.5,0.01)]
 bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors;
                                 num_samples=500, ϵ = 0.001,
                                 distancefunction = distfn)
@@ -52,8 +80,8 @@ sol = solve(prob1,Tsit5())
 t = collect(range(1,stop=10,length=10))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
-priors = [Truncated(Normal(1.5,1),0,2),Truncated(Normal(1.0,1),0,1.5),
-          Truncated(Normal(3.0,1),0,4),Truncated(Normal(1.0,1),0,2)]
+priors = [truncated(Normal(1.5,1),0,2),truncated(Normal(1.0,1),0,1.5),
+          truncated(Normal(3.0,1),0,4),truncated(Normal(1.0,1),0,2)]
 
 bayesian_result = abc_inference(prob1,Tsit5(),t,data,priors; num_samples=500)
 

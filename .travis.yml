@@ -4,29 +4,27 @@ os:
   - linux
 julia:
   - 1
-#  - nightly
+  # - nightly
 notifications:
   email: false
 git:
   depth: 99999999
-#matrix:
-#  allow_failures:
-#  - julia: nightly
+# matrix:
+#   allow_failures:
+#     julia: nightly
 dist: xenial
 env:
   - GROUP=Core
-    - JULIA_CMDSTAN_HOME="$HOME/cmdstan-2.21.0/"
   - GROUP=Stan
-    - JULIA_CMDSTAN_HOME="$HOME/cmdstan-2.21.0/"
-before_install:
-  - OLDWD=`pwd`
-  - cd ~
-  - wget https://github.com/stan-dev/cmdstan/releases/download/v2.21.0/cmdstan-2.21.0.tar.gz
-  - tar -xzpf cmdstan-2.21.0.tar.gz
-  - make -C $JULIA_CMDSTAN_HOME build
-  - cd $OLDWD
+before_install: |
+  if [[ "$GROUP" == "Stan" ]]; then
+    url="https://github.com/stan-dev/cmdstan/releases/download/v2.21.0/cmdstan-2.21.0.tar.gz"
+    curl -L "$url" | tar zxf -
+    export JULIA_CMDSTAN_HOME="$(pwd)/cmdstan-2.21.0"
+    make -C "$JULIA_CMDSTAN_HOME" build
+  fi
 after_success:
   # push coverage results to Coveralls
-  - julia -e 'using Pkg; cd(Pkg.dir("DiffEqBayes")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
   # push coverage results to Codecov
-  - julia -e 'using Pkg; cd(Pkg.dir("DiffEqBayes")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'

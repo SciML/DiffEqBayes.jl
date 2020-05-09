@@ -21,7 +21,7 @@ function turing_inference(
     kwargs...,
 )
     N = length(priors)
-    Turing.@model mf(x, ::Type{T} = Float64) where {T <: Real} = begin
+    Turing.@model function mf(x, ::Type{T} = Float64) where {T <: Real}
         theta = Vector{T}(undef, length(priors))
         for i in 1:length(priors)
             theta[i] ~ NamedDist(priors[i], syms[i])
@@ -39,13 +39,12 @@ function turing_inference(
                 push!(u0, convert(T,prob.u0[i]))
             end
         end
-        _saveat = isnothing(t) ? Float64[] : t
+        _saveat = t === nothing ? Float64[] : t
         sol = concrete_solve(prob, alg, u0, p; saveat = _saveat, progress = progress, save_idxs = save_idxs, kwargs...)
         failure = size(sol, 2) < length(_saveat)
 
         if failure
-            S = typeof(Turing.Inference.getlogp(_varinfo))
-            Turing.Inference.acclogp!(_varinfo, S(-Inf))
+            Turing.acclogp!(_varinfo, -Inf)
             return
         end
         if ndims(sol) == 1
@@ -56,7 +55,7 @@ function turing_inference(
             end
         end
         return
-    end
+    end false
 
     # Instantiate a Model object.
     model = mf(data)

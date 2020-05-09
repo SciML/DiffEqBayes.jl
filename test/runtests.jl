@@ -8,7 +8,7 @@ const is_TRAVIS = haskey(ENV,"TRAVIS")
 @time begin
 if GROUP == "All" || GROUP == "Core"
     @time @safetestset "DynamicHMC" begin include("dynamicHMC.jl") end
-    @time @safetestset "Turing" begin include("turing.jl") end # Doesn't work on v0.6
+    @time @safetestset "Turing" begin include("turing.jl") end
     @time @safetestset "ABC" begin include("abc.jl") end
 end
 end

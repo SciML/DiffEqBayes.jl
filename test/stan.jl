@@ -14,7 +14,7 @@ sol = solve(prob1,Tsit5())
 t = collect(range(1,stop=10,length=50))
 randomized = VectorOfArray([(sol(t[i]) + .01randn(2)) for i in 1:length(t)])
 data = convert(Array,randomized)
-priors = [truncated(Normal(1.5,0.1),0.5,2)]
+priors = [truncated(Normal(1.5,0.1),1.0,1.8)]
 
 bayesian_result = stan_inference(prob1,t,data,priors;num_samples=300,
                                  num_warmup=500,likelihood=Normal)

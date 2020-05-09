@@ -44,7 +44,7 @@ function turing_inference(
         failure = size(sol, 2) < length(_saveat)
 
         if failure
-            @logpdf() = T(0) * sum(x) + T(-Inf)
+            acclogp!(_varinfo, T(0) * sum(x) + T(-Inf))
             return
         end
         if ndims(sol) == 1

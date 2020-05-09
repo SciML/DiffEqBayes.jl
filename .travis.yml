@@ -1,5 +1,9 @@
 ## Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
+# do not run CI tests twice
+branches:
+  only:
+    - master
 os:
   - linux
 julia:

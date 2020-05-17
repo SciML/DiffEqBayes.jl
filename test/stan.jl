@@ -22,6 +22,12 @@ bayesian_result = stan_inference(prob1,t,data,priors;num_samples=300,
 sdf  = CmdStan.read_summary(bayesian_result.model)
 @test sdf[sdf.parameters .== :theta1, :mean][1] ≈ 1.5 atol=3e-1
 
+# Test norecompile
+bayesian_result2 = stan_inference(prob1,t,data,priors,bayesian_result.model;
+                                  num_samples=300,num_warmup=500,likelihood=Normal)
+
+sdf  = CmdStan.read_summary(bayesian_result.model)
+@test sdf[sdf.parameters .== :theta1, :mean][1] ≈ 1.5 atol=3e-1
 
 priors = [truncated(Normal(1.,0.01),0.5,2.0),truncated(Normal(1.,0.01),0.5,2.0),truncated(Normal(1.5,0.01),1.0,2.0)]
 bayesian_result = stan_inference(prob1,t,data,priors;num_samples=300,

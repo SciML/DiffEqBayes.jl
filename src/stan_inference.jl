@@ -65,12 +65,14 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
   end
   
   if stanmodel === nothing
-    if alg ==:rk45
+    if alg ==:adams
+      algorithm = "integrate_ode_adams"
+    elseif alg ==:rk45
       algorithm = "integrate_ode_rk45"
     elseif alg == :bdf
       algorithm = "integrate_ode_bdf"
     else
-      error("The choices for alg are :rk45 or :bdf")
+      error("The choices for alg are :adams, :rk45, or :bdf")
     end
     hyper_params = ""
     tuple_hyper_params = ""

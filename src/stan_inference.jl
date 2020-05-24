@@ -47,7 +47,7 @@ function generate_theta(n,priors)
 end
 
 function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
-                            stanmodel = nothing;alg=:adams,
+                            stanmodel = nothing;alg=:rk45,
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
                             abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,
                             vars=(StanODEData(),InverseGamma(3,3)),nchains=1,

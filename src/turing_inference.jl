@@ -1,10 +1,5 @@
 using Turing: Tracker
 
-function DiffEqBase._concrete_solve(prob::DiffEqBase.AbstractSteadyStateProblem,
-    alg::DiffEqBase.DEAlgorithm, u0 = prob.u0, p = prob.p, args...; kwargs...)
-    solve(remake(prob,u0 = u0, p = p), alg, args...; kwargs...)
-end
-
 function turing_inference(
     prob::DiffEqBase.DEProblem,
     alg,

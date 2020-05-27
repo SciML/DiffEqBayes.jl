@@ -59,7 +59,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
   length_of_params = length(vars)
   if isnothing(diffeq_string)
     sys = first(ModelingToolkit.modelingtoolkitize(prob))
-    length_of_parameter = length(sys.ps) + sample_u0 * length(save_idxs)
+    length_of_parameter = length(ModelingToolkit.parameters(sys)) + sample_u0 * length(save_idxs)
   else
     length_of_parameter = length(prob.p) + sample_u0 * length(save_idxs)
   end
@@ -129,8 +129,8 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
     """
     if isnothing(diffeq_string)
       diffeq_string = ModelingToolkit.build_function(
-          sys.eqs,sys.states,
-          sys.ps,sys.iv,
+        ModelingToolkit.equations(sys),ModelingToolkit.states(sys),
+        ModelingToolkit.parameters(sys),ModelingToolkit.independent_variable(sys),
           fname = :sho,
           target = ModelingToolkit.StanTarget()
       )

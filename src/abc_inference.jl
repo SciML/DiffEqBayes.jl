@@ -11,7 +11,7 @@ function createabcfunction(prob, t, distancefunction, alg; save_idxs = nothing, 
         else
             u0 = prob.u0
         end
-        sol = concrete_solve(STANDARD_PROB_GENERATOR(prob, params), alg, u0; saveat = t, save_idxs = save_idxs, kwargs...)
+        sol = solve(prob, alg, u0=u0, p=params, saveat = t, save_idxs = save_idxs, kwargs...)
         if size(sol, 2) < length(t)
             return Inf,nothing
         else

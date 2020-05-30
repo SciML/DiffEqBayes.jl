@@ -11,8 +11,8 @@ function turing_inference(
     num_samples=1000, sampler = Turing.NUTS(0.65),
     syms = [Turing.@varname(theta[i]) for i in 1:length(priors)],
     sample_u0 = false,
-    save_idxs = nothing, 
-    progress = false, 
+    save_idxs = nothing,
+    progress = false,
     kwargs...,
 )
     N = length(priors)
@@ -29,13 +29,13 @@ function turing_inference(
         u0 = convert.(T, sample_u0 ? theta[1:nu] : prob.u0)
         p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
         if length(u0) < length(prob.u0)
-            # assumes u is ordered such that the observed variables are in the begining, consistent with ordered theta 
+            # assumes u is ordered such that the observed variables are in the begining, consistent with ordered theta
             for i in length(u0):length(prob.u0)
                 push!(u0, convert(T,prob.u0[i]))
             end
         end
         _saveat = t === nothing ? Float64[] : t
-        sol = concrete_solve(prob, alg, u0, p; saveat = _saveat, progress = progress, save_idxs = save_idxs, kwargs...)
+        sol = solve(prob, alg; u0=u0, p=p, saveat = _saveat, progress = progress, save_idxs = save_idxs, kwargs...)
         failure = size(sol, 2) < length(_saveat)
 
         if failure

@@ -25,8 +25,8 @@ the parameters of our differential equation must be positive, we utilize
 truncated Normal distributions to make sure that is satisfied in the result:
 
 ```julia
-priors = [Truncated(Normal(1.5,0.1),0,2),Truncated(Normal(1.0,0.1),0,1.5),
-          Truncated(Normal(3.0,0.1),0,4),Truncated(Normal(1.0,0.1),0,2)]
+priors = [truncated(Normal(1.5,0.1),0,2),truncated(Normal(1.0,0.1),0,1.5),
+          truncated(Normal(3.0,0.1),0,4),truncated(Normal(1.0,0.1),0,2)]
 ```
 
 We then give these to the inference function.
@@ -122,24 +122,27 @@ still work with macro-defined functions. Thus, using the same setup as before,
 we simply give the setup to:
 
 ```julia
-bayesian_result = turing_inference(prob,Tsit5(),t,data,priors;num_samples=500)
+bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=500)
 ```
 
-The chain for the `i`th parameter is then given by:
+The result is a [`MCMCChains.jl`](https://github.com/TuringLang/MCMCChains.jl)
+chains object. The chain for the first parameter is then given by:
 
 ```julia
-bayesian_result[:theta1]
+bayesian_result["theta[1]"]
 ```
 
 Summary statistics can be also be accessed:
 ```julia
-Mamba.describe(bayesian_result)
+using StatsBase
+describe(bayesian_result)
 ```
 
 The chain can be analysed by the trace plots and other plots obtained by:
 
 ```julia
-plot_chain(bayesian_result)
+using StatsPlots
+plot(bayesian_result)
 ```
 
 ### DynamicHMC

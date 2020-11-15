@@ -3,8 +3,8 @@
 [![Build Status](https://travis-ci.org/SciML/DiffEqBayes.jl.svg?branch=master)](https://travis-ci.org/SciML/DiffEqBayes.jl)
 [![Coverage Status](https://coveralls.io/repos/github/SciML/DiffEqBayes.jl/badge.svg?branch=master)](https://coveralls.io/github/SciML/DiffEqBayes.jl?branch=master)
 [![codecov.io](http://codecov.io/github/SciML/DiffEqBayes.jl/coverage.svg?branch=master)](http://codecov.io/github/SciML/DiffEqBayes.jl?branch=master)
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](http://diffeqflux.sciml.ai/stable/)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](http://diffeqflux.sciml.ai/dev/)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](http://diffeqbayes.sciml.ai/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](http://diffeqbayes.sciml.ai/dev/)
 
 This repository is a set of extension functionality for estimating the parameters of differential equations using Bayesian methods. It allows the choice of using [CmdStan.jl](https://github.com/StanJulia/CmdStan.jl), [Turing.jl](https://github.com/TuringLang/Turing.jl), [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) and [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl) to perform a Bayesian estimation of a differential equation problem specified via the [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl) interface.
 
@@ -17,8 +17,8 @@ using DiffEqBayes
 ## Tutorials and Documentation
 
 For information on using the package,
-[see the stable documentation](https://diffeqflux.sciml.ai/stable/). Use the
-[in-development documentation](https://diffeqflux.sciml.ai/dev/) for the version of
+[see the stable documentation](https://diffeqbayes.sciml.ai/stable/). Use the
+[in-development documentation](https://diffeqbayes.sciml.ai/dev/) for the version of
 the documentation, which contains the unreleased features.
 
 ## Example

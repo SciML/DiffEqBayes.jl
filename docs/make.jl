@@ -1,13 +1,23 @@
 using Documenter, DiffEqBayes
 
-makedocs(sitename="DiffEqBayes.jl",
+makedocs(
+    sitename="DiffEqBayes.jl",
+    authors="#",
+    clean=true,
+    doctest=false,
     modules=[DiffEqBayes],
-    clean=true,doctest=false,
-    format = Documenter.HTML(#analytics = "UA-90474609-3",
-    assets = ["assets/favicon.ico"])
+
+    format=Documenter.HTML(assets=["assets/favicon.ico"],
+                           canonical="#"),
+
+    pages=[
+        "DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations" => "index.md",
+        "Methods" => "methods.md",
+        "Examples" => "examples.md"
+    ]
 )
 
 deploydocs(
-   repo = "github.com/SciML/DiffEqBayes.jl.git";
-   push_preview = true
+    repo="github.com/SciML/DiffEqBayes.jl.git";
+    push_preview=true
 )

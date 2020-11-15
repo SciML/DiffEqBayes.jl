@@ -2,7 +2,7 @@ using Documenter, DiffEqBayes
 
 makedocs(
     sitename="DiffEqBayes.jl",
-    authors="Chris Rackauckas et al.",
+    authors="Chris Rackauckas, Vaibhav Kumar Dixit et al.",
     clean=true,
     doctest=false,
     modules=[DiffEqBayes],

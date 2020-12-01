@@ -1,6 +1,6 @@
 # DiffEqBayes.jl
 
-[![Build Status](https://travis-ci.org/SciML/DiffEqBayes.jl.svg?branch=master)](https://travis-ci.org/SciML/DiffEqBayes.jl)
+[![Build Status](https://github.com/SciML/DiffEqBayes.jl/workflows/CI/badge.svg)](https://github.com/SciML/DiffEqBayes.jl/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/SciML/DiffEqBayes.jl/badge.svg?branch=master)](https://coveralls.io/github/SciML/DiffEqBayes.jl?branch=master)
 [![codecov.io](http://codecov.io/github/SciML/DiffEqBayes.jl/coverage.svg?branch=master)](http://codecov.io/github/SciML/DiffEqBayes.jl?branch=master)
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](http://diffeqbayes.sciml.ai/stable/)

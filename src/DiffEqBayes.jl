@@ -1,4 +1,9 @@
+"""
+$(DocStringExtensions.README)
+"""
 module DiffEqBayes
+
+using DocStringExtensions
 using DiffEqBase, Distributions, Turing, MacroTools
 using RecursiveArrayTools, ModelingToolkit
 using Parameters, Distributions, Optim, Requires

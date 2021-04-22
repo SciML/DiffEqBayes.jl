@@ -36,7 +36,7 @@ function (P::DynamicHMCPosterior)(θ)
     @unpack algorithm, problem, data, t, parameter_priors = P
     @unpack σ_priors, solve_kwargs, sample_u0, save_idxs = P
     T = eltype(parameters)
-    nu = save_idxs == nothing ? length(problem.u0) : length(save_idxs)
+    nu = save_idxs === nothing ? length(problem.u0) : length(save_idxs)
     u0 = convert.(T, sample_u0 ? parameters[1:nu] : problem.u0)
     p = convert.(T, sample_u0 ? parameters[(nu + 1):end] : parameters)
     if length(u0) < length(problem.u0)

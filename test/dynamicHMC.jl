@@ -3,7 +3,7 @@ using DynamicHMC, TransformVariables, LinearAlgebra
 using Parameters, Distributions, Optim
 using Test
 
-reporter = LogProgressReport(nothing, 100, 60.0) 
+reporter = LogProgressReport(nothing, 100, 60.0)
 
 f1 = @ode_def LotkaVolterraTest1 begin
   dx = a*x - x*y
@@ -83,7 +83,7 @@ priors = (a = truncated(Normal(1.5,0.01), 0, 2),
               b = truncated(Normal(1.0,0.01), 0, 1.5),
               c = truncated(Normal(3.0,0.01), 0, 4),
               d = truncated(Normal(1.0, 0.01), 0, 2))
-mcmc_kwargs = (initialization = (q = zeros(4 + 2),), reporter = reporter)
+mcmc_kwargs = (initialization = (q = zeros(4 + 2), ϵ = 1.0,), reporter = reporter,  warmup_stages = default_warmup_stages(; stepsize_search = nothing))
 bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, priors,
           as(Vector, asℝ₊, 4),mcmc_kwargs = mcmc_kwargs)
 @test norm(mean([p.parameters for p in bayesian_result.posterior]) .- p, Inf) ≤ 0.1

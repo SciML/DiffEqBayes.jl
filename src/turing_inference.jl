@@ -43,7 +43,7 @@ function turing_inference(
             return
         end
         if ndims(sol) == 1
-            x ~ likelihood(sol[:], theta, Inf, σ)
+            x ~ likelihood(Array(sol), theta, Inf, σ)
         else
             for i = 1:length(t)
                 x[:, i] ~ likelihood(sol[:, i], theta, sol.t[i], σ)

@@ -99,5 +99,5 @@ bayesian_result = turing_inference(s_prob,DynamicSS(Tsit5(),abstol=1e-4,reltol=1
                                    num_samples=500,
                                    maxiters = 1e6,
                                    syms = [:α])
-                                   
+
 @test mean(get(bayesian_result,:α)[1]) ≈ 2.0 atol=3e-1

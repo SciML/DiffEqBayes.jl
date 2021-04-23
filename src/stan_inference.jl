@@ -58,7 +58,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
   save_idxs = something(save_idxs, 1:length_of_y)
   length_of_params = length(vars)
   if isnothing(diffeq_string)
-    sys = first(ModelingToolkit.modelingtoolkitize(prob))
+    sys = ModelingToolkit.modelingtoolkitize(prob)
     length_of_parameter = length(ModelingToolkit.parameters(sys)) + sample_u0 * length(save_idxs)
   else
     length_of_parameter = length(prob.p) + sample_u0 * length(save_idxs)

@@ -30,6 +30,8 @@ jobs:
             ${{ runner.os }}-test-
             ${{ runner.os }}-
       - if: ${{ matrix.group == 'Stan' }}
+        run: chmod +x ./.github/scripts/stan.sh
+      - if: ${{ matrix.group == 'Stan' }}
         run: ./.github/scripts/stan.sh
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1

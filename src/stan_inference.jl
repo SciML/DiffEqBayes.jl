@@ -171,7 +171,6 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
     "
     stanmodel = CmdStan.Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model, nchains=nchains, printsummary = printsummary)
   end
-  
   parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => view(data, :, 1:length(t))', "t0" => prob.tspan[1], "ts" => t)
   return_code, chains, cnames = CmdStan.stan(stanmodel, [parameter_estimation_data])
   return StanModel(stanmodel, return_code, chains, cnames)

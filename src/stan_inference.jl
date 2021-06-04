@@ -10,13 +10,13 @@ end
 
 function generate_priors(n,priors)
   priors_string = ""
-  if priors==nothing
+  if priors===nothing
     for i in 1:n
-      priors_string = string(priors_string,"theta[$i] ~ normal(0, 1)", " ; ")
+      priors_string = string(priors_string,"theta_$i ~ normal(0, 1)", " ; ")
     end
   else
     for i in 1:n
-      priors_string = string(priors_string,"theta[$i] ~",stan_string(priors[i]),";")
+      priors_string = string(priors_string,"theta_$i ~",stan_string(priors[i]),";")
     end
   end
   priors_string
@@ -66,11 +66,11 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
   
   if stanmodel === nothing
     if alg ==:adams
-      algorithm = "integrate_ode_adams"
+      algorithm = "ode_adams_tol"
     elseif alg ==:rk45
-      algorithm = "integrate_ode_rk45"
+      algorithm = "ode_rk45_tol"
     elseif alg == :bdf
-      algorithm = "integrate_ode_bdf"
+      algorithm = "ode_bdf_tol"
     else
       error("The choices for alg are :adams, :rk45, or :bdf")
     end
@@ -78,9 +78,11 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
     tuple_hyper_params = ""
     setup_params = ""
     thetas = ""
+    theta_names = ""
     theta_string = generate_theta(length_of_parameter,priors)
     for i in 1:length_of_parameter
-      thetas = string(thetas,"theta[$i] = theta$i",";")
+      thetas = string(thetas,"real theta_$i",";")
+      theta_names = string(theta_names,"theta_$i",",")
     end
     for i in 1:length_of_params
       if isa(vars[i],StanODEData)
@@ -103,12 +105,12 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
           u0 = u0*string(u_)
         end
         u0 = u0*"}"
-        integral_string = "u_hat = $algorithm(sho, append_array(theta[1:$nu],$u0), t0, ts, theta[$(nu+1):$length_of_parameter], x_r, x_i, $reltol, $abstol, $maxiter);"
+        integral_string = "u_hat = $algorithm(sho, append_array(theta[1:$nu],$u0), t0, ts, $reltol, $abstol, $maxiter, theta[$(nu+1):$length_of_parameter]);"
       else 
-        integral_string = "u_hat = $algorithm(sho, theta[1:$nu], t0, ts, theta[$(nu+1):$length_of_parameter], x_r, x_i, $reltol, $abstol, $maxiter);"
+        integral_string = "u_hat = $algorithm(sho, theta[1:$nu], t0, ts, $reltol, $abstol, $maxiter, theta[$(nu+1):$length_of_parameter]);"
       end
     else
-      integral_string = "u_hat = $algorithm(sho, u0, t0, ts, theta, x_r, x_i, $reltol, $abstol, $maxiter);"
+      integral_string = "u_hat = $algorithm(sho, u0, t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names,',')));"
     end
     binsearch_string = """
       int bin_search(real x, int min_val, int max_val){
@@ -141,7 +143,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
       $diffeq_string
     }
     data {
-      real u0[$length_of_y];
+      vector[$length_of_y] u0;
       int<lower=1> T;
       real internal_var___u[T,$(length(save_idxs))];
       real t0;
@@ -156,11 +158,10 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
       $theta_string
     }
     transformed parameters{
-      real theta[$length_of_parameter];
       $thetas
     }
     model{
-      real u_hat[T,$length_of_y];
+      vector[$length_of_y] u_hat[T];
       $hyper_params
       $priors_string
       $integral_string

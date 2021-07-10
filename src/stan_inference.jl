@@ -16,7 +16,7 @@ function generate_priors(n,priors)
     end
   else
     for i in 1:n
-      priors_string = string(priors_string,"theta_$i ~",stan_string(priors[i]),";")
+      priors_string = string(priors_string,"theta_$i ~ ",stan_string(priors[i]),";")
     end
   end
   priors_string
@@ -34,13 +34,13 @@ function generate_theta(n,priors)
       lower_bound = string("lower=",minimum(priors[i]))
     end
     if lower_bound != "" && upper_bound != ""
-      theta = string(theta,"real","<$lower_bound",",","$upper_bound>"," theta$i",";")
+      theta = string(theta,"real","<$lower_bound",",","$upper_bound>"," theta_$i",";")
     elseif lower_bound != ""
-      theta = string(theta,"real","<$lower_bound",">"," theta$i",";")
+      theta = string(theta,"real","<$lower_bound",">"," theta_$i",";")
     elseif upper_bound != ""
-      theta = string(theta,"real","<","$upper_bound>"," theta$i",";")
+      theta = string(theta,"real","<","$upper_bound>"," theta_$i",";")
     else
-      theta = string(theta,"real"," theta$i",";")
+      theta = string(theta,"real"," theta_$i",";")
     end
   end
   return theta
@@ -63,7 +63,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
   else
     length_of_parameter = length(prob.p) + sample_u0 * length(save_idxs)
   end
-  
+
   if stanmodel === nothing
     if alg ==:adams
       algorithm = "ode_adams_tol"
@@ -106,7 +106,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
         end
         u0 = u0*"}"
         integral_string = "u_hat = $algorithm(sho, append_array(theta[1:$nu],$u0), t0, ts, $reltol, $abstol, $maxiter, theta[$(nu+1):$length_of_parameter]);"
-      else 
+      else
         integral_string = "u_hat = $algorithm(sho, theta[1:$nu], t0, ts, $reltol, $abstol, $maxiter, theta[$(nu+1):$length_of_parameter]);"
       end
     else
@@ -122,8 +122,8 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
                 out = mid_pt;
                 range = 0;
             } else {
-                range = (range + 1) / 2; 
-                mid_pt = x > mid_pt ? mid_pt + range: mid_pt - range; 
+                range = (range + 1) / 2;
+                mid_pt = x > mid_pt ? mid_pt + range: mid_pt - range;
             }
         }
         return out;
@@ -149,16 +149,9 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
       real t0;
       real ts[T];
     }
-    transformed data {
-      real x_r[0];
-      int x_i[0];
-    }
     parameters {
       $setup_params
       $theta_string
-    }
-    transformed parameters{
-      $thetas
     }
     model{
       vector[$length_of_y] u_hat[T];
@@ -170,9 +163,8 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
         }
     }
     "
-    stanmodel = CmdStan.Stanmodel(num_samples=num_samples, num_warmup=num_warmup, name="parameter_estimation_model", model=parameter_estimation_model, nchains=nchains, printsummary = printsummary)
+    stanmodel = StanSample.SampleModel("parameter_estimation_model", parameter_estimation_model)
   end
   parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => view(data, :, 1:length(t))', "t0" => prob.tspan[1], "ts" => t)
-  return_code, chains, cnames = CmdStan.stan(stanmodel, [parameter_estimation_data])
-  return StanModel(stanmodel, return_code, chains, cnames)
+  stan_sample(stanmodel; data = parameter_estimation_data)
 end

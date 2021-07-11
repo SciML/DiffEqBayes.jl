@@ -1,4 +1,4 @@
-using CmdStan, Distributions, DiffEqBayes
+using Distributions, DiffEqBayes
 
 println("Starting the test")
 @test stan_string(Bernoulli(1)) == "bernoulli(1.0)"

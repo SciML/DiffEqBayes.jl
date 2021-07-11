@@ -4,7 +4,6 @@ authors = ["Vaibhavdixit02 <vaibhavyashdixit@gmail.com>"]
 version = "2.24.0"
 
 [deps]
-ApproxBayes = "f5f396d3-230c-5e07-80e6-9fadf06146cc"
 DiffEqBase = "2b5f629d-d688-5b77-993f-72d75c75574e"
 DiffResults = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
@@ -32,7 +31,6 @@ TransformVariables = "84d833dd-6860-57f9-a1a7-6da5db126cff"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
 [compat]
-ApproxBayes = "0.3"
 DiffEqBase = "6.36"
 DiffResults = "0.0.4, 1.0"
 Distances = "0.8, 0.9, 0.10"

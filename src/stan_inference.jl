@@ -172,7 +172,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
   parameter_estimation_data = Dict("u0"=>prob.u0, "T" => length(t), "internal_var___u" => view(data, :, 1:length(t))', "t0" => prob.tspan[1], "ts" => t)
   rc = stan_sample(stanmodel; data = parameter_estimation_data)
   if success(rc)
-    return StanResult(stanmodel, rc, read_samples(stanmodel; output_format=output_format))
+    return StanResult(stanmodel, rc, read_samples(stanmodel, output_format))
   else
      rc.err
   end

@@ -1,5 +1,7 @@
 using Documenter, DiffEqBayes
 
+include("pages.jl")
+
 makedocs(
     sitename="DiffEqBayes.jl",
     authors="Chris Rackauckas, Vaibhav Kumar Dixit et al.",
@@ -10,11 +12,7 @@ makedocs(
     format=Documenter.HTML(assets=["assets/favicon.ico"],
                            canonical="https://diffeqbayes.sciml.ai/stable/"),
 
-    pages=[
-        "DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations" => "index.md",
-        "Methods" => "methods.md",
-        "Examples" => "examples.md"
-    ]
+    pages=pages
 )
 
 deploydocs(

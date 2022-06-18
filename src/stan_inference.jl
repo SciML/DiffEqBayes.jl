@@ -54,7 +54,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
                             num_samples=1000, num_warmup=1000, reltol=1e-3,
                             abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,
                             vars=(StanODEData(),InverseGamma(3,3)),nchains=[1],
-                            sample_u0 = false, save_idxs = nothing, diffeq_string = nothing, 
+                            sample_u0 = false, save_idxs = nothing, diffeq_string = nothing,
                             printsummary = true, output_format = :mcmcchains)
 
   save_idxs !== nothing && length(save_idxs) == 1 ? save_idxs = save_idxs[1] : save_idxs = save_idxs
@@ -136,7 +136,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,t,data,priors = nothing,
     if isnothing(diffeq_string)
       diffeq_string = ModelingToolkit.build_function(
         ModelingToolkit.equations(sys),ModelingToolkit.states(sys),
-        ModelingToolkit.parameters(sys),ModelingToolkit.independent_variable(sys),
+        ModelingToolkit.parameters(sys),ModelingToolkit.independent_variables(sys),
           fname = :sho,
           target = ModelingToolkit.StanTarget()
       )

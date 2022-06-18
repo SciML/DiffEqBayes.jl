@@ -7,7 +7,7 @@ function turing_inference(
     data,
     priors;
     likelihood_dist_priors = [InverseGamma(2, 3)],
-    likelihood = (u,p,t,σ) -> MvNormal(u, σ[1]*ones(length(u))),
+    likelihood = (u,p,t,σ) -> MvNormal(u, Diagonal((σ[1])^2*ones(length(u)))),
     num_samples=1000, sampler = Turing.NUTS(0.65),
     syms = [Turing.@varname(theta[i]) for i in 1:length(priors)],
     sample_u0 = false,
@@ -39,7 +39,7 @@ function turing_inference(
         failure = size(sol, 2) < length(_saveat)
 
         if failure
-            Turing.acclogp!(_varinfo, -Inf)
+            Turing.DynamicPPL.acclogp!!(__varinfo__, -Inf)
             return
         end
         if ndims(sol) == 1

@@ -11,7 +11,7 @@ using DiffEqBayes
 
 ```julia
 stan_inference(prob::ODEProblem,t,data,priors = nothing;alg=:rk45,
-               num_samples=1000, num_warmup=1000, reltol=1e-3,
+               num_samples=1000, num_warmups=1000, reltol=1e-3,
                abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,
                vars=(StanODEData(),InverseGamma(2,3)))
 ```
@@ -24,7 +24,7 @@ and `data` is the array where the first dimension (columns) corresponds to the
 array of system values. `priors` is an array of prior distributions for each
 parameter, specified via a [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/)
 type. `alg` is a choice between `:rk45` and `:bdf`, the two internal integrators
-of Stan. `num_samples` is the number of samples to take per chain, and `num_warmup`
+of Stan. `num_samples` is the number of samples to take per chain, and `num_warmups`
 is the number of MCMC warmup steps. `abstol` and `reltol` are the keyword
 arguments for the internal integrator. `likelihood` is the likelihood distribution
 to use with the arguments from `vars`, and `vars` is a tuple of priors for the

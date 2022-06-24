@@ -9,8 +9,10 @@ using RecursiveArrayTools, ModelingToolkit, LinearAlgebra
 using Parameters, Distributions, Optim, Requires
 using Distances, DocStringExtensions, Random, StanSample
 
-STANDARD_PROB_GENERATOR(prob,p) = remake(prob;u0=eltype(p).(prob.u0),p=p)
-STANDARD_PROB_GENERATOR(prob::EnsembleProblem,p) = EnsembleProblem(remake(prob.prob;u0=eltype(p).(prob.prob.u0),p=p))
+STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
+function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)
+    EnsembleProblem(remake(prob.prob; u0 = eltype(p).(prob.prob.u0), p = p))
+end
 
 include("turing_inference.jl")
 # include("abc_inference.jl")
@@ -25,5 +27,5 @@ function __init__()
     end
 end
 
-export turing_inference, stan_inference ,abc_inference
+export turing_inference, stan_inference, abc_inference
 end # module

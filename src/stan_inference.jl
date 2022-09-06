@@ -62,7 +62,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,
                         # stan_sample keyword arguments
                         num_samples = 1000, num_warmups = 1000,
                         num_cpp_chains = 1, num_chains = 1, num_threads = 1,
-                        delta=0.8,
+                        delta = 0.8,
                         # read_samples arguments
                         output_format = :mcmcchains,
                         # read_summary arguments

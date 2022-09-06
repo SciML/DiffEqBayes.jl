@@ -114,11 +114,11 @@ function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
     ℓ = TransformedLogDensity(trans, P)
     ∇ℓ = LogDensityProblems.ADgradient(AD_gradient_kind, ℓ)
     results = mcmc_with_warmup(rng, ∇ℓ, num_samples; mcmc_kwargs...)
-    posterior_matrix = if haskey(results, :chain) # DynamicHMC < 3.3.0
+    chain = if haskey(results, :chain) # DynamicHMC < 3.3.0
         results.chain
     else
-        results.posterior_matrix
+        eachcol(results.posterior_matrix)
     end
-    merge((posterior = TransformVariables.transform.(Ref(trans), posterior_matrix),),
-          results)
+    posterior = map(Base.Fix1(TransformVariables.transform, trans), chain)
+    merge((; posterior), results)
 end

@@ -201,7 +201,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,
                 "t0" => prob.tspan[1], "ts" => t)
 
     @time rc = stan_sample(stanmodel; data, num_threads, num_cpp_chains,
-                           num_samples, num_warmups, num_chains,delta)
+                           num_samples, num_warmups, num_chains, delta)
 
     if success(rc)
         return StanResult(stanmodel, rc, read_samples(stanmodel, output_format))

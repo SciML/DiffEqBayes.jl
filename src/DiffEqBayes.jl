@@ -4,10 +4,21 @@ $(DocStringExtensions.README)
 module DiffEqBayes
 
 using DocStringExtensions
-using DiffEqBase, Distributions, Turing, MacroTools
-using RecursiveArrayTools, ModelingToolkit, LinearAlgebra
-using Parameters, Distributions, Optim, Requires
-using Distances, DocStringExtensions, Random, StanSample
+using DiffEqBase
+using Distributions
+using Turing
+using MacroTools
+using RecursiveArrayTools
+using ModelingToolkit
+using LinearAlgebra
+using Parameters
+using Distributions
+using Optim
+using Requires
+using Distances
+using DocStringExtensions
+using Random
+using StanSample
 
 STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
 function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)

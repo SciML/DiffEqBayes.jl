@@ -7,8 +7,6 @@ module DiffEqBayes
 using DiffEqBase
 using Distances
 using Distributions
-using Distributions
-using DocStringExtensions
 using DocStringExtensions
 using LinearAlgebra
 using MacroTools

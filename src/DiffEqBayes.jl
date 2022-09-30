@@ -3,7 +3,6 @@ $(DocStringExtensions.README)
 """
 module DiffEqBayes
 
-using DocStringExtensions
 using DiffEqBase, Distributions, Turing, MacroTools
 using RecursiveArrayTools, ModelingToolkit, LinearAlgebra
 using Parameters, Distributions, Optim, Requires

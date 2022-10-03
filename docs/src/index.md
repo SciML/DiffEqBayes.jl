@@ -1,4 +1,4 @@
-# DiffEqBayes.jl
+# DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations
 
 This repository is a set of extension functionality for estimating the parameters
 of differential equations using Bayesian methods. It allows the choice of using
@@ -8,9 +8,23 @@ Bayesian estimation of a differential equation problem specified via the [Differ
 
 ## Installation
 
-For the Bayesian methods, you must install DiffEqBayes.jl:
+To install DiffEqBayes.jl, use the Julia package manager:
 
 ```julia
-]add DiffEqBayes
-using DiffEqBayes
+using Pkg
+Pkg.add("DiffEqBayes")
 ```
+
+## Contributing
+
+- Please refer to the
+  [SciML ColPrac: Contributor's Guide on Collaborative Practices for Community Packages](https://github.com/SciML/ColPrac/blob/master/README.md)
+  for guidance on PRs, issues, and other matters relating to contributing to SciML.
+- See the [SciML Style Guide](https://github.com/SciML/SciMLStyle) for common coding practices and other style decisions.
+- There are a few community forums:
+    - The #diffeq-bridged and #sciml-bridged channels in the
+      [Julia Slack](https://julialang.org/slack/)
+    - The #diffeq-bridged and #sciml-bridged channels in the
+      [Julia Zulip](https://julialang.zulipchat.com/#narrow/stream/279055-sciml-bridged)
+    - On the [Julia Discourse forums](https://discourse.julialang.org)
+    - See also [SciML Community page](https://sciml.ai/community/)

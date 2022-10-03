@@ -1,5 +1,4 @@
-pages = [
-    "DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations" => "index.md",
+pages = ["index.md",
     "Methods" => "methods.md",
     "Examples" => "examples.md",
 ]

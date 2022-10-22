@@ -8,7 +8,7 @@ makedocs(sitename = "DiffEqBayes.jl",
          doctest = false,
          modules = [DiffEqBayes],
          format = Documenter.HTML(assets = ["assets/favicon.ico"],
-                                  canonical = "https://diffeqbayes.sciml.ai/stable/"),
+                                  canonical = "https://docs.sciml.ai/DiffEqBayes/stable/"),
          pages = pages)
 
 deploydocs(repo = "github.com/SciML/DiffEqBayes.jl.git";

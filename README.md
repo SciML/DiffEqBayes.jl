@@ -1,8 +1,7 @@
 # DiffEqBayes.jl
 
 [![Join the chat at https://julialang.zulipchat.com #sciml-bridged](https://img.shields.io/static/v1?label=Zulip&message=chat&color=9558b2&labelColor=389826)](https://julialang.zulipchat.com/#narrow/stream/279055-sciml-bridged)
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](http://diffeqbayes.sciml.ai/stable/)
-[![Global Docs](https://img.shields.io/badge/docs-SciML-blue.svg)](https://docs.sciml.ai/dev/modules//DiffEqBayes/)
+[![Global Docs](https://img.shields.io/badge/docs-SciML-blue.svg)](https://docs.sciml.ai/DiffEqBayes/stable/)
 
 [![codecov](https://codecov.io/gh/SciML/DiffEqBayes.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/SciML/DiffEqBayes.jl)
 [![Build Status](https://github.com/SciML/DiffEqBayes.jl/workflows/CI/badge.svg)](https://github.com/SciML/DiffEqBayes.jl/actions?query=workflow%3ACI)
@@ -10,7 +9,7 @@
 [![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
 [![SciML Code Style](https://img.shields.io/static/v1?label=code%20style&message=SciML&color=9558b2&labelColor=389826)](https://github.com/SciML/SciMLStyle)
 
-This repository is a set of extension functionality for estimating the parameters of differential equations using Bayesian methods. It allows the choice of using [CmdStan.jl](https://github.com/StanJulia/CmdStan.jl), [Turing.jl](https://github.com/TuringLang/Turing.jl), [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) and [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl) to perform a Bayesian estimation of a differential equation problem specified via the [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl) interface.
+This repository is a set of extension functionality for estimating the parameters of differential equations using Bayesian methods. It allows the choice of using [CmdStan.jl](https://stanjulia.github.io/CmdStan.jl/stable/), [Turing.jl](https://turing.ml/stable/docs/using-turing/), [DynamicHMC.jl](https://www.tamaspapp.eu/DynamicHMC.jl/stable/) and [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl) to perform a Bayesian estimation of a differential equation problem specified via the [DifferentialEquations.jl](https://docs.sciml.ai/DiffEqDocs/stable/) interface.
 
 To begin you first need to add this repository using the following command.
 ```julia
@@ -21,8 +20,8 @@ using DiffEqBayes
 ## Tutorials and Documentation
 
 For information on using the package,
-[see the stable documentation](https://diffeqbayes.sciml.ai/stable/). Use the
-[in-development documentation](https://diffeqbayes.sciml.ai/dev/) for the version of
+[see the stable documentation](https://docs.sciml.ai/DiffEqBayes/stable/). Use the
+[in-development documentation](https://docs.sciml.ai/DiffEqBayes/dev/) for the version of
 the documentation, which contains the unreleased features.
 
 ## Example

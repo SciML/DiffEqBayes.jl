@@ -2,9 +2,9 @@
 
 This repository is a set of extension functionality for estimating the parameters
 of differential equations using Bayesian methods. It allows the choice of using
-[CmdStan.jl](https://github.com/StanJulia/CmdStan.jl), [Turing.jl](https://github.com/TuringLang/Turing.jl), [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) and
+[CmdStan.jl](https://stanjulia.github.io/CmdStan.jl/stable/), [Turing.jl](https://turing.ml/stable/docs/using-turing/), [DynamicHMC.jl](https://www.tamaspapp.eu/DynamicHMC.jl/stable/) and
 [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl) to perform a
-Bayesian estimation of a differential equation problem specified via the [DifferentialEquations.jl](https://github.com/SciML/DifferentialEquations.jl) interface.
+Bayesian estimation of a differential equation problem specified via the [DifferentialEquations.jl](https://docs.sciml.ai/DiffEqDocs/stable/) interface.
 
 ## Installation
 

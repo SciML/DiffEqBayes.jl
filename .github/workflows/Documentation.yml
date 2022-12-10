@@ -16,9 +16,7 @@ jobs:
         with:
           version: '1'
       - name: Install dependencies
-        run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
-        run: chmod +x ./.github/scripts/stan.sh
-        run: ./.github/scripts/stan.sh
+        run: chmod +x ./.github/scripts/stan.sh; ./.github/scripts/stan.sh; julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
       - name: Build and deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # For authentication with GitHub Actions token

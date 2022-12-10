@@ -11,13 +11,13 @@ makedocs(sitename = "DiffEqBayes.jl",
          doctest = false,
          modules = [DiffEqBayes],
          strict = [
-            :doctest,
-            :linkcheck,
-            :parse_error,
-            :example_block,
-            # Other available options are
-            # :autodocs_block, :cross_references, :docs_block, :eval_block, :example_block, :footnote, :meta_block, :missing_docs, :setup_block
-        ],
+             :doctest,
+             :linkcheck,
+             :parse_error,
+             :example_block,
+             # Other available options are
+             # :autodocs_block, :cross_references, :docs_block, :eval_block, :example_block, :footnote, :meta_block, :missing_docs, :setup_block
+         ],
          format = Documenter.HTML(assets = ["assets/favicon.ico"],
                                   canonical = "https://docs.sciml.ai/DiffEqBayes/stable/"),
          pages = pages)

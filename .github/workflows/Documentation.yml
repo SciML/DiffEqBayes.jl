@@ -17,9 +17,7 @@ jobs:
           version: '1'
       - name: Install dependencies
         run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
-      - if: ${{ matrix.group == 'Stan' }}
         run: chmod +x ./.github/scripts/stan.sh
-      - if: ${{ matrix.group == 'Stan' }}
         run: ./.github/scripts/stan.sh
       - name: Build and deploy
         env:

@@ -13,7 +13,7 @@ First let's setup our ODE and the data. For the data, we will simply solve the O
 take that solution at some known parameters as the dataset. This looks like the following:
 
 ```@example all
-using ParameterizedFunctions, OrdinaryDiffEq, RecursiveArrayTools, Distributions
+using DiffEqBayes, ParameterizedFunctions, OrdinaryDiffEq, RecursiveArrayTools, Distributions
 f1 = @ode_def LotkaVolterra begin
  dx = a*x - x*y
  dy = -3*y + x*y

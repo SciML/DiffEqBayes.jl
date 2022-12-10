@@ -1,5 +1,10 @@
 [deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+RecursiveArrayTools = "731186ca-8d62-57ce-b412-fbd966d074cd"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
 Documenter = "0.27"

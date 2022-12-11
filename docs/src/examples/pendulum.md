@@ -114,7 +114,7 @@ specific to each package and algorithm combinations, you might want to do your o
 ```
 
 ```@example pendulum
-@btime bayesian_result = stan_inference(prob1,t,data,priors;num_samples=10_000,printsummary=false)
+@btime bayesian_result = stan_inference(prob1,t,data,priors;num_samples=10_000,print_summary=false)
 ```
 
 ```@example pendulum

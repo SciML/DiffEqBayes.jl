@@ -1,4 +1,4 @@
-# Bayesian Inference Examples
+# Bayesian Inference of ODE
 
 For this tutorial we will show how to do Bayesian inference to infer the parameters of
 the Lotka-Volterra equations using each of the three backends:

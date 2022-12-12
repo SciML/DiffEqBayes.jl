@@ -2,7 +2,7 @@
 
 julia_version = "1.8.3"
 manifest_format = "2.0"
-project_hash = "e4576015021975239a147d6584615f223e8553d2"
+project_hash = "716253813261cdb86a74be73b80704f6a5e0c1bc"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -1331,9 +1331,9 @@ version = "1.7.4"
 
 [[deps.Optimisers]]
 deps = ["ChainRulesCore", "Functors", "LinearAlgebra", "Random", "Statistics"]
-git-tree-sha1 = "f1cccb9f879dd4eaa4d92b115ab793545965d763"
+git-tree-sha1 = "e657acef119cc0de2a8c0762666d3b64727b053b"
 uuid = "3bd65402-5787-11e9-1adc-39752487f4e2"
-version = "0.2.13"
+version = "0.2.14"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]

@@ -73,7 +73,7 @@ information, but have a prior belief that ω is between 0.1 and 3.0, while the
 length of the pendulum L is probably around 3.0:
 
 ```@example pendulum
-priors = [Uniform(0.1,3.0), Normal(3.0,1.0)]
+priors = [truncated(Normal(0.1,1.0), lower = 0.0), truncated(Normal(3.0,1.0), lower = 0.0)]
 ```
 
 Finally let's run the estimation routine from DiffEqBayes.jl with the Turing.jl backend to check if we indeed recover the parameters!

@@ -1,6 +1,6 @@
 # Bayesian Inference of ODE
 
-For this tutorial we will show how to do Bayesian inference to infer the parameters of
+For this tutorial, we will show how to do Bayesian inference to infer the parameters of
 the Lotka-Volterra equations using each of the three backends:
 
 - Turing.jl
@@ -9,7 +9,7 @@ the Lotka-Volterra equations using each of the three backends:
 
 ## Setup
 
-First let's setup our ODE and the data. For the data, we will simply solve the ODE and
+First, let's set up our ODE and the data. For the data, we will simply solve the ODE and
 take that solution at some known parameters as the dataset. This looks like the following:
 
 ```@example all
@@ -58,4 +58,4 @@ bayesian_result_hmc = dynamichmc_inference(prob1, Tsit5(), t, data, priors)
 
 ## More Information
 
-For a better idea of the summary statistics and plotting you can take a look at the [benchmarks](https://github.com/SciML/SciMLBenchmarks.jl).
+For a better idea of the summary statistics and plotting, you can take a look at the [benchmarks](https://github.com/SciML/SciMLBenchmarks.jl).

@@ -1,6 +1,6 @@
 # Bayesian Inference of Pendulum Parameters
 
-In this tutorial we will perform Bayesian parameter inference of the parameters of a
+In this tutorial, we will perform Bayesian parameter inference of the parameters of a
 pendulum.
 
 ## Set up simple pendulum problem
@@ -9,7 +9,7 @@ pendulum.
 using DiffEqBayes, OrdinaryDiffEq, RecursiveArrayTools, Distributions, Plots, StatsPlots, BenchmarkTools, TransformVariables, CmdStan, DynamicHMC
 ```
 
-Let's define our simple pendulum problem. Here our pendulum has a drag term `ω`
+Let's define our simple pendulum problem. Here, our pendulum has a drag term `ω`
 and a length `L`.
 
 ![pendulum](https://user-images.githubusercontent.com/1814174/59942945-059c1680-942f-11e9-991c-2025e6e4ccd3.jpg)
@@ -41,7 +41,7 @@ plot(sol)
 ```
 
 It's the pendulum, so you know what it looks like. It's periodic, but since we
-have not made a small angle assumption it's not exactly `sin` or `cos`. Because
+have not made a small angle assumption, it's not exactly `sin` or `cos`. Because
 the true dampening parameter `ω` is 1, the solution does not decay over time,
 nor does it increase. The length `L` determines the period.
 
@@ -62,7 +62,7 @@ scatter!(data')
 ```
 
 This data captures the non-dampening effect and the true period, making it
-perfect to attempting a Bayesian inference.
+perfect for attempting a Bayesian inference.
 
 ## Perform Bayesian Estimation
 
@@ -76,7 +76,7 @@ length of the pendulum L is probably around 3.0:
 priors = [truncated(Normal(0.1,1.0), lower = 0.0), truncated(Normal(3.0,1.0), lower = 0.0)]
 ```
 
-Finally let's run the estimation routine from DiffEqBayes.jl with the Turing.jl backend to check if we indeed recover the parameters!
+Finally, let's run the estimation routine from DiffEqBayes.jl with the Turing.jl backend to check if we indeed recover the parameters!
 
 ```@example pendulum
 bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;num_samples=10_000,
@@ -101,13 +101,18 @@ samples that form the posterior distribution!)
 plot(bayesian_result, colordim = :parameter)
 ```
 
-Notice that after awhile these chains converge to a "fuzzy line", meaning it
+Notice that after a while these chains converge to a “fuzzy line”, meaning it
 found the area with the most likelihood and then starts to sample around there,
 which builds a posterior distribution around the true mean.
 
-DiffEqBayes.jl allows the choice of using Stan.jl, Turing.jl and DynamicHMC.jl for MCMC, you can also use ApproxBayes.jl for Approximate Bayesian computation algorithms.
-Let's compare the timings across the different MCMC backends. We'll stick with the default arguments and 10,000 samples in each since there is a lot of room for micro-optimization
-specific to each package and algorithm combinations, you might want to do your own experiments for specific problems to get better understanding of the performance.
+DiffEqBayes.jl allows the choice of using Stan.jl, Turing.jl and DynamicHMC.jl
+for MCMC, you can also use ApproxBayes.jl for Approximate Bayesian computation algorithms.
+Let's compare the timings across the different MCMC backends.
+We'll stick with the default arguments and 10,000 samples in each.
+However, there is a lot of room for micro-optimization
+specific to each package and algorithm combinations,
+you might want to do your own experiments for specific problems
+to get better understanding of the performance.
 
 ```@example pendulum
 @btime bayesian_result = turing_inference(prob1,Tsit5(),t,data,priors;syms = [:omega,:L],num_samples=10_000)

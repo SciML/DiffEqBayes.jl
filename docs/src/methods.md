@@ -25,7 +25,7 @@ array of system values. `priors` is an array of prior distributions for each
 parameter, specified via a [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/)
 type. `alg` is a choice between `:rk45` and `:bdf`, the two internal integrators
 of Stan. `num_samples` is the number of samples to take per chain, and `num_warmups`
-is the number of MCMC warmup steps. `abstol` and `reltol` are the keyword
+is the number of MCMC warm-up steps. `abstol` and `reltol` are the keyword
 arguments for the internal integrator. `likelihood` is the likelihood distribution
 to use with the arguments from `vars`, and `vars` is a tuple of priors for the
 distributions of the likelihood hyperparameters. The special value `StanODEData()`
@@ -58,11 +58,11 @@ dynamichmc_inference(prob::DEProblem,alg,t,data,priors,transformations;
 ```
 
 `dynamichmc_inference` uses [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) to
- perform the bayesian parameter estimation. `prob` can be any `DEProblem`, `data` is the set
+ perform the Bayesian parameter estimation. `prob` can be any `DEProblem`, `data` is the set
  of observations for our model which is to be used in the Bayesian Inference process. `priors` represent the
  choice of prior distributions for the parameters to be determined, passed as an array of [Distributions.jl]
  (https://juliastats.github.io/Distributions.jl/dev/) distributions. `t` is the array of time points. `transformations`
- is an array of [Tranformations](https://github.com/tpapp/ContinuousTransformations.jl) imposed for constraining the
+ is an array of [Transformations](https://github.com/tpapp/ContinuousTransformations.jl) imposed for constraining the
  parameter values to specific domains. `initial` values for the parameters can be passed, if not passed the means of the
  `priors` are used. `ϵ` can be used as a kwarg to pass the initial step size for the NUTS algorithm.
 
@@ -74,7 +74,7 @@ abc_inference(prob::DEProblem, alg, t, data, priors; ϵ=0.001,
      num_samples = 500, maxiterations = 10^5, kwargs...)
 ```
 
-`abc_inference` uses [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl) which uses Approximate Bayesian Computation (ABC) to
+`abc_inference` uses [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl), which uses Approximate Bayesian Computation (ABC) to
 perform its parameter inference. `prob` can be any `DEProblem` with a corresponding
 `alg` choice. `t` is the array of time points and `data[:,i]` is the set of
 observations for the differential equation system at time point `t[i]` (or higher

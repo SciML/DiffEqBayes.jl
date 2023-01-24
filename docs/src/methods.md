@@ -3,17 +3,18 @@
 The following methods require DiffEqBayes.jl:
 
 ```julia
-]add DiffEqBayes
+using Pkg
+Pkg.add("DiffEqBayes")
 using DiffEqBayes
 ```
 
 ### stan_inference
 
 ```julia
-stan_inference(prob::ODEProblem,t,data,priors = nothing;alg=:rk45,
-               num_samples=1000, num_warmups=1000, reltol=1e-3,
-               abstol=1e-6, maxiter=Int(1e5),likelihood=Normal,
-               vars=(StanODEData(),InverseGamma(2,3)))
+stan_inference(prob::ODEProblem, t, data, priors = nothing; alg = :rk45,
+               num_samples = 1000, num_warmups = 1000, reltol = 1e-3,
+               abstol = 1e-6, maxiter = Int(1e5), likelihood = Normal,
+               vars = (StanODEData(), InverseGamma(2, 3)))
 ```
 
 `stan_inference` uses [Stan.jl](https://stanjulia.github.io/CmdStan.jl/latest/INTRO/)
@@ -35,9 +36,10 @@ parameter list.
 ### turing_inference
 
 ```julia
-function turing_inference(prob::DiffEqBase.DEProblem,alg,t,data,priors;
-                              likelihood_dist_priors, likelihood, num_samples=1000,
-                              sampler = Turing.NUTS(num_samples, 0.65), syms, kwargs...)
+function turing_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors;
+                          likelihood_dist_priors, likelihood, num_samples = 1000,
+                          sampler = Turing.NUTS(num_samples, 0.65), syms, kwargs...)
+end
 ```
 
 `turing_inference` uses [Turing.jl](https://github.com/TuringLang/Turing.jl) to
@@ -53,25 +55,25 @@ equation solver.
 ### dynamichmc_inference
 
 ```julia
-dynamichmc_inference(prob::DEProblem,alg,t,data,priors,transformations;
-                      σ = 0.01,ϵ=0.001,initial=Float64[])
+dynamichmc_inference(prob::DEProblem, alg, t, data, priors, transformations;
+                     σ = 0.01, ϵ = 0.001, initial = Float64[])
 ```
 
 `dynamichmc_inference` uses [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) to
- perform the Bayesian parameter estimation. `prob` can be any `DEProblem`, `data` is the set
- of observations for our model which is to be used in the Bayesian Inference process. `priors` represent the
- choice of prior distributions for the parameters to be determined, passed as an array of [Distributions.jl]
- (https://juliastats.github.io/Distributions.jl/dev/) distributions. `t` is the array of time points. `transformations`
- is an array of [Transformations](https://github.com/tpapp/ContinuousTransformations.jl) imposed for constraining the
- parameter values to specific domains. `initial` values for the parameters can be passed, if not passed the means of the
- `priors` are used. `ϵ` can be used as a kwarg to pass the initial step size for the NUTS algorithm.
+perform the Bayesian parameter estimation. `prob` can be any `DEProblem`, `data` is the set
+of observations for our model which is to be used in the Bayesian Inference process. `priors` represent the
+choice of prior distributions for the parameters to be determined, passed as an array of [Distributions.jl]
+(https://juliastats.github.io/Distributions.jl/dev/) distributions. `t` is the array of time points. `transformations`
+is an array of [Transformations](https://github.com/tpapp/ContinuousTransformations.jl) imposed for constraining the
+parameter values to specific domains. `initial` values for the parameters can be passed, if not passed the means of the
+`priors` are used. `ϵ` can be used as a kwarg to pass the initial step size for the NUTS algorithm.
 
 ### abc_inference
 
 ```julia
-abc_inference(prob::DEProblem, alg, t, data, priors; ϵ=0.001,
-     distancefunction = euclidean, ABCalgorithm = ABCSMC, progress = false,
-     num_samples = 500, maxiterations = 10^5, kwargs...)
+abc_inference(prob::DEProblem, alg, t, data, priors; ϵ = 0.001,
+              distancefunction = euclidean, ABCalgorithm = ABCSMC, progress = false,
+              num_samples = 500, maxiterations = 10^5, kwargs...)
 ```
 
 `abc_inference` uses [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl), which uses Approximate Bayesian Computation (ABC) to

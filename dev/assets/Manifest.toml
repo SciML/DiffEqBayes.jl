@@ -888,9 +888,9 @@ version = "2.1.91+0"
 
 [[deps.JuliaFormatter]]
 deps = ["CSTParser", "CommonMark", "DataStructures", "Glob", "Pkg", "SnoopPrecompile", "Tokenize"]
-git-tree-sha1 = "04c4f16ef537e7b5fe0998e507cfeedc5b95b01d"
+git-tree-sha1 = "0f6545dd63fec03d0cfe0c1d28f851e2d804e942"
 uuid = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
-version = "1.0.24"
+version = "1.0.25"
 
 [[deps.JumpProcesses]]
 deps = ["ArrayInterface", "DataStructures", "DiffEqBase", "DocStringExtensions", "FunctionWrappers", "Graphs", "LinearAlgebra", "Markdown", "PoissonRandom", "Random", "RandomNumbers", "RecursiveArrayTools", "Reexport", "SciMLBase", "StaticArrays", "TreeViews", "UnPack"]
@@ -1197,9 +1197,9 @@ version = "8.36.0"
 
 [[deps.MonteCarloMeasurements]]
 deps = ["Distributed", "Distributions", "ForwardDiff", "GenericSchur", "LinearAlgebra", "MacroTools", "Random", "RecipesBase", "Requires", "SLEEFPirates", "StaticArrays", "Statistics", "StatsBase", "Test"]
-git-tree-sha1 = "3be0d822973d4edfe432bea8704d2570d0522db7"
+git-tree-sha1 = "b0de90429a3fbbc95f9b144c1833195c24fcee3f"
 uuid = "0987c9cc-fe09-11e8-30f0-b96dd679fdca"
-version = "1.1.1"
+version = "1.1.2"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"

@@ -53,8 +53,8 @@ Requires = "1.0"
 StanSample = "6"
 StructArrays = "0.6"
 TransformedLogDensities = "1"
-TransformVariables = "0.6, 0.7"
-Turing = "0.22, 0.23"
+TransformVariables = "0.8"
+Turing = "0.25"
 julia = "1.6"
 
 [extras]

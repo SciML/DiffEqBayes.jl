@@ -7,7 +7,7 @@ using DiffEqBase, Distributions, Turing, MacroTools
 using RecursiveArrayTools, ModelingToolkit, LinearAlgebra
 using Parameters, Distributions, Optim, Requires
 using Distances, DocStringExtensions, Random, StanSample
-using DynamicHMC, TransformVariables, LogDensityProblems, TransformedLogDensities
+using DynamicHMC, TransformVariables, LogDensityProblemsAD, TransformedLogDensities
 
 STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
 function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)

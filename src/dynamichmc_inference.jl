@@ -112,7 +112,7 @@ function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
     trans = as((parameters = parameter_transformations,
                 σ = as(Vector, asℝ₊, length(σ_priors))))
     ℓ = TransformedLogDensity(trans, P)
-    ∇ℓ = LogDensityProblems.ADgradient(AD_gradient_kind, ℓ)
+    ∇ℓ = LogDensityProblemsAD.ADgradient(AD_gradient_kind, ℓ)
     results = mcmc_with_warmup(rng, ∇ℓ, num_samples; mcmc_kwargs...)
     chain = if haskey(results, :chain) # DynamicHMC < 3.3.0
         results.chain

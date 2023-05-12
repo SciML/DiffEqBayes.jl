@@ -207,9 +207,11 @@ function stan_string(p::Union{Type{VonMises}, VonMises})
         return string("von_mises")
     end
 end
-function stan_string(p::T) where {T <: Truncated}
-    lower = isinf(p.lower) ? "" : p.lower
-    upper = isinf(p.upper) ? "" : p.upper
+function stan_string(p::Truncated)
+    p_lower = p.lower
+    p_upper = p.upper
+    lower = p_lower === nothing || isinf(p_lower) ? "" : p_lower
+    upper = p_upper === nothing || isinf(p_upper) ? "" : p_upper
     raw_string = stan_string(p.untruncated)
     return string(raw_string, " T[$lower,$upper]")
 end

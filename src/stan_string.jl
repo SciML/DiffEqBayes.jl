@@ -208,11 +208,10 @@ function stan_string(p::Union{Type{VonMises}, VonMises})
     end
 end
 function stan_string(p::Truncated)
-    p_lower = p.lower
-    p_upper = p.upper
+    min_truncated, max_truncated = extrema(p)
     min_untruncated, max_untruncated = extrema(p.untruncated)
-    lower = p_lower === nothing || p_lower == min_untruncated ? "" : string(p_lower)
-    upper = p_upper === nothing || p_upper == max_untruncated ? "" : string(p_upper)
+    lower = min_truncated == min_untruncated ? "" : string(min_truncated)
+    upper = max_truncated == max_untruncated ? "" : string(max_truncated)
     raw_string = stan_string(p.untruncated)
     return string(raw_string, " T[", lower, ",", upper, "]")
 end

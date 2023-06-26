@@ -9,14 +9,17 @@ function turing_inference(prob::DiffEqBase.DEProblem,
                           likelihood = (u, p, t, σ) -> MvNormal(u,
                                                                 Diagonal((σ[1])^2 *
                                                                          ones(length(u)))),
-                          num_samples = 1000, sampler = Turing.NUTS(0.65),
+                          num_samples = 1000,
+                          sampler = Turing.NUTS(0.65),
+                          parallel_type = MCMCSerial(),
+                          n_chains = 1,
                           syms = [Turing.@varname(theta[i]) for i in 1:length(priors)],
                           sample_u0 = false,
                           save_idxs = nothing,
                           progress = false,
                           kwargs...)
     N = length(priors)
-    Turing.@model function mf(x, ::Type{T} = Float64) where {T <: Real}
+    Turing.@model function infer(x, ::Type{T} = Float64) where {T <: Real}
         theta = Vector{T}(undef, length(priors))
         for i in 1:length(priors)
             theta[i] ~ NamedDist(priors[i], syms[i])
@@ -54,7 +57,14 @@ function turing_inference(prob::DiffEqBase.DEProblem,
     end false
 
     # Instantiate a Model object.
-    model = mf(data)
-    chn = sample(model, sampler, num_samples; progress = progress)
+    model = infer(data)
+    chn = sample(
+        model,
+        sampler,
+        parallel_type,
+        num_samples,
+        n_chains;
+        progress = progress
+    )
     return chn
 end

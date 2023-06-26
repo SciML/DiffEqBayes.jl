@@ -38,7 +38,7 @@ parameter list.
 ```julia
 function turing_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors;
                           likelihood_dist_priors, likelihood, num_samples = 1000,
-                          sampler = Turing.NUTS(num_samples, 0.65), syms, kwargs...)
+                          sampler = Turing.NUTS(num_samples, 0.65), parallel_type = MCMCSerial(), n_chains = 1, syms, kwargs...)
 end
 ```
 
@@ -49,8 +49,7 @@ observations for the differential equation system at time point `t[i]` (or highe
 dimensional). `priors` is an array of prior distributions for each
 parameter, specified via a
 [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/)
-type. `num_samples` is the number of samples per MCMC chain. The extra `kwargs` are given to the internal differential
-equation solver.
+type. `num_samples` is the number of samples per MCMC chain. Sampling from multiple chains is possible, see [`Turing.jl` documentation](https://turinglang.org/v0.26/docs/using-turing/guide#sampling-multiple-chains), serially or parallelly using `parallel_type` and `n_chains`. The extra `kwargs` are given to the internal differential equation solver.
 
 ### dynamichmc_inference
 

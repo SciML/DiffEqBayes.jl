@@ -1,5 +1,7 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using Test, Distributions, SteadyStateDiffEq
+using Turing
+
 println("One parameter case")
 f1 = @ode_def begin
     dx = a * x - x * y
@@ -14,25 +16,28 @@ randomized = VectorOfArray([(sol(t[i]) + 0.01randn(2)) for i in 1:length(t)])
 data = convert(Array, randomized)
 priors = [Normal(1.5, 0.01)]
 
-bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500,
-                                   syms = [:a])
+bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500, syms = [:a])
 
 @show bayesian_result
 
 @test mean(get(bayesian_result, :a)[1])≈1.5 atol=3e-1
 
-bayesian_result = turing_inference(prob1, Rosenbrock23(autodiff = false), t, data, priors;
-                                   num_samples = 500,
-                                   syms = [:a])
+bayesian_result = turing_inference(prob1, Rosenbrock23(autodiff = false), t, data, priors; num_samples = 500, syms = [:a])
 
 bayesian_result = turing_inference(prob1, Rosenbrock23(), t, data, priors;
                                    num_samples = 500,
                                    syms = [:a])
 
+# --- test Multithreaded sampling
+println("Multithreaded case")
+result_threaded = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500, syms = [:a], parallel_type=MCMCThreads(), n_chains=2)
+
+@test length(result_threaded.value.axes[3]) == 2
+@test mean(get(result_threaded, :a)[1])≈1.5 atol=3e-1
+# ---
+
 priors = [Normal(1.0, 0.01), Normal(1.0, 0.01), Normal(1.5, 0.01)]
-bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500,
-                                   sample_u0 = true,
-                                   syms = [:u1, :u2, :a])
+bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500, sample_u0 = true, syms = [:u1, :u2, :a])
 
 @test mean(get(bayesian_result, :a)[1])≈1.5 atol=3e-1
 @test mean(get(bayesian_result, :u1)[1])≈1.0 atol=3e-1

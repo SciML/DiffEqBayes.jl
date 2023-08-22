@@ -16,6 +16,7 @@ function turing_inference(
     n_chains = 1,
     syms = [Turing.@varname(theta[i]) for i in 1:length(priors)],
     sample_u0 = false,
+    pooled_params=0,
     progress = false,
     solve_kwargs = Dict(
         :save_idxs => nothing,
@@ -69,7 +70,9 @@ function turing_inference(
             cases = size(x, 4)
             nu = solve_kwargs[:save_idxs] === nothing ? cases*length(prob.u0) : cases*length(solve_kwargs[:save_idxs])
             u0 = convert.(T, sample_u0 ? theta[1:nu] : prob.u0)
-            p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
+            pooled = convert.(T, sample_u0 ? theta[(nu+1):(nu+pooled_params)] : theta[1:pooled_params])
+            unpooled = convert.(T, sample_u0 ? theta[(nu+1+pooled_params):end] : theta[pooled_params+1:end])
+            window = length(prob.p)-pooled_params
             # if length(u0) < cases*length(prob.u0)
             #     # assumes u is ordered such that the observed variables are in the begining, consistent with ordered theta
             #     for i in length(u0):cases*length(prob.u0)
@@ -78,6 +81,7 @@ function turing_inference(
             # end
             _saveat = t === nothing ? Float64[] : t
             for case in 1:cases
+                p = vcat(pooled, unpooled[window*(case-1)+1:window*case])
                 sol = solve(prob, alg; u0 = u0[length(prob.u0)*(case-1)+1:length(prob.u0)*case], p = p, saveat = _saveat, progress = progress, solve_kwargs...)
                 failure = size(sol, 2) < length(_saveat)
 

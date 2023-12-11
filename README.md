@@ -60,7 +60,7 @@ bayesian_result_abc = abc_inference(prob1, Tsit5(), t, data, priors)
 ### Using save_idxs to declare observables
 
 You don't always have data for all of the variables of the model. In case of certain latent variables
-you can utilise the `save_idxs` kwarg to declare the oberved variables and run the inference using any
+you can utilise the `save_idxs` kwarg to declare the observed variables and run the inference using any
 of the backends as shown below.
 
 ```julia

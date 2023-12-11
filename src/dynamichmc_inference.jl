@@ -40,7 +40,7 @@ function (P::DynamicHMCPosterior)(θ)
     u0 = convert.(T, sample_u0 ? parameters[1:nu] : problem.u0)
     p = convert.(T, sample_u0 ? parameters[(nu + 1):end] : parameters)
     if length(u0) < length(problem.u0)
-        # assumes u is ordered such that the observed variables are in the begining, consistent with ordered theta
+        # assumes u is ordered such that the observed variables are in the beginning, consistent with ordered theta
         for i in length(u0):length(problem.u0)
             push!(u0, convert(T, problem.u0[i]))
         end

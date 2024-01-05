@@ -102,10 +102,11 @@ s_sol = solve(s_prob, DynamicSS(Tsit5(), abstol = 1e-4, reltol = 1e-3))
 # true data is 1.00, 0.25
 data = [1.05, 0.23]
 priors = [truncated(Normal(2.0, 0.2), 0, 3)]
-bayesian_result = turing_inference(s_prob, DynamicSS(Tsit5(), abstol = 1e-4, reltol = 1e-3),
+bayesian_result = turing_inference(s_prob, DynamicSS(Tsit5()),
                                    nothing, data, priors;
                                    num_samples = 500,
                                    maxiters = 1e6,
-                                   syms = [:α])
+                                   syms = [:α],
+                                   abstol = 1e-4, reltol = 1e-3,)
 
 @test mean(get(bayesian_result, :α)[1])≈2.0 atol=3e-1

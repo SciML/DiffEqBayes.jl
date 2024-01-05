@@ -1,5 +1,3 @@
-using Turing: Tracker
-
 """
 $(TYPEDEF)
 Defines a callable that returns the log density for given parameter values when called with

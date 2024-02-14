@@ -20,7 +20,7 @@ function generate_priors(n, priors)
     else
         for i in 1:n
             priors_string = string(priors_string, "theta_$i ~ ", stan_string(priors[i]),
-                                   ";")
+                ";")
         end
     end
     priors_string
@@ -39,7 +39,7 @@ function generate_theta(n, priors)
         end
         if lower_bound != "" && upper_bound != ""
             theta = string(theta, "real", "<$lower_bound", ",", "$upper_bound>",
-                           " theta_$i", ";")
+                " theta_$i", ";")
         elseif lower_bound != ""
             theta = string(theta, "real", "<$lower_bound", ">", " theta_$i", ";")
         elseif upper_bound != ""
@@ -52,23 +52,23 @@ function generate_theta(n, priors)
 end
 
 function stan_inference(prob::DiffEqBase.DEProblem,
-                        # Positional arguments
-                        t, data, priors = nothing, stanmodel = nothing;
-                        # DiffEqBayes keyword arguments
-                        likelihood = Normal, vars = (StanODEData(), InverseGamma(3, 3)),
-                        sample_u0 = false, save_idxs = nothing, diffeq_string = nothing,
-                        # Stan differential equation function keyword arguments
-                        alg = :rk45, reltol = 1e-3, abstol = 1e-6, maxiter = Int(1e5),
-                        # stan_sample keyword arguments
-                        num_samples = 1000, num_warmups = 1000,
-                        num_cpp_chains = 1, num_chains = 1, num_threads = 1,
-                        delta = 0.8,
-                        # read_samples arguments
-                        output_format = :mcmcchains,
-                        # read_summary arguments
-                        print_summary = true,
-                        # pass in existing tmpdir
-                        tmpdir = mktempdir())
+        # Positional arguments
+        t, data, priors = nothing, stanmodel = nothing;
+        # DiffEqBayes keyword arguments
+        likelihood = Normal, vars = (StanODEData(), InverseGamma(3, 3)),
+        sample_u0 = false, save_idxs = nothing, diffeq_string = nothing,
+        # Stan differential equation function keyword arguments
+        alg = :rk45, reltol = 1e-3, abstol = 1e-6, maxiter = Int(1e5),
+        # stan_sample keyword arguments
+        num_samples = 1000, num_warmups = 1000,
+        num_cpp_chains = 1, num_chains = 1, num_threads = 1,
+        delta = 0.8,
+        # read_samples arguments
+        output_format = :mcmcchains,
+        # read_summary arguments
+        print_summary = true,
+        # pass in existing tmpdir
+        tmpdir = mktempdir())
     save_idxs !== nothing && length(save_idxs) == 1 ? save_idxs = save_idxs[1] :
     save_idxs = save_idxs
     length_of_y = length(prob.u0)
@@ -113,7 +113,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,
                 hyper_params = string(hyper_params, "sigma$(i-1) ~ $dist;")
                 tuple_hyper_params = string(tuple_hyper_params, "sigma$(i-1)", ",")
                 setup_params = string(setup_params,
-                                      "row_vector<lower=0>[$(length(save_idxs))] sigma$(i-1);")
+                    "row_vector<lower=0>[$(length(save_idxs))] sigma$(i-1);")
             end
         end
 
@@ -157,12 +157,12 @@ function stan_inference(prob::DiffEqBase.DEProblem,
 
         if isnothing(diffeq_string)
             diffeq_string = ModelingToolkit.build_function(ModelingToolkit.equations(sys),
-                                                           ModelingToolkit.states(sys),
-                                                           ModelingToolkit.parameters(sys),
-                                                           ModelingToolkit.get_iv(sys);
-                                                           expression = Val{true},
-                                                           fname = :sho,
-                                                           target = ModelingToolkit.StanTarget())
+                ModelingToolkit.states(sys),
+                ModelingToolkit.parameters(sys),
+                ModelingToolkit.get_iv(sys);
+                expression = Val{true},
+                fname = :sho,
+                target = ModelingToolkit.StanTarget())
         end
 
         parameter_estimation_model = "
@@ -192,16 +192,16 @@ function stan_inference(prob::DiffEqBase.DEProblem,
             "
 
         stanmodel = SampleModel("parameter_estimation_model",
-                                parameter_estimation_model,
-                                tmpdir)
+            parameter_estimation_model,
+            tmpdir)
     end
 
     data = Dict("u0" => prob.u0, "T" => length(t),
-                "internal_var___u" => view(data, :, 1:length(t)),
-                "t0" => prob.tspan[1], "ts" => t)
+        "internal_var___u" => view(data, :, 1:length(t)),
+        "t0" => prob.tspan[1], "ts" => t)
 
     @time rc = stan_sample(stanmodel; data, num_threads, num_cpp_chains,
-                           num_samples, num_warmups, num_chains, delta)
+        num_samples, num_warmups, num_chains, delta)
 
     if success(rc)
         return StanResult(stanmodel, rc, read_samples(stanmodel, output_format))

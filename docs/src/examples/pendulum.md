@@ -76,7 +76,7 @@ length of the pendulum L is probably around 3.0:
 ```@example pendulum
 priors = [
     truncated(Normal(0.1, 1.0), lower = 0.0),
-    truncated(Normal(3.0, 1.0), lower = 0.0),
+    truncated(Normal(3.0, 1.0), lower = 0.0)
 ]
 ```
 
@@ -84,7 +84,7 @@ Finally, let's run the estimation routine from DiffEqBayes.jl with the Turing.jl
 
 ```@example pendulum
 bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 10_000,
-                                   syms = [:omega, :L])
+    syms = [:omega, :L])
 ```
 
 Notice that while our guesses had the wrong means, the learned parameters converged
@@ -120,15 +120,15 @@ to get better understanding of the performance.
 
 ```@example pendulum
 @btime bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors;
-                                          syms = [:omega, :L], num_samples = 10_000)
+    syms = [:omega, :L], num_samples = 10_000)
 ```
 
 ```@example pendulum
 @btime bayesian_result = stan_inference(prob1, t, data, priors; num_samples = 10_000,
-                                        print_summary = false)
+    print_summary = false)
 ```
 
 ```@example pendulum
 @btime bayesian_result = dynamichmc_inference(prob1, Tsit5(), t, data, priors;
-                                              num_samples = 10_000)
+    num_samples = 10_000)
 ```

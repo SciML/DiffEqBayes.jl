@@ -17,13 +17,13 @@ data = convert(Array, randomized)
 priors = [Normal(1.5, 0.01)]
 
 bayesian_result = abc_inference(prob1, Tsit5(), t, data, priors;
-                                num_samples = 500, ϵ = 0.001)
+    num_samples = 500, ϵ = 0.001)
 
 @test mean(bayesian_result.parameters, weights(bayesian_result.weights))≈1.5 atol=0.1
 
 priors = [Normal(1.0, 0.01), Normal(1.0, 0.01), Normal(1.5, 0.01)]
 bayesian_result = abc_inference(prob1, Tsit5(), t, data, priors;
-                                num_samples = 500, ϵ = 0.001, sample_u0 = true)
+    num_samples = 500, ϵ = 0.001, sample_u0 = true)
 
 meanvals = mean(bayesian_result.parameters, weights(bayesian_result.weights), 1)
 @test meanvals[1]≈1.0 atol=0.1
@@ -35,14 +35,14 @@ randomized = VectorOfArray([(sol(t[i]) + 0.01randn(1)) for i in 1:length(t)])
 data = convert(Array, randomized)
 priors = [Normal(1.5, 0.01)]
 bayesian_result = abc_inference(prob1, Tsit5(), t, data, priors;
-                                num_samples = 500, ϵ = 0.001, save_idxs = [1])
+    num_samples = 500, ϵ = 0.001, save_idxs = [1])
 
 @test mean(bayesian_result.parameters, weights(bayesian_result.weights))≈1.5 atol=0.1
 
 priors = [Normal(1.0, 0.01), Normal(1.5, 0.01)]
 bayesian_result = abc_inference(prob1, Tsit5(), t, data, priors;
-                                num_samples = 500, ϵ = 0.001, sample_u0 = true,
-                                save_idxs = [1])
+    num_samples = 500, ϵ = 0.001, sample_u0 = true,
+    save_idxs = [1])
 
 meanvals = mean(bayesian_result.parameters, weights(bayesian_result.weights), 1)
 @test meanvals[1]≈1.0 atol=0.1
@@ -63,8 +63,8 @@ distfn = function (d1, d2)
 end
 priors = [Normal(1.5, 0.01)]
 bayesian_result = abc_inference(prob1, Tsit5(), t, data, priors;
-                                num_samples = 500, ϵ = 0.001,
-                                distancefunction = distfn)
+    num_samples = 500, ϵ = 0.001,
+    distancefunction = distfn)
 
 @test mean(bayesian_result.parameters, weights(bayesian_result.weights))≈1.5 atol=0.1
 

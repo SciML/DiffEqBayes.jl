@@ -16,28 +16,32 @@ randomized = VectorOfArray([(sol(t[i]) + 0.01randn(2)) for i in 1:length(t)])
 data = convert(Array, randomized)
 priors = [Normal(1.5, 0.01)]
 
-bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500, syms = [:a])
+bayesian_result = turing_inference(
+    prob1, Tsit5(), t, data, priors; num_samples = 500, syms = [:a])
 
 @show bayesian_result
 
 @test mean(get(bayesian_result, :a)[1])≈1.5 atol=3e-1
 
-bayesian_result = turing_inference(prob1, Rosenbrock23(autodiff = false), t, data, priors; num_samples = 500, syms = [:a])
+bayesian_result = turing_inference(
+    prob1, Rosenbrock23(autodiff = false), t, data, priors; num_samples = 500, syms = [:a])
 
 bayesian_result = turing_inference(prob1, Rosenbrock23(), t, data, priors;
-                                   num_samples = 500,
-                                   syms = [:a])
+    num_samples = 500,
+    syms = [:a])
 
 # --- test Multithreaded sampling
 println("Multithreaded case")
-result_threaded = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500, syms = [:a], parallel_type=MCMCThreads(), n_chains=2)
+result_threaded = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500,
+    syms = [:a], parallel_type = MCMCThreads(), n_chains = 2)
 
 @test length(result_threaded.value.axes[3]) == 2
 @test mean(get(result_threaded, :a)[1])≈1.5 atol=3e-1
 # ---
 
 priors = [Normal(1.0, 0.01), Normal(1.0, 0.01), Normal(1.5, 0.01)]
-bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500, sample_u0 = true, syms = [:u1, :u2, :a])
+bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500,
+    sample_u0 = true, syms = [:u1, :u2, :a])
 
 @test mean(get(bayesian_result, :a)[1])≈1.5 atol=3e-1
 @test mean(get(bayesian_result, :u1)[1])≈1.0 atol=3e-1
@@ -48,14 +52,14 @@ randomized = VectorOfArray([(sol(t[i]) + 0.01 * randn(1)) for i in 1:length(t)])
 data = convert(Array, randomized)
 priors = [Normal(1.5, 0.01)]
 bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500,
-                                   syms = [:a], save_idxs = [1])
+    syms = [:a], save_idxs = [1])
 
 @test mean(get(bayesian_result, :a)[1])≈1.5 atol=3e-1
 
 priors = [Normal(1.0, 0.01), Normal(1.5, 0.01)]
 bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors; num_samples = 500,
-                                   sample_u0 = true,
-                                   syms = [:u1, :a], save_idxs = [1])
+    sample_u0 = true,
+    syms = [:u1, :a], save_idxs = [1])
 
 @test mean(get(bayesian_result, :a)[1])≈1.5 atol=3e-1
 @test mean(get(bayesian_result, :u1)[1])≈1.0 atol=3e-1
@@ -77,7 +81,7 @@ priors = [truncated(Normal(1.5, 0.01), 0, 2), truncated(Normal(1.0, 0.01), 0, 1.
     truncated(Normal(3.0, 0.01), 0, 4), truncated(Normal(1.0, 0.01), 0, 2)]
 
 bayesian_result = turing_inference(prob2, Tsit5(), t, data, priors; num_samples = 500,
-                                   syms = [:a, :b, :c, :d])
+    syms = [:a, :b, :c, :d])
 
 @show bayesian_result
 
@@ -103,10 +107,10 @@ s_sol = solve(s_prob, DynamicSS(Tsit5()), abstol = 1e-4, reltol = 1e-3)
 data = [1.05, 0.23]
 priors = [truncated(Normal(2.0, 0.2), 0, 3)]
 bayesian_result = turing_inference(s_prob, DynamicSS(Tsit5()),
-                                   nothing, data, priors;
-                                   num_samples = 500,
-                                   maxiters = 1e6,
-                                   syms = [:α],
-                                   abstol = 1e-4, reltol = 1e-3,)
+    nothing, data, priors;
+    num_samples = 500,
+    maxiters = 1e6,
+    syms = [:α],
+    abstol = 1e-4, reltol = 1e-3)
 
 @test mean(get(bayesian_result, :α)[1])≈2.0 atol=3e-1

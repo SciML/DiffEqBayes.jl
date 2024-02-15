@@ -12,9 +12,9 @@ using DiffEqBayes
 
 ```julia
 stan_inference(prob::ODEProblem, t, data, priors = nothing; alg = :rk45,
-               num_samples = 1000, num_warmups = 1000, reltol = 1e-3,
-               abstol = 1e-6, maxiter = Int(1e5), likelihood = Normal,
-               vars = (StanODEData(), InverseGamma(2, 3)))
+    num_samples = 1000, num_warmups = 1000, reltol = 1e-3,
+    abstol = 1e-6, maxiter = Int(1e5), likelihood = Normal,
+    vars = (StanODEData(), InverseGamma(2, 3)))
 ```
 
 `stan_inference` uses [Stan.jl](https://stanjulia.github.io/CmdStan.jl/latest/INTRO/)
@@ -37,8 +37,8 @@ parameter list.
 
 ```julia
 function turing_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors;
-                          likelihood_dist_priors, likelihood, num_samples = 1000,
-                          sampler = Turing.NUTS(num_samples, 0.65), parallel_type = MCMCSerial(), n_chains = 1, syms, kwargs...)
+        likelihood_dist_priors, likelihood, num_samples = 1000,
+        sampler = Turing.NUTS(num_samples, 0.65), parallel_type = MCMCSerial(), n_chains = 1, syms, kwargs...)
 end
 ```
 
@@ -55,7 +55,7 @@ type. `num_samples` is the number of samples per MCMC chain. Sampling from multi
 
 ```julia
 dynamichmc_inference(prob::DEProblem, alg, t, data, priors, transformations;
-                     σ = 0.01, ϵ = 0.001, initial = Float64[])
+    σ = 0.01, ϵ = 0.001, initial = Float64[])
 ```
 
 `dynamichmc_inference` uses [DynamicHMC.jl](https://github.com/tpapp/DynamicHMC.jl) to
@@ -71,8 +71,8 @@ parameter values to specific domains. `initial` values for the parameters can be
 
 ```julia
 abc_inference(prob::DEProblem, alg, t, data, priors; ϵ = 0.001,
-              distancefunction = euclidean, ABCalgorithm = ABCSMC, progress = false,
-              num_samples = 500, maxiterations = 10^5, kwargs...)
+    distancefunction = euclidean, ABCalgorithm = ABCSMC, progress = false,
+    num_samples = 500, maxiterations = 10^5, kwargs...)
 ```
 
 `abc_inference` uses [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl), which uses Approximate Bayesian Computation (ABC) to

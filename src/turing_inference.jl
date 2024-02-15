@@ -1,21 +1,21 @@
 function turing_inference(prob::DiffEqBase.DEProblem,
-                          alg,
-                          t,
-                          data,
-                          priors;
-                          likelihood_dist_priors = [InverseGamma(2, 3)],
-                          likelihood = (u, p, t, σ) -> MvNormal(u,
-                                                                Diagonal((σ[1])^2 *
-                                                                         ones(length(u)))),
-                          num_samples = 1000,
-                          sampler = Turing.NUTS(0.65),
-                          parallel_type = MCMCSerial(),
-                          n_chains = 1,
-                          syms = [Turing.@varname(theta[i]) for i in 1:length(priors)],
-                          sample_u0 = false,
-                          save_idxs = nothing,
-                          progress = false,
-                          kwargs...)
+        alg,
+        t,
+        data,
+        priors;
+        likelihood_dist_priors = [InverseGamma(2, 3)],
+        likelihood = (u, p, t, σ) -> MvNormal(u,
+            Diagonal((σ[1])^2 *
+                     ones(length(u)))),
+        num_samples = 1000,
+        sampler = Turing.NUTS(0.65),
+        parallel_type = MCMCSerial(),
+        n_chains = 1,
+        syms = [Turing.@varname(theta[i]) for i in 1:length(priors)],
+        sample_u0 = false,
+        save_idxs = nothing,
+        progress = false,
+        kwargs...)
     N = length(priors)
     Turing.@model function infer(x, ::Type{T} = Float64) where {T <: Real}
         theta = Vector{T}(undef, length(priors))
@@ -37,7 +37,7 @@ function turing_inference(prob::DiffEqBase.DEProblem,
         end
         _saveat = t === nothing ? Float64[] : t
         sol = solve(prob, alg; u0 = u0, p = p, saveat = _saveat, progress = progress,
-                    save_idxs = save_idxs, kwargs...)
+            save_idxs = save_idxs, kwargs...)
         failure = size(sol, 2) < length(_saveat)
 
         if failure

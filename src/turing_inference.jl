@@ -1,5 +1,3 @@
-using Turing: Tracker
-
 function turing_inference(
     prob::DiffEqBase.DEProblem,
     alg,

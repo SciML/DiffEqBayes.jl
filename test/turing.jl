@@ -90,12 +90,12 @@ bayesian_result = turing_inference(prob2, Tsit5(), t, data, priors; num_samples 
 @test mean(get(bayesian_result, :c)[1])≈3.0 atol=3e-1
 @test mean(get(bayesian_result, :d)[1])≈1.0 atol=3e-1
 
-# println("Steady state problem")
-# function f(du, u, p, t)
-#     α = p[1]
-#     du[1] = 2 - α * u[1]
-#     du[2] = u[1] - 4u[2]
-# end
+println("Steady state problem")
+function f(du, u, p, t)
+    α = p[1]
+    du[1] = 2 - α * u[1]
+    du[2] = u[1] - 4u[2]
+end
 
 p = [2.0]
 u0 = zeros(2)

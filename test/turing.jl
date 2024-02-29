@@ -33,7 +33,8 @@ bayesian_result = turing_inference(prob1, Rosenbrock23(), t, data, priors; syms 
 # --- test Multithreaded sampling
 println("Multithreaded case")
 result_threaded = turing_inference(prob1, Tsit5(), t, data, priors;
-    syms = [:a], sample_args = (parallel_type = MCMCThreads(), num_samples = 500, n_chains = 2))
+    syms = [:a], sample_args = (
+        parallel_type = MCMCThreads(), num_samples = 500, n_chains = 2))
 
 @test length(result_threaded.value.axes[3]) == 2
 @test mean(get(result_threaded, :a)[1])≈1.5 atol=3e-1

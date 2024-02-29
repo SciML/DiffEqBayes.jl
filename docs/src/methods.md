@@ -36,10 +36,9 @@ parameter list.
 ### turing_inference
 
 ```julia
-function turing_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors;
-        likelihood_dist_priors, likelihood, num_samples = 1000,
-        sampler = Turing.NUTS(num_samples, 0.65), parallel_type = MCMCSerial(), n_chains = 1, syms, kwargs...)
-end
+turing_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors;
+    likelihood_dist_priors, likelihood, syms, sample_u0 = false, progress = false,
+    solve_kwargs = Dict(), sample_args = NamedTuple(), sample_kwargs= Dict())
 ```
 
 `turing_inference` uses [Turing.jl](https://github.com/TuringLang/Turing.jl) to
@@ -49,7 +48,17 @@ observations for the differential equation system at time point `t[i]` (or highe
 dimensional). `priors` is an array of prior distributions for each
 parameter, specified via a
 [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/)
-type. `num_samples` is the number of samples per MCMC chain. Sampling from multiple chains is possible, see [`Turing.jl` documentation](https://turinglang.org/v0.26/docs/using-turing/guide#sampling-multiple-chains), serially or parallelly using `parallel_type` and `n_chains`. The extra `kwargs` are given to the internal differential equation solver.
+type.
+
+The `turing_inference` interacts with `SciML.CommonSolve.solve` and `StatsBase.sample`. Both accept many arguments depending on the solver and sampling algorithm.
+These arguments are supplied to `turing_inferene` function via `solve_kwargs`, `sample_args`, and `sample_kwargs` arguments. Please refer to [the `solve` documentation](https://docs.sciml.ai/DiffEqDocs/stable/basics/common_solver_opts/) for `solve_kwargs`, e.g. `solve_kwargs = Dict(:save_idxs => [1])`.
+The `solve` keyword arguments default to `save_idxs = nothing`. Similarly please refer to [the `sample` documentation]((https://turinglang.org/v0.26/docs/using-turing/guide#sampling-multiple-chains)) for `sample_args` and `sample_kwargs`. The four positional argument are as following: `sampler`, the sampling algorithm. Sampling from multiple chains is possible serially or parallelly using `parallel_type`. Third `num_samples`, the number of samples per MCMC chain and `n_chains`, the number of MCMC chains. The positional arguments default to the following values.
+```julia
+sampler = Turing.NUTS(0.65)
+parallel_type = MCMCSerial()
+num_samples = 1000
+n_chains = 1
+```
 
 ### dynamichmc_inference
 

@@ -19,10 +19,10 @@ function turing_inference(
     # default args are updated with user supplied args
     solve_kwargs = merge(Dict(:save_idxs => nothing), solve_kwargs)
     sample_args = (;
-        sampler=Turing.NUTS(0.65),
-        parallel_type=MCMCSerial(),
-        num_samples=1000,
-        n_chains=1,
+        sampler = Turing.NUTS(0.65),
+        parallel_type = MCMCSerial(),
+        num_samples = 1000,
+        n_chains = 1,
         sample_args...
     )
     Turing.@model function infer(x, ::Type{T} = Float64) where {T <: Real}

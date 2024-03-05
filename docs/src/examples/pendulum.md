@@ -84,7 +84,7 @@ Finally, let's run the estimation routine from DiffEqBayes.jl with the Turing.jl
 
 ```@example pendulum
 bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors;
-    syms = [:omega, :L], sample_args=(num_samples = 10_000,))
+    syms = [:omega, :L], sample_args = (num_samples = 10_000,))
 ```
 
 Notice that while our guesses had the wrong means, the learned parameters converged
@@ -120,7 +120,7 @@ to get better understanding of the performance.
 
 ```@example pendulum
 @btime bayesian_result = turing_inference(prob1, Tsit5(), t, data, priors;
-    syms = [:omega, :L], sample_args=(num_samples = 10_000,))
+    syms = [:omega, :L], sample_args = (num_samples = 10_000,))
 ```
 
 ```@example pendulum

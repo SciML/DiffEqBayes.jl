@@ -124,8 +124,8 @@ to get better understanding of the performance.
 ```
 
 ```@example pendulum
-@btime bayesian_result = stan_inference(prob1, t, data, priors; num_samples = 10_000,
-    print_summary = false)
+@btime bayesian_result = stan_inference(prob1, :rk45, t, data, priors;
+sample_kwargs = Dict(:num_samples => 10_000), print_summary = false)
 ```
 
 ```@example pendulum

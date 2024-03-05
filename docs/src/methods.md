@@ -11,34 +11,24 @@ using DiffEqBayes
 ### stan_inference
 
 ```julia
-stan_inference(prob::ODEProblem, t, data, priors = nothing; alg = :rk45,
-    num_samples = 1000, num_warmups = 1000, reltol = 1e-3,
-    abstol = 1e-6, maxiter = Int(1e5), likelihood = Normal,
-    vars = (StanODEData(), InverseGamma(2, 3)))
+stan_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors = nothing;
+    stanmodel = nothing, likelihood = Normal, vars = (StanODEData(), InverseGamma(3, 3)), sample_u0 = false, solve_kwargs = Dict(), diffeq_string = nothing, sample_kwargs = Dict(), output_format = :mcmcchains, print_summary = true, tmpdir = mktempdir())
 ```
 
 `stan_inference` uses [Stan.jl](https://stanjulia.github.io/CmdStan.jl/latest/INTRO/)
 to perform the Bayesian inference. The
 [Stan installation process](https://stanjulia.github.io/CmdStan.jl/latest/INSTALLATION/)
-is required to use this function. `t` is the array of time
-and `data` is the array where the first dimension (columns) corresponds to the
-array of system values. `priors` is an array of prior distributions for each
-parameter, specified via a [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/)
-type. `alg` is a choice between `:rk45` and `:bdf`, the two internal integrators
-of Stan. `num_samples` is the number of samples to take per chain, and `num_warmups`
-is the number of MCMC warm-up steps. `abstol` and `reltol` are the keyword
-arguments for the internal integrator. `likelihood` is the likelihood distribution
-to use with the arguments from `vars`, and `vars` is a tuple of priors for the
-distributions of the likelihood hyperparameters. The special value `StanODEData()`
-in this tuple denotes the position that the ODE solution takes in the likelihood's
-parameter list.
+is required to use this function. Currently `CmdStan v2.34.1` is supported.
+
+`prob` can be any `DEProblem` with a corresponding `alg` choice. `alg` is a choice between `:rk45` and `:bdf`, the two internal integrators of Stan. `t` is the array of time and `data` is the array where the first dimension (columns) corresponds to the array of system values. `priors` is an array of prior distributions for each parameter, specified via a [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/) type. `likelihood` is the likelihood distribution to use with the arguments from `vars`, and `vars` is a tuple of priors for the distributions of the likelihood hyperparameters. The special value `StanODEData()` in this tuple denotes the position that the ODE solution takes in the likelihood's parameter list.
+
+`solve_kwargs` is a `Dict` and passed to the stan differential equation solver. `solve_kwargs` may contain `save_idxs`, `reltol`, `abstol`, and `maxiter`. `save_idxs` is documented at [`DifferentialEquations.jl`](https://docs.sciml.ai/DiffEqDocs/stable/basics/common_solver_opts/). `sample_kwargs` are passed to the stan sampler and accepts `num_samples`, `num_warmups`, `num_cpp_chains` , `num_chains`, `num_threads`, `delta`. Please refer to the [stan documentation for more information](https://mc-stan.org/docs/cmdstan-guide/mcmc-intro.html).
 
 ### turing_inference
 
 ```julia
 turing_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors;
-    likelihood_dist_priors, likelihood, syms, sample_u0 = false, progress = false,
-    solve_kwargs = Dict(), sample_args = NamedTuple(), sample_kwargs= Dict())
+    likelihood_dist_priors, likelihood, syms, sample_u0 = false, progress = false, solve_kwargs = Dict(), sample_args = NamedTuple(), sample_kwargs= Dict())
 ```
 
 `turing_inference` uses [Turing.jl](https://github.com/TuringLang/Turing.jl) to

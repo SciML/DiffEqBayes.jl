@@ -25,8 +25,8 @@ bayesian_result = stan_inference(prob1, alg, t, data, priors; sample_kwargs, lik
 @test mean(get(bayesian_result.chains, :theta_1)[1])≈1.5 atol=3e-1
 
 # Test norecompile
-bayesian_result2 = stan_inference(prob1, alg, t, data, priors, bayesian_result.model;
-    sample_kwargs, likelihood = Normal)
+bayesian_result2 = stan_inference(prob1, alg, t, data, priors;
+    stanmodel = bayesian_result.model, sample_kwargs, likelihood = Normal)
 
 @test mean(get(bayesian_result2.chains, :theta_1)[1])≈1.5 atol=3e-1
 

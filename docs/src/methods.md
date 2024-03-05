@@ -53,6 +53,7 @@ type.
 The `turing_inference` interacts with `SciML.CommonSolve.solve` and `StatsBase.sample`. Both accept many arguments depending on the solver and sampling algorithm.
 These arguments are supplied to `turing_inferene` function via `solve_kwargs`, `sample_args`, and `sample_kwargs` arguments. Please refer to [the `solve` documentation](https://docs.sciml.ai/DiffEqDocs/stable/basics/common_solver_opts/) for `solve_kwargs`, e.g. `solve_kwargs = Dict(:save_idxs => [1])`.
 The `solve` keyword arguments default to `save_idxs = nothing`. Similarly please refer to [the `sample` documentation]((https://turinglang.org/v0.26/docs/using-turing/guide#sampling-multiple-chains)) for `sample_args` and `sample_kwargs`. The four positional argument are as following: `sampler`, the sampling algorithm. Sampling from multiple chains is possible serially or parallelly using `parallel_type`. Third `num_samples`, the number of samples per MCMC chain and `n_chains`, the number of MCMC chains. The positional arguments default to the following values.
+
 ```julia
 sampler = Turing.NUTS(0.65)
 parallel_type = MCMCSerial()

@@ -18,9 +18,10 @@ priors = [truncated(Normal(1.5, 0.1), 1.0, 1.8)]
 
 sample_kwargs = Dict(:num_samples => 300, :num_warmups => 500)
 solve_kwargs = Dict(:save_idxs => [1])
-alg=:rk45
+alg = :rk45
 
-bayesian_result = stan_inference(prob1, alg, t, data, priors; sample_kwargs, likelihood = Normal)
+bayesian_result = stan_inference(
+    prob1, alg, t, data, priors; sample_kwargs, likelihood = Normal)
 
 @test mean(get(bayesian_result.chains, :theta_1)[1])≈1.5 atol=3e-1
 

@@ -75,7 +75,7 @@ function stan_inference(
         # pass in existing tmpdir
         tmpdir = mktempdir()
 )
-    # update default stan diff eq funciton kw args
+    # update default stan diff eq function kw args
     solve_kwargs = merge(
         Dict(
             :save_idxs => nothing,
@@ -231,7 +231,7 @@ function stan_inference(
                     internal_var___u[t,:] ~ $stan_likelihood($tuple_hyper_params);
                 }
             }
-        ";
+        "
 
         stanmodel = SampleModel("parameter_estimation_model",
             parameter_estimation_model,

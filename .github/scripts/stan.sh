@@ -1,4 +1,4 @@
-JULIA_CMDSTAN_HOME="/home/runner/cmdstan-2.29.2/"
+JULIA_CMDSTAN_HOME="/home/runner/cmdstan-2.34.1/"
 OLDWD=`pwd`
 cd ~
 pwd

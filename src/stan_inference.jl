@@ -51,24 +51,66 @@ function generate_theta(n, priors)
     return theta
 end
 
-function stan_inference(prob::DiffEqBase.DEProblem,
+function stan_inference(
+        prob::DiffEqBase.DEProblem,
+        alg,
         # Positional arguments
-        t, data, priors = nothing, stanmodel = nothing;
+        t,
+        data,
+        priors = nothing;
+        stanmodel = nothing,
         # DiffEqBayes keyword arguments
-        likelihood = Normal, vars = (StanODEData(), InverseGamma(3, 3)),
-        sample_u0 = false, save_idxs = nothing, diffeq_string = nothing,
+        likelihood = Normal,
+        vars = (StanODEData(), InverseGamma(3, 3)),
+        sample_u0 = false,
         # Stan differential equation function keyword arguments
-        alg = :rk45, reltol = 1e-3, abstol = 1e-6, maxiter = Int(1e5),
+        solve_kwargs = Dict(),
+        diffeq_string = nothing,
         # stan_sample keyword arguments
-        num_samples = 1000, num_warmups = 1000,
-        num_cpp_chains = 1, num_chains = 1, num_threads = 1,
-        delta = 0.8,
+        sample_kwargs = Dict(),
         # read_samples arguments
         output_format = :mcmcchains,
         # read_summary arguments
         print_summary = true,
         # pass in existing tmpdir
-        tmpdir = mktempdir())
+        tmpdir = mktempdir()
+)
+    # update default stan diff eq function kw args
+    solve_kwargs = merge(
+        Dict(
+            :save_idxs => nothing,
+            :reltol => 1e-3,
+            :abstol => 1e-6,
+            :maxiter => Int(1e5)
+        ),
+        solve_kwargs
+    )
+    # update default stan sample kw args
+    sample_kwargs = merge(
+        Dict(
+            :num_samples => 1000,
+            :num_warmups => 1000,
+            :num_cpp_chains => 1,
+            :num_chains => 1,
+            :num_threads => 1,
+            :delta => 0.8
+        ),
+        sample_kwargs
+    )
+
+    # make kw arg from dicts available as old vars
+    save_idxs = solve_kwargs[:save_idxs]
+    reltol = solve_kwargs[:reltol]
+    abstol = solve_kwargs[:abstol]
+    maxiter = solve_kwargs[:maxiter]
+
+    num_samples = sample_kwargs[:num_samples]
+    num_warmups = sample_kwargs[:num_warmups]
+    num_cpp_chains = sample_kwargs[:num_cpp_chains]
+    num_chains = sample_kwargs[:num_chains]
+    num_threads = sample_kwargs[:num_threads]
+    delta = sample_kwargs[:delta]
+
     save_idxs !== nothing && length(save_idxs) == 1 ? save_idxs = save_idxs[1] :
     save_idxs = save_idxs
     length_of_y = length(prob.u0)
@@ -167,21 +209,21 @@ function stan_inference(prob::DiffEqBase.DEProblem,
 
         parameter_estimation_model = "
             functions {
-                $diffeq_string
+                $(diffeq_string)
             }
             data {
-                vector[$length_of_y] u0;
+                vector[$(length_of_y)] u0;
                 int<lower=1> T;
-                real internal_var___u[T,$(length(save_idxs))];
+                array[T,$(length(save_idxs))] real internal_var___u;
                 real t0;
-                real ts[T];
+                array[T] real ts;
             }
             parameters {
-                $setup_params
-                $theta_string
+                $(setup_params)
+                $(theta_string)
             }
             model{
-                vector[$length_of_y] u_hat[T];
+                array[T] vector[$length_of_y] u_hat;
                 $hyper_params
                 $priors_string
                 $integral_string
@@ -189,7 +231,7 @@ function stan_inference(prob::DiffEqBase.DEProblem,
                     internal_var___u[t,:] ~ $stan_likelihood($tuple_hyper_params);
                 }
             }
-            "
+        "
 
         stanmodel = SampleModel("parameter_estimation_model",
             parameter_estimation_model,

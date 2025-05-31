@@ -27,7 +27,7 @@ function turing_inference(
     )
 
     _p, repack, aliases = if SciMLStructures.isscimlstructure(prob.p)
-        SciMLStructures.canonicalize(SciMLStructures.Tunables(), prob.p)
+        SciMLStructures.canonicalize(SciMLStructures.Tunable(), prob.p)
     else
         prob.p, identity, true
     end

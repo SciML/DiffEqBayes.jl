@@ -46,7 +46,7 @@ function (P::DynamicHMCPosterior)(θ)
     end
     _saveat = t === nothing ? Float64[] : t
     sol = solve(
-        problem, algorithm; u0 = u0, p = p.repack(p), saveat = _saveat, save_idxs = save_idxs,
+        problem, algorithm; u0 = u0, p = P.repack(p), saveat = _saveat, save_idxs = save_idxs,
         solve_kwargs...)
     failure = size(sol, 2) < length(_saveat)
     failure && return T(0) * sum(σ) + T(-Inf)

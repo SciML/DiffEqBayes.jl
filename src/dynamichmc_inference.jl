@@ -106,7 +106,7 @@ function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
         else
             problem.p, identity, true
         end
-        mcmc_kwargs = (initialization = (q = zeros(length(parameter_priors) + (save_idxs ===
+        mcmc_kwargs = (; initialization = (q = zeros(length(parameter_priors) + (save_idxs ===
                                                     nothing ?
                                                     length(data[:, 1]) :
                                                     length(save_idxs))),),)

@@ -8,6 +8,7 @@ using RecursiveArrayTools, ModelingToolkit, LinearAlgebra
 using Parameters, Distributions, Optim, Requires
 using Distances, DocStringExtensions, Random, StanSample
 using DynamicHMC, TransformVariables, LogDensityProblemsAD, TransformedLogDensities
+using SciMLStructures
 
 STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
 function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)

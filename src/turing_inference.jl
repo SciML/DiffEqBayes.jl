@@ -25,6 +25,13 @@ function turing_inference(
         n_chains = 1,
         sample_args...
     )
+
+    _p, repack, aliases = if SciMLStructures.isscimlstructure(prob.p)
+        canonicalize(SciMLStructures.Tunables(), prob.p)
+    else
+        prob.p, identity, true
+    end
+
     Turing.@model function infer(x, ::Type{T} = Float64) where {T <: Real}
         theta = Vector{T}(undef, length(priors))
         for i in 1:length(priors)
@@ -45,7 +52,7 @@ function turing_inference(
             end
         end
         _saveat = t === nothing ? Float64[] : t
-        sol = solve(prob, alg; u0 = u0, p = p, saveat = _saveat,
+        sol = solve(prob, alg; u0 = u0, p = repack(p), saveat = _saveat,
             progress = progress, solve_kwargs...)
         failure = size(sol, 2) < length(_saveat)
 

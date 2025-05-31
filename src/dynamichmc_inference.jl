@@ -100,6 +100,12 @@ function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
         sample_u0 = false, rng = Random.GLOBAL_RNG,
         num_samples = 1000, AD_gradient_kind = Val(:ForwardDiff),
         save_idxs = nothing, solve_kwargs = (),
+
+        _p, repack, aliases = if SciMLStructures.isscimlstructure(problem.p)
+            canonicalize(SciMLStructures.Tunables(), problem.p)
+        else
+            problem.p, identity, true
+        end
         mcmc_kwargs = (initialization = (q = zeros(length(parameter_priors) +
                                                    (save_idxs ===
                                                     nothing ?
@@ -108,13 +114,8 @@ function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
     P = DynamicHMCPosterior(; algorithm = algorithm, problem = problem, t = t, data = data,
         parameter_priors = parameter_priors, σ_priors = σ_priors,
         solve_kwargs = solve_kwargs, sample_u0 = sample_u0,
-        save_idxs = save_idxs)
-    
-    _p, repack, aliases = if SciMLStructures.isscimlstructure(problem.p)
-        canonicalize(SciMLStructures.Tunables(), problem.p)
-    else
-        problem.p, identity, true
-    end
+        save_idxs = save_idxs, repack = repack)
+
 
     trans = as((parameters = parameter_transformations,
         σ = as(Vector, asℝ₊, length(σ_priors))))

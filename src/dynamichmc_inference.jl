@@ -106,7 +106,7 @@ function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
                                             length(data[:, 1]) :
                                             length(save_idxs))),),))
     
-        _p, repack, aliases = if SciMLStructures.isscimlstructure(problem.p)
+        _p, repack, aliases = if SciMLStructures.isscimlstructure(problem.p) && !(typeof(problem.p) <: AbstractArray)
             SciMLStructures.canonicalize(SciMLStructures.Tunable(), problem.p)
         else
             problem.p, identity, true

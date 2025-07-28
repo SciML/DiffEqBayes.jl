@@ -198,7 +198,7 @@ function stan_inference(
         """
 
         if isnothing(diffeq_string)
-            diffeq_string = ModelingToolkit.build_function(ModelingToolkit.equations(sys),
+            diffeq_string = ModelingToolkit.build_function(collect(ModelingToolkit.equations(sys)),
                 ModelingToolkit.unknowns(sys),
                 ModelingToolkit.parameters(sys),
                 ModelingToolkit.get_iv(sys);

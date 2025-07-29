@@ -1,6 +1,6 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using Test, Distributions, SteadyStateDiffEq
-using Turing
+using Turing, ADTypes
 
 println("One parameter case")
 f1 = @ode_def begin
@@ -24,7 +24,7 @@ bayesian_result = turing_inference(
 @test mean(get(bayesian_result, :a)[1])≈1.5 atol=3e-1
 
 bayesian_result = turing_inference(
-    prob1, Rosenbrock23(autodiff = false), t, data, priors;
+    prob1, Rosenbrock23(autodiff = AutoFiniteDiff()), t, data, priors;
     syms = [:a], sample_args = (num_samples = 500,))
 
 bayesian_result = turing_inference(prob1, Rosenbrock23(), t, data, priors; syms = [:a],

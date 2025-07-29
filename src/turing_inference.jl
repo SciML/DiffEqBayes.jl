@@ -57,7 +57,7 @@ function turing_inference(
         failure = size(sol, 2) < length(_saveat)
 
         if failure
-            Turing.DynamicPPL.acclogp!!(__varinfo__, -Inf)
+            Turing.@addlogprob! -Inf
             return
         end
         if ndims(sol) == 1

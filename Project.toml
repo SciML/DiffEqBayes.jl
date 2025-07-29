@@ -1,7 +1,7 @@
 name = "DiffEqBayes"
 uuid = "ebbdde9d-f333-5424-9be2-dbf1e9acfb5e"
 authors = ["Vaibhavdixit02 <vaibhavyashdixit@gmail.com>"]
-version = "3.8.0"
+version = "3.9.0"
 
 [deps]
 DiffEqBase = "2b5f629d-d688-5b77-993f-72d75c75574e"

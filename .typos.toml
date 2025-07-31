@@ -1,4 +1,6 @@
 [default.extend-words]
+Missings = "Missings"
+
 # Julia-specific functions
 indexin = "indexin"
 findfirst = "findfirst"

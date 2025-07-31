@@ -4,7 +4,9 @@ Defines a callable that returns the log density for given parameter values when 
 a `NamedTuple` `(parameters = ..., σ = ...)` where `parameters` is a vector of parameters,
 and `σ` is the vector of noise scales.
 For a common use case, see [`dynamichmc_inference`](@ref).
+
 # Fields
+
 $(FIELDS)
 """
 Base.@kwdef struct DynamicHMCPosterior{TA, TP, TD, TT, TR, TS, TK, TI, TRe}
@@ -75,22 +77,26 @@ $(SIGNATURES)
 Run MCMC for an ODE problem. Return a `NamedTuple`, which is similar to the one returned by
 `DynamicHMC.mcmc_with_warmup`, with an added field `posterior` which contains a vector of
 posterior values (transformed from `ℝⁿ`).
+
 # Arguments
-- `problem` is the ODE problem
-- `algorithm` is the ODE algorithm
-- `t` is the time values at which the solution is compared to `data`
-- `data` is a matrix of data, with one column for each element in `t`
-- `parameter_priors` is an iterable with the length of the number of paramers, and is used
-  as a prior on it, should have comparable structure.
-- `parameter_transformations`: a `TransformVariables` transformation to mapping `ℝⁿ` to the
-  vector of valid parameters.
+
+  - `problem` is the ODE problem
+  - `algorithm` is the ODE algorithm
+  - `t` is the time values at which the solution is compared to `data`
+  - `data` is a matrix of data, with one column for each element in `t`
+  - `parameter_priors` is an iterable with the length of the number of paramers, and is used
+    as a prior on it, should have comparable structure.
+  - `parameter_transformations`: a `TransformVariables` transformation to mapping `ℝⁿ` to the
+    vector of valid parameters.
+
 # Keyword arguments
-- `rng` is the random number generator used for MCMC. Defaults to the global one.
-- `num_samples` is the number of MCMC draws (default: 1000)
-- `AD_gradient_kind` is passed on to `LogDensityProblems.ADgradient`, make sure to `import`
-  the corresponding library.
-- `solve_kwargs` is passed on to `solve`
-- `mcmc_kwargs` are passed on as keyword arguments to `DynamicHMC.mcmc_with_warmup`
+
+  - `rng` is the random number generator used for MCMC. Defaults to the global one.
+  - `num_samples` is the number of MCMC draws (default: 1000)
+  - `AD_gradient_kind` is passed on to `LogDensityProblems.ADgradient`, make sure to `import`
+    the corresponding library.
+  - `solve_kwargs` is passed on to `solve`
+  - `mcmc_kwargs` are passed on as keyword arguments to `DynamicHMC.mcmc_with_warmup`
 """
 function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
         parameter_priors,
@@ -101,22 +107,22 @@ function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
         num_samples = 1000, AD_gradient_kind = Val(:ForwardDiff),
         save_idxs = nothing, solve_kwargs = (),
         mcmc_kwargs = (initialization = (q = zeros(length(parameter_priors) +
-                                           (save_idxs ===
-                                            nothing ?
-                                            length(data[:, 1]) :
-                                            length(save_idxs))),),))
-    
-        _p, repack, aliases = if SciMLStructures.isscimlstructure(problem.p) && !(typeof(problem.p) <: AbstractArray)
-            SciMLStructures.canonicalize(SciMLStructures.Tunable(), problem.p)
-        else
-            problem.p, identity, true
-        end
-    
-        P = DynamicHMCPosterior(; algorithm = algorithm, problem = problem, t = t, data = data,
+                                                   (save_idxs ===
+                                                    nothing ?
+                                                    length(data[:, 1]) :
+                                                    length(save_idxs))),),))
+    _p, repack,
+    aliases = if SciMLStructures.isscimlstructure(problem.p) &&
+                 !(typeof(problem.p) <: AbstractArray)
+        SciMLStructures.canonicalize(SciMLStructures.Tunable(), problem.p)
+    else
+        problem.p, identity, true
+    end
+
+    P = DynamicHMCPosterior(; algorithm = algorithm, problem = problem, t = t, data = data,
         parameter_priors = parameter_priors, σ_priors = σ_priors,
         solve_kwargs = solve_kwargs, sample_u0 = sample_u0,
         save_idxs = save_idxs, repack = repack)
-
 
     trans = as((parameters = parameter_transformations,
         σ = as(Vector, asℝ₊, length(σ_priors))))

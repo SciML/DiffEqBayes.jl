@@ -12,7 +12,9 @@ using DiffEqBayes
 
 ```julia
 stan_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors = nothing;
-    stanmodel = nothing, likelihood = Normal, vars = (StanODEData(), InverseGamma(3, 3)), sample_u0 = false, solve_kwargs = Dict(), diffeq_string = nothing, sample_kwargs = Dict(), output_format = :mcmcchains, print_summary = true, tmpdir = mktempdir())
+    stanmodel = nothing, likelihood = Normal, vars = (StanODEData(), InverseGamma(3, 3)), sample_u0 = false,
+    solve_kwargs = Dict(), diffeq_string = nothing, sample_kwargs = Dict(),
+    output_format = :mcmcchains, print_summary = true, tmpdir = mktempdir())
 ```
 
 `stan_inference` uses [Stan.jl](https://stanjulia.github.io/CmdStan.jl/latest/INTRO/)
@@ -28,7 +30,8 @@ is required to use this function. Currently `CmdStan v2.34.1` is supported.
 
 ```julia
 turing_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors;
-    likelihood_dist_priors, likelihood, syms, sample_u0 = false, progress = false, solve_kwargs = Dict(), sample_args = NamedTuple(), sample_kwargs= Dict())
+    likelihood_dist_priors, likelihood, syms, sample_u0 = false, progress = false,
+    solve_kwargs = Dict(), sample_args = NamedTuple(), sample_kwargs = Dict())
 ```
 
 `turing_inference` uses [Turing.jl](https://github.com/TuringLang/Turing.jl) to

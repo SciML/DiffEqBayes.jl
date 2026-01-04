@@ -49,14 +49,17 @@ function (P::DynamicHMCPosterior)(θ)
     _saveat = t === nothing ? Float64[] : t
     sol = solve(
         problem, algorithm; u0 = u0, p = P.repack(p), saveat = _saveat, save_idxs = save_idxs,
-        solve_kwargs...)
+        solve_kwargs...
+    )
     failure = size(sol, 2) < length(_saveat)
     failure && return T(0) * sum(σ) + T(-Inf)
-    log_likelihood = sum(sum(map(logpdf, Normal.(0.0, σ), sol[:, i] .- data[:, i]))
-    for (i, t) in enumerate(t))
+    log_likelihood = sum(
+        sum(map(logpdf, Normal.(0.0, σ), sol[:, i] .- data[:, i]))
+            for (i, t) in enumerate(t)
+    )
     log_prior_parameters = sum(map(logpdf, parameter_priors, parameters))
     log_prior_σ = sum(map(logpdf, σ_priors, σ))
-    log_likelihood + log_prior_parameters + log_prior_σ
+    return log_likelihood + log_prior_parameters + log_prior_σ
 end
 
 # function (P::DynamicHMCPosterior)(θ)
@@ -98,34 +101,52 @@ posterior values (transformed from `ℝⁿ`).
   - `solve_kwargs` is passed on to `solve`
   - `mcmc_kwargs` are passed on as keyword arguments to `DynamicHMC.mcmc_with_warmup`
 """
-function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
+function dynamichmc_inference(
+        problem::DiffEqBase.DEProblem, algorithm, t, data,
         parameter_priors,
-        parameter_transformations = as(Vector, asℝ₊,
-            length(parameter_priors));
+        parameter_transformations = as(
+            Vector, asℝ₊,
+            length(parameter_priors)
+        );
         σ_priors = fill(Normal(0, 5), size(data, 1)),
         sample_u0 = false, rng = Random.GLOBAL_RNG,
         num_samples = 1000, AD_gradient_kind = Val(:ForwardDiff),
         save_idxs = nothing, solve_kwargs = (),
-        mcmc_kwargs = (initialization = (q = zeros(length(parameter_priors) +
-                                                   (save_idxs ===
-                                                    nothing ?
-                                                    length(data[:, 1]) :
-                                                    length(save_idxs))),),))
+        mcmc_kwargs = (
+            initialization = (
+                q = zeros(
+                    length(parameter_priors) +
+                        (
+                        save_idxs ===
+                            nothing ?
+                            length(data[:, 1]) :
+                            length(save_idxs)
+                    )
+                ),
+            ),
+        )
+    )
     _p, repack,
-    aliases = if SciMLStructures.isscimlstructure(problem.p) &&
-                 !(typeof(problem.p) <: AbstractArray)
+        aliases = if SciMLStructures.isscimlstructure(problem.p) &&
+            !(typeof(problem.p) <: AbstractArray)
         SciMLStructures.canonicalize(SciMLStructures.Tunable(), problem.p)
     else
         problem.p, identity, true
     end
 
-    P = DynamicHMCPosterior(; algorithm = algorithm, problem = problem, t = t, data = data,
+    P = DynamicHMCPosterior(;
+        algorithm = algorithm, problem = problem, t = t, data = data,
         parameter_priors = parameter_priors, σ_priors = σ_priors,
         solve_kwargs = solve_kwargs, sample_u0 = sample_u0,
-        save_idxs = save_idxs, repack = repack)
+        save_idxs = save_idxs, repack = repack
+    )
 
-    trans = as((parameters = parameter_transformations,
-        σ = as(Vector, asℝ₊, length(σ_priors))))
+    trans = as(
+        (
+            parameters = parameter_transformations,
+            σ = as(Vector, asℝ₊, length(σ_priors)),
+        )
+    )
     ℓ = TransformedLogDensity(trans, P)
     ∇ℓ = LogDensityProblemsAD.ADgradient(AD_gradient_kind, ℓ)
     results = mcmc_with_warmup(rng, ∇ℓ, num_samples; mcmc_kwargs...)
@@ -135,5 +156,5 @@ function dynamichmc_inference(problem::DiffEqBase.DEProblem, algorithm, t, data,
         eachcol(results.posterior_matrix)
     end
     posterior = map(Base.Fix1(TransformVariables.transform, trans), chain)
-    merge((; posterior), results)
+    return merge((; posterior), results)
 end

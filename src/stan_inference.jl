@@ -1,4 +1,3 @@
-
 struct StanResult{M, R, C}
     model::M
     return_code::R
@@ -6,7 +5,7 @@ struct StanResult{M, R, C}
 end
 
 function Base.show(io::IO, mime::MIME"text/plain", res::StanResult)
-    show(io, mime, res.chains)
+    return show(io, mime, res.chains)
 end
 
 struct StanODEData end
@@ -19,11 +18,13 @@ function generate_priors(n, priors)
         end
     else
         for i in 1:n
-            priors_string = string(priors_string, "theta_$i ~ ", stan_string(priors[i]),
-                ";")
+            priors_string = string(
+                priors_string, "theta_$i ~ ", stan_string(priors[i]),
+                ";"
+            )
         end
     end
-    priors_string
+    return priors_string
 end
 
 function generate_theta(n, priors)
@@ -38,8 +39,10 @@ function generate_theta(n, priors)
             lower_bound = string("lower=", minimum(priors[i]))
         end
         if lower_bound != "" && upper_bound != ""
-            theta = string(theta, "real", "<$lower_bound", ",", "$upper_bound>",
-                " theta_$i", ";")
+            theta = string(
+                theta, "real", "<$lower_bound", ",", "$upper_bound>",
+                " theta_$i", ";"
+            )
         elseif lower_bound != ""
             theta = string(theta, "real", "<$lower_bound", ">", " theta_$i", ";")
         elseif upper_bound != ""
@@ -74,14 +77,14 @@ function stan_inference(
         print_summary = true,
         # pass in existing tmpdir
         tmpdir = mktempdir()
-)
+    )
     # update default stan diff eq function kw args
     solve_kwargs = merge(
         Dict(
             :save_idxs => nothing,
-            :reltol => 1e-3,
-            :abstol => 1e-6,
-            :maxiter => Int(1e5)
+            :reltol => 1.0e-3,
+            :abstol => 1.0e-6,
+            :maxiter => Int(1.0e5)
         ),
         solve_kwargs
     )
@@ -112,7 +115,7 @@ function stan_inference(
     delta = sample_kwargs[:delta]
 
     save_idxs !== nothing && length(save_idxs) == 1 ? save_idxs = save_idxs[1] :
-    save_idxs = save_idxs
+        save_idxs = save_idxs
     length_of_y = length(prob.u0)
     save_idxs = something(save_idxs, 1:length_of_y)
 
@@ -120,7 +123,7 @@ function stan_inference(
     if isnothing(diffeq_string)
         sys = ModelingToolkit.modelingtoolkitize(prob)
         length_of_parameter = length(ModelingToolkit.parameters(sys)) +
-                              sample_u0 * length(save_idxs)
+            sample_u0 * length(save_idxs)
     else
         length_of_parameter = length(prob.p) + sample_u0 * length(save_idxs)
     end
@@ -152,10 +155,12 @@ function stan_inference(
                 tuple_hyper_params = string(tuple_hyper_params, "u_hat[t,$save_idxs]", ",")
             else
                 dist = stan_string(vars[i])
-                hyper_params = string(hyper_params, "sigma$(i-1) ~ $dist;")
-                tuple_hyper_params = string(tuple_hyper_params, "sigma$(i-1)", ",")
-                setup_params = string(setup_params,
-                    "row_vector<lower=0>[$(length(save_idxs))] sigma$(i-1);")
+                hyper_params = string(hyper_params, "sigma$(i - 1) ~ $dist;")
+                tuple_hyper_params = string(tuple_hyper_params, "sigma$(i - 1)", ",")
+                setup_params = string(
+                    setup_params,
+                    "row_vector<lower=0>[$(length(save_idxs))] sigma$(i - 1);"
+                )
             end
         end
 
@@ -171,12 +176,12 @@ function stan_inference(
                 for u_ in prob.u0[(nu + 1):length(prob.u0)]
                     u0 = u0 * string(u_)
                 end
-                integral_string = "u_hat = $algorithm(sho, [$(theta_names[1:dv_names_ind]),$u0]', t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names[dv_names_ind+2:end],',')));"
+                integral_string = "u_hat = $algorithm(sho, [$(theta_names[1:dv_names_ind]),$u0]', t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names[(dv_names_ind + 2):end], ',')));"
             else
-                integral_string = "u_hat = $algorithm(sho, [$(theta_names[1:dv_names_ind])]', t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names[dv_names_ind+2:end],',')));"
+                integral_string = "u_hat = $algorithm(sho, [$(theta_names[1:dv_names_ind])]', t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names[(dv_names_ind + 2):end], ',')));"
             end
         else
-            integral_string = "u_hat = $algorithm(sho, u0, t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names,',')));"
+            integral_string = "u_hat = $algorithm(sho, u0, t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names, ',')));"
         end
 
         binsearch_string = """
@@ -205,7 +210,8 @@ function stan_inference(
                 ModelingToolkit.get_iv(sys);
                 expression = Val{true},
                 fname = :sho,
-                target = ModelingToolkit.StanTarget())
+                target = ModelingToolkit.StanTarget()
+            )
         end
 
         parameter_estimation_model = "
@@ -234,17 +240,23 @@ function stan_inference(
             }
         "
 
-        stanmodel = SampleModel("parameter_estimation_model",
+        stanmodel = SampleModel(
+            "parameter_estimation_model",
             parameter_estimation_model,
-            tmpdir)
+            tmpdir
+        )
     end
 
-    data = Dict("u0" => prob.u0, "T" => length(t),
+    data = Dict(
+        "u0" => prob.u0, "T" => length(t),
         "internal_var___u" => view(data, :, 1:length(t)),
-        "t0" => prob.tspan[1], "ts" => t)
+        "t0" => prob.tspan[1], "ts" => t
+    )
 
-    @time rc = stan_sample(stanmodel; data, num_threads, num_cpp_chains,
-        num_samples, num_warmups, num_chains, delta)
+    @time rc = stan_sample(
+        stanmodel; data, num_threads, num_cpp_chains,
+        num_samples, num_warmups, num_chains, delta
+    )
 
     if success(rc)
         return StanResult(stanmodel, rc, read_samples(stanmodel, output_format))

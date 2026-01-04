@@ -7,7 +7,8 @@ ENV["PLOTS_TEST"] = "true"
 ENV["GKSwstype"] = "100"
 include("pages.jl")
 
-makedocs(sitename = "DiffEqBayes.jl",
+makedocs(
+    sitename = "DiffEqBayes.jl",
     authors = "Chris Rackauckas, Vaibhav Kumar Dixit et al.",
     clean = true,
     doctest = false,
@@ -16,11 +17,16 @@ makedocs(sitename = "DiffEqBayes.jl",
         :doctest,
         :linkcheck,
         :parse_error,
-        :example_block        # Other available options are        # :autodocs_block, :cross_references, :docs_block, :eval_block, :example_block, :footnote, :meta_block, :missing_docs, :setup_block
+        :example_block,        # Other available options are        # :autodocs_block, :cross_references, :docs_block, :eval_block, :example_block, :footnote, :meta_block, :missing_docs, :setup_block
     ],
-    format = Documenter.HTML(assets = ["assets/favicon.ico"],
-        canonical = "https://docs.sciml.ai/DiffEqBayes/stable/"),
-    pages = pages)
+    format = Documenter.HTML(
+        assets = ["assets/favicon.ico"],
+        canonical = "https://docs.sciml.ai/DiffEqBayes/stable/"
+    ),
+    pages = pages
+)
 
-deploydocs(repo = "github.com/SciML/DiffEqBayes.jl.git";
-    push_preview = true)
+deploydocs(
+    repo = "github.com/SciML/DiffEqBayes.jl.git";
+    push_preview = true
+)

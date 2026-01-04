@@ -14,7 +14,7 @@ function turing_inference(
         solve_kwargs = Dict(), # accept SciML DiffEq solve kwargs
         sample_args = NamedTuple(), # accept Turing.jl sample args
         sample_kwargs = Dict() # accept Turing.jl sample kwargs
-)
+    )
     N = length(priors)
     # default args are updated with user supplied args
     solve_kwargs = merge(Dict(:save_idxs => nothing), solve_kwargs)
@@ -23,11 +23,11 @@ function turing_inference(
         parallel_type = MCMCSerial(),
         num_samples = 1000,
         n_chains = 1,
-        sample_args...
+        sample_args...,
     )
 
     _p, repack,
-    aliases = if SciMLStructures.isscimlstructure(prob.p)
+        aliases = if SciMLStructures.isscimlstructure(prob.p)
         SciMLStructures.canonicalize(SciMLStructures.Tunable(), prob.p)
     else
         prob.p, identity, true
@@ -43,7 +43,7 @@ function turing_inference(
             σ[i] ~ likelihood_dist_priors[i]
         end
         nu = solve_kwargs[:save_idxs] === nothing ? length(prob.u0) :
-             length(solve_kwargs[:save_idxs])
+            length(solve_kwargs[:save_idxs])
         u0 = convert.(T, sample_u0 ? theta[1:nu] : prob.u0)
         p = convert.(T, sample_u0 ? theta[(nu + 1):end] : theta)
         if length(u0) < length(prob.u0)
@@ -53,8 +53,10 @@ function turing_inference(
             end
         end
         _saveat = t === nothing ? Float64[] : t
-        sol = solve(prob, alg; u0 = u0, p = repack(p), saveat = _saveat,
-            progress = progress, solve_kwargs...)
+        sol = solve(
+            prob, alg; u0 = u0, p = repack(p), saveat = _saveat,
+            progress = progress, solve_kwargs...
+        )
         failure = size(sol, 2) < length(_saveat)
 
         if failure

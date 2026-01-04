@@ -12,7 +12,7 @@ using SciMLStructures
 
 STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
 function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)
-    EnsembleProblem(remake(prob.prob; u0 = eltype(p).(prob.prob.u0), p = p))
+    return EnsembleProblem(remake(prob.prob; u0 = eltype(p).(prob.prob.u0), p = p))
 end
 
 include("turing_inference.jl")

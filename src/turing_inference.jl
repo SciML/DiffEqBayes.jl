@@ -1,5 +1,5 @@
 function turing_inference(
-        prob::DiffEqBase.DEProblem,
+        prob::Union{DiffEqBase.DEProblem, DiffEqBase.AbstractNonlinearProblem},
         alg,
         t,
         data,

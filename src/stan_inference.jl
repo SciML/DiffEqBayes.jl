@@ -55,7 +55,7 @@ function generate_theta(n::Integer, priors)
 end
 
 function stan_inference(
-        prob::DiffEqBase.DEProblem,
+        prob::Union{DiffEqBase.DEProblem, DiffEqBase.AbstractNonlinearProblem},
         alg,
         # Positional arguments
         t,

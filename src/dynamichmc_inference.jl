@@ -12,7 +12,7 @@ $(FIELDS)
 Base.@kwdef struct DynamicHMCPosterior{TA, TP, TD, TT, TR, TS, TK, TI, TRe}
     "Algorithm for the ODE solver."
     algorithm::TA
-    "An ODE problem definition (`DiffEqBase.DEProblem`)."
+    "A problem definition (`DiffEqBase.DEProblem` or `DiffEqBase.AbstractNonlinearProblem`)."
     problem::TP
     "Time values at which the simulated path is compared to `data`."
     t::TT
@@ -102,7 +102,7 @@ posterior values (transformed from `ℝⁿ`).
   - `mcmc_kwargs` are passed on as keyword arguments to `DynamicHMC.mcmc_with_warmup`
 """
 function dynamichmc_inference(
-        problem::DiffEqBase.DEProblem, algorithm, t, data,
+        problem::Union{DiffEqBase.DEProblem, DiffEqBase.AbstractNonlinearProblem}, algorithm, t, data,
         parameter_priors,
         parameter_transformations = as(
             Vector, asℝ₊,

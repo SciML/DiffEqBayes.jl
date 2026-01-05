@@ -10,7 +10,7 @@ end
 
 struct StanODEData end
 
-function generate_priors(n, priors)
+function generate_priors(n::Integer, priors)
     priors_string = ""
     if priors === nothing
         for i in 1:n
@@ -27,7 +27,7 @@ function generate_priors(n, priors)
     return priors_string
 end
 
-function generate_theta(n, priors)
+function generate_theta(n::Integer, priors)
     theta = ""
     for i in 1:n
         upper_bound = ""
@@ -55,7 +55,7 @@ function generate_theta(n, priors)
 end
 
 function stan_inference(
-        prob::DiffEqBase.DEProblem,
+        prob::Union{DiffEqBase.DEProblem, DiffEqBase.AbstractNonlinearProblem},
         alg,
         # Positional arguments
         t,

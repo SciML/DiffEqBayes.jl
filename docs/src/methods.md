@@ -17,9 +17,9 @@ stan_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors = nothing;
     output_format = :mcmcchains, print_summary = true, tmpdir = mktempdir())
 ```
 
-`stan_inference` uses [Stan.jl](https://stanjulia.github.io/CmdStan.jl/latest/INTRO/)
+`stan_inference` uses [StanSample.jl](https://stanjulia.github.io/StanSample.jl/stable/)
 to perform the Bayesian inference. The
-[Stan installation process](https://stanjulia.github.io/CmdStan.jl/latest/INSTALLATION/)
+[Stan installation process](https://stanjulia.github.io/StanSample.jl/stable/INSTALLATION/)
 is required to use this function. Currently `CmdStan v2.34.1` is supported.
 
 `prob` can be any `DEProblem` with a corresponding `alg` choice. `alg` is a choice between `:rk45` and `:bdf`, the two internal integrators of Stan. `t` is the array of time and `data` is the array where the first dimension (columns) corresponds to the array of system values. `priors` is an array of prior distributions for each parameter, specified via a [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/) type. `likelihood` is the likelihood distribution to use with the arguments from `vars`, and `vars` is a tuple of priors for the distributions of the likelihood hyperparameters. The special value `StanODEData()` in this tuple denotes the position that the ODE solution takes in the likelihood's parameter list.
@@ -45,7 +45,7 @@ type.
 
 The `turing_inference` interacts with `SciML.CommonSolve.solve` and `StatsBase.sample`. Both accept many arguments depending on the solver and sampling algorithm.
 These arguments are supplied to `turing_inferene` function via `solve_kwargs`, `sample_args`, and `sample_kwargs` arguments. Please refer to [the `solve` documentation](https://docs.sciml.ai/DiffEqDocs/stable/basics/common_solver_opts/) for `solve_kwargs`, e.g. `solve_kwargs = Dict(:save_idxs => [1])`.
-The `solve` keyword arguments default to `save_idxs = nothing`. Similarly please refer to [the `sample` documentation]((https://turinglang.org/v0.26/docs/using-turing/guide#sampling-multiple-chains)) for `sample_args` and `sample_kwargs`. The four positional argument are as following: `sampler`, the sampling algorithm. Sampling from multiple chains is possible serially or parallelly using `parallel_type`. Third `num_samples`, the number of samples per MCMC chain and `n_chains`, the number of MCMC chains. The positional arguments default to the following values.
+The `solve` keyword arguments default to `save_idxs = nothing`. Similarly please refer to [the `sample` documentation](https://turinglang.org/v0.26/docs/using-turing/guide#sampling-multiple-chains) for `sample_args` and `sample_kwargs`. The four positional argument are as following: `sampler`, the sampling algorithm. Sampling from multiple chains is possible serially or parallelly using `parallel_type`. Third `num_samples`, the number of samples per MCMC chain and `n_chains`, the number of MCMC chains. The positional arguments default to the following values.
 
 ```julia
 sampler = Turing.NUTS(0.65)

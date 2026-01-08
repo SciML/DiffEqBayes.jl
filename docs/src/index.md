@@ -2,7 +2,7 @@
 
 This repository is a set of extension functionality for estimating the parameters
 of differential equations using Bayesian methods. It allows the choice of using
-[CmdStan.jl](https://stanjulia.github.io/CmdStan.jl/stable/), [Turing.jl](https://turing.ml/stable/docs/using-turing/), [DynamicHMC.jl](https://www.tamaspapp.eu/DynamicHMC.jl/stable/) and
+[StanSample.jl](https://stanjulia.github.io/StanSample.jl/stable/), [Turing.jl](https://turing.ml/stable/docs/using-turing/), [DynamicHMC.jl](https://www.tamaspapp.eu/DynamicHMC.jl/stable/) and
 [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl) to perform a
 Bayesian estimation of a differential equation problem specified via the [DifferentialEquations.jl](https://docs.sciml.ai/DiffEqDocs/stable/) interface.
 
@@ -78,11 +78,12 @@ You can also download the
 ```
 
 ```@eval
-using TOML
+using TOML, Markdown
 version = TOML.parse(read("../../Project.toml", String))["version"]
 name = TOML.parse(read("../../Project.toml", String))["name"]
 link = "https://github.com/SciML/" * name * ".jl/tree/gh-pages/v" * version *
        "/assets/Manifest.toml"
+Markdown.parse(link)
 ```
 
 ```@raw html
@@ -91,11 +92,12 @@ link = "https://github.com/SciML/" * name * ".jl/tree/gh-pages/v" * version *
 ```
 
 ```@eval
-using TOML
+using TOML, Markdown
 version = TOML.parse(read("../../Project.toml", String))["version"]
 name = TOML.parse(read("../../Project.toml", String))["name"]
 link = "https://github.com/SciML/" * name * ".jl/tree/gh-pages/v" * version *
        "/assets/Project.toml"
+Markdown.parse(link)
 ```
 
 ```@raw html

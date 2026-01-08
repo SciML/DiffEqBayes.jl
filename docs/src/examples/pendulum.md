@@ -7,7 +7,7 @@ pendulum.
 
 ```@example pendulum
 using DiffEqBayes, OrdinaryDiffEq, RecursiveArrayTools, Distributions, Plots, StatsPlots,
-      BenchmarkTools, TransformVariables, CmdStan, DynamicHMC
+      BenchmarkTools, TransformVariables, StanSample, DynamicHMC
 ```
 
 Let's define our simple pendulum problem. Here, our pendulum has a drag term `ω`

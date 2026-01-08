@@ -21,3 +21,9 @@ if GROUP == "Stan" || GROUP == "All"
         include("stan.jl")
     end
 end
+
+if GROUP == "JET" || GROUP == "All"
+    @time @safetestset "JET" begin
+        include("jet.jl")
+    end
+end

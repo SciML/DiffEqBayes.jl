@@ -1,4 +1,5 @@
-pages = ["index.md",
+pages = [
+    "index.md",
     "Methods" => "methods.md",
-    "Examples" => ["examples.md", "examples/pendulum.md"]
+    "Examples" => ["examples.md", "examples/pendulum.md"],
 ]

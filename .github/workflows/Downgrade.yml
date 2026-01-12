@@ -12,6 +12,7 @@ on:
       - 'docs/**'
 jobs:
   test:
+    if: false  # Disabled until dependency compatibility issues are resolved. See https://github.com/SciML/DiffEqBayes.jl/issues/370
     runs-on: ubuntu-latest
     strategy:
       matrix:

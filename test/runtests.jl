@@ -22,8 +22,11 @@ if GROUP == "Stan" || GROUP == "All"
     end
 end
 
-if GROUP == "JET" || GROUP == "All"
+if GROUP == "JET"
+    using Pkg
+    Pkg.activate(joinpath(@__DIR__, "jet"))
+    Pkg.instantiate()
     @time @safetestset "JET" begin
-        include("jet.jl")
+        include("jet/jet_tests.jl")
     end
 end

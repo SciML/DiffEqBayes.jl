@@ -61,7 +61,6 @@ julia = "1.10"
 
 [extras]
 ADTypes = "47edcb42-4c32-4615-8424-f2b9edc5f35b"
-JET = "c3a54625-cd67-489e-a8e7-0a5a0ff4e31b"
 OrdinaryDiffEq = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
 ParameterizedFunctions = "65888b18-ceab-5e60-b2b9-181511a3b968"
 Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
@@ -71,4 +70,4 @@ SteadyStateDiffEq = "9672c7b4-1e72-59bd-8a11-6ac3964bc41f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["ADTypes", "JET", "Test", "Pkg", "OrdinaryDiffEq", "ParameterizedFunctions", "SafeTestsets", "StatsBase", "SteadyStateDiffEq"]
+test = ["ADTypes", "Test", "Pkg", "OrdinaryDiffEq", "ParameterizedFunctions", "SafeTestsets", "StatsBase", "SteadyStateDiffEq"]

@@ -29,7 +29,7 @@ function createabcfunction(
 end
 
 function abc_inference(
-        prob::DiffEqBase.DEProblem, alg, t, data, priors; ϵ = 0.001,
+        prob::SciMLBase.AbstractSciMLProblem, alg, t, data, priors; ϵ = 0.001,
         distancefunction = euclidean, ABCalgorithm = ABCSMC,
         progress = false,
         num_samples = 500, maxiterations = 10^5, save_idxs = nothing,

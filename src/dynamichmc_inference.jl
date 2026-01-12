@@ -102,7 +102,7 @@ posterior values (transformed from `ℝⁿ`).
   - `mcmc_kwargs` are passed on as keyword arguments to `DynamicHMC.mcmc_with_warmup`
 """
 function dynamichmc_inference(
-        problem::Union{DiffEqBase.DEProblem, DiffEqBase.AbstractNonlinearProblem}, algorithm, t, data,
+        problem::SciMLBase.AbstractSciMLProblem, algorithm, t, data,
         parameter_priors,
         parameter_transformations = as(
             Vector, asℝ₊,

@@ -650,9 +650,9 @@ version = "6.197.0"
 
 [[deps.DiffEqBayes]]
 deps = ["DiffEqBase", "DiffResults", "Distances", "Distributed", "Distributions", "DocStringExtensions", "DynamicHMC", "ForwardDiff", "LabelledArrays", "LinearAlgebra", "LogDensityProblemsAD", "MacroTools", "Missings", "ModelingToolkit", "Optim", "PDMats", "Parameters", "Random", "RecursiveArrayTools", "Reexport", "Requires", "SciMLStructures", "StanSample", "StructArrays", "TransformVariables", "TransformedLogDensities", "Turing"]
-path = "/home/chrisrackauckas/github-runners/deepsea3-17/_work/DiffEqBayes.jl/DiffEqBayes.jl"
+path = "/home/runner/work/DiffEqBayes.jl/DiffEqBayes.jl"
 uuid = "ebbdde9d-f333-5424-9be2-dbf1e9acfb5e"
-version = "3.11.0"
+version = "3.10.0"
 
 [[deps.DiffEqCallbacks]]
 deps = ["ConcreteStructs", "DataStructures", "DiffEqBase", "DifferentiationInterface", "LinearAlgebra", "Markdown", "PrecompileTools", "RecipesBase", "RecursiveArrayTools", "SciMLBase", "StaticArraysCore"]

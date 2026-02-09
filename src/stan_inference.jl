@@ -171,17 +171,18 @@ function stan_inference(
         if sample_u0
             nu = length(save_idxs)
             dv_names_ind = findfirst("$nu", theta_names)[1]
+            param_theta = rstrip(theta_names[(dv_names_ind + 2):end], ',')
             if nu < length(prob.u0)
                 u0 = ""
                 for u_ in prob.u0[(nu + 1):length(prob.u0)]
                     u0 = u0 * string(u_)
                 end
-                integral_string = "u_hat = $algorithm(sho, [$(theta_names[1:dv_names_ind]),$u0]', t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names[(dv_names_ind + 2):end], ',')));"
+                integral_string = "u_hat = $algorithm(sho, [$(theta_names[1:dv_names_ind]),$u0]', t0, ts, $reltol, $abstol, $maxiter, [$param_theta]');"
             else
-                integral_string = "u_hat = $algorithm(sho, [$(theta_names[1:dv_names_ind])]', t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names[(dv_names_ind + 2):end], ',')));"
+                integral_string = "u_hat = $algorithm(sho, [$(theta_names[1:dv_names_ind])]', t0, ts, $reltol, $abstol, $maxiter, [$param_theta]');"
             end
         else
-            integral_string = "u_hat = $algorithm(sho, u0, t0, ts, $reltol, $abstol, $maxiter, $(rstrip(theta_names, ',')));"
+            integral_string = "u_hat = $algorithm(sho, u0, t0, ts, $reltol, $abstol, $maxiter, [$(rstrip(theta_names, ','))]');"
         end
 
         binsearch_string = """
@@ -204,7 +205,7 @@ function stan_inference(
 
         if isnothing(diffeq_string)
             diffeq_string = ModelingToolkit.build_function(
-                collect(ModelingToolkit.equations(sys)),
+                [eq.rhs for eq in ModelingToolkit.equations(sys)],
                 ModelingToolkit.unknowns(sys),
                 ModelingToolkit.parameters(sys),
                 ModelingToolkit.get_iv(sys);

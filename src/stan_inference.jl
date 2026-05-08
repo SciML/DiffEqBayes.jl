@@ -120,8 +120,8 @@ function stan_inference(
     save_idxs = something(save_idxs, 1:length_of_y)
 
     length_of_params = length(vars)
-    if isnothing(diffeq_string)
-        sys = ModelingToolkit.modelingtoolkitize(prob)
+    sys = isnothing(diffeq_string) ? ModelingToolkit.modelingtoolkitize(prob) : nothing
+    if sys !== nothing
         length_of_parameter = length(ModelingToolkit.parameters(sys)) +
             sample_u0 * length(save_idxs)
     else

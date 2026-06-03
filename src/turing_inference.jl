@@ -36,7 +36,12 @@ function turing_inference(
     Turing.@model function infer(x, ::Type{T} = Float64) where {T <: Real}
         theta = Vector{T}(undef, length(priors))
         for i in 1:length(priors)
-            theta[i] ~ NamedDist(priors[i], syms[i])
+            # Sample into a scalar bound to the user-supplied name (via `NamedDist`)
+            # and store it explicitly: as of DynamicPPL 0.41 the `~` assignment uses
+            # the resolved (renamed) varname's optic, so `theta[i] ~ NamedDist(d, :a)`
+            # would overwrite the whole `theta` with a scalar instead of element `i`.
+            param ~ NamedDist(priors[i], syms[i])
+            theta[i] = param
         end
         σ = Vector{T}(undef, length(likelihood_dist_priors))
         for i in 1:length(likelihood_dist_priors)

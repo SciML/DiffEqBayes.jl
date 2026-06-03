@@ -22,7 +22,7 @@ bayesian_result = turing_inference(
 
 @show bayesian_result
 
-@test mean(get(bayesian_result, :a)[1]) ≈ 1.5 atol = 3.0e-1
+@test mean(bayesian_result[@varname(a)]) ≈ 1.5 atol = 3.0e-1
 
 bayesian_result = turing_inference(
     prob1, Rosenbrock23(autodiff = AutoFiniteDiff()), t, data, priors;
@@ -43,8 +43,8 @@ result_threaded = turing_inference(
     )
 )
 
-@test length(result_threaded.value.axes[3]) == 2
-@test mean(get(result_threaded, :a)[1]) ≈ 1.5 atol = 3.0e-1
+@test size(result_threaded, 2) == 2
+@test mean(result_threaded[@varname(a)]) ≈ 1.5 atol = 3.0e-1
 # ---
 
 priors = [Normal(1.0, 0.01), Normal(1.0, 0.01), Normal(1.5, 0.01)]
@@ -53,9 +53,9 @@ bayesian_result = turing_inference(
     sample_u0 = true, syms = [:u1, :u2, :a], sample_args = (num_samples = 500,)
 )
 
-@test mean(get(bayesian_result, :a)[1]) ≈ 1.5 atol = 3.0e-1
-@test mean(get(bayesian_result, :u1)[1]) ≈ 1.0 atol = 3.0e-1
-@test mean(get(bayesian_result, :u2)[1]) ≈ 1.0 atol = 3.0e-1
+@test mean(bayesian_result[@varname(a)]) ≈ 1.5 atol = 3.0e-1
+@test mean(bayesian_result[@varname(u1)]) ≈ 1.0 atol = 3.0e-1
+@test mean(bayesian_result[@varname(u2)]) ≈ 1.0 atol = 3.0e-1
 
 sol = solve(prob1, Tsit5(); save_idxs = [1])
 randomized = VectorOfArray([(sol(t[i]) + 0.01 * randn(1)) for i in 1:length(t)])
@@ -66,7 +66,7 @@ bayesian_result = turing_inference(
     syms = [:a], solve_kwargs = Dict(:save_idxs => [1]), sample_args = (num_samples = 500,)
 )
 
-@test mean(get(bayesian_result, :a)[1]) ≈ 1.5 atol = 3.0e-1
+@test mean(bayesian_result[@varname(a)]) ≈ 1.5 atol = 3.0e-1
 
 priors = [Normal(1.0, 0.01), Normal(1.5, 0.01)]
 bayesian_result = turing_inference(
@@ -75,8 +75,8 @@ bayesian_result = turing_inference(
     syms = [:u1, :a], solve_kwargs = Dict(:save_idxs => [1]), sample_args = (num_samples = 500,)
 )
 
-@test mean(get(bayesian_result, :a)[1]) ≈ 1.5 atol = 3.0e-1
-@test mean(get(bayesian_result, :u1)[1]) ≈ 1.0 atol = 3.0e-1
+@test mean(bayesian_result[@varname(a)]) ≈ 1.5 atol = 3.0e-1
+@test mean(bayesian_result[@varname(u1)]) ≈ 1.0 atol = 3.0e-1
 
 println("Four parameter case")
 f2 = @ode_def begin
@@ -103,10 +103,10 @@ bayesian_result = turing_inference(
 
 @show bayesian_result
 
-@test mean(get(bayesian_result, :a)[1]) ≈ 1.5 atol = 3.0e-1
-@test mean(get(bayesian_result, :b)[1]) ≈ 1.0 atol = 3.0e-1
-@test mean(get(bayesian_result, :c)[1]) ≈ 3.0 atol = 3.0e-1
-@test mean(get(bayesian_result, :d)[1]) ≈ 1.0 atol = 3.0e-1
+@test mean(bayesian_result[@varname(a)]) ≈ 1.5 atol = 3.0e-1
+@test mean(bayesian_result[@varname(b)]) ≈ 1.0 atol = 3.0e-1
+@test mean(bayesian_result[@varname(c)]) ≈ 3.0 atol = 3.0e-1
+@test mean(bayesian_result[@varname(d)]) ≈ 1.0 atol = 3.0e-1
 
 println("Steady state problem")
 function f(du, u, p, t)
@@ -132,4 +132,4 @@ bayesian_result = turing_inference(
     sample_args = (num_samples = 500,)
 )
 
-@test mean(get(bayesian_result, :α)[1]) ≈ 2.0 atol = 3.0e-1
+@test mean(bayesian_result[@varname(α)]) ≈ 2.0 atol = 3.0e-1

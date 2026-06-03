@@ -72,7 +72,13 @@ function stan_inference(
         # stan_sample keyword arguments
         sample_kwargs = Dict(),
         # read_samples arguments
-        output_format = :mcmcchains,
+        # `:dataframe` rather than `:mcmcchains`: StanSample only provides the
+        # `:mcmcchains` format through its MCMCChains extension, and MCMCChains
+        # is no longer in the dependency graph (Turing 0.45 uses FlexiChains, and
+        # MCMCChains cannot be added — StanSample caps it <7 while the rest of the
+        # stack requires >=7.6). The result is a DataFrame with one column per
+        # Stan parameter (`theta_1`, `theta_2`, ...), all chains appended.
+        output_format = :dataframe,
         # read_summary arguments
         print_summary = true,
         # pass in existing tmpdir

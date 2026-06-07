@@ -12,10 +12,11 @@ on:
       - 'docs/**'
 jobs:
   downgrade:
+    # Runs strict (allow-reresolve: false); expected RED until Turing/DynamicPPL is fixed. See https://github.com/SciML/DiffEqBayes.jl/issues/370
     name: "Downgrade"
     uses: "SciML/.github/.github/workflows/downgrade.yml@v1"
     with:
       julia-version: "1.10"
-      group: "Core"
       skip: "Pkg,TOML"
+      allow-reresolve: false
     secrets: "inherit"

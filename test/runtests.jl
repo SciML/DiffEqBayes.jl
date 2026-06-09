@@ -22,11 +22,12 @@ if GROUP == "Stan" || GROUP == "All"
     end
 end
 
-if GROUP == "JET"
+if GROUP == "QA"
     using Pkg
-    Pkg.activate(joinpath(@__DIR__, "jet"))
+    Pkg.activate(joinpath(@__DIR__, "qa"))
+    Pkg.develop(path = joinpath(@__DIR__, ".."))
     Pkg.instantiate()
-    @time @safetestset "JET" begin
-        include("jet/jet_tests.jl")
+    @time @safetestset "QA" begin
+        include("qa/qa.jl")
     end
 end

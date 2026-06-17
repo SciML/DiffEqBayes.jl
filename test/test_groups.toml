@@ -1,7 +1,8 @@
+# The Stan group is NOT listed here: it requires a cmdstan build
+# (.github/scripts/stan.sh download + `make build` + JULIA_CMDSTAN_HOME) that the
+# centralized grouped-tests.yml caller cannot perform. The Stan group keeps its
+# full coverage through the dedicated CI.yml workflow, which runs stan.sh first.
 [Core]
-versions = ["lts", "1", "pre"]
-
-[Stan]
 versions = ["lts", "1", "pre"]
 
 [QA]

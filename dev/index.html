@@ -3,7 +3,7 @@
 Pkg.add(&quot;DiffEqBayes&quot;)</code></pre><h2 id="Contributing"><a class="docs-heading-anchor" href="#Contributing">Contributing</a><a id="Contributing-1"></a><a class="docs-heading-anchor-permalink" href="#Contributing" title="Permalink"></a></h2><ul><li><p>Please refer to the <a href="https://github.com/SciML/ColPrac/blob/master/README.md">SciML ColPrac: Contributor&#39;s Guide on Collaborative Practices for Community Packages</a> for guidance on PRs, issues, and other matters relating to contributing to SciML.</p></li><li><p>See the <a href="https://github.com/SciML/SciMLStyle">SciML Style Guide</a> for common coding practices and other style decisions.</p></li><li><p>There are a few community forums:</p><ul><li>The #diffeq-bridged and #sciml-bridged channels in the <a href="https://julialang.org/slack/">Julia Slack</a></li><li>The #diffeq-bridged and #sciml-bridged channels in the <a href="https://julialang.zulipchat.com/#narrow/stream/279055-sciml-bridged">Julia Zulip</a></li><li>On the <a href="https://discourse.julialang.org">Julia Discourse forums</a></li><li>See also <a href="https://sciml.ai/community/">SciML Community page</a></li></ul></li></ul><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><details><summary>The documentation of this SciML package was built using these direct dependencies,</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/DiffEqBayes.jl/DiffEqBayes.jl/docs/Project.toml`
   [6e4b80f9] BenchmarkTools v1.8.0
   [ebbdde9d] DiffEqBayes v3.14.0 `~/work/DiffEqBayes.jl/DiffEqBayes.jl`
-  [31c24e10] Distributions v0.25.126
+  [31c24e10] Distributions v0.25.127
   [e30172f5] Documenter v1.17.0
   [bbc10e6e] DynamicHMC v3.6.1
   [1dea7af3] OrdinaryDiffEq v7.0.1
@@ -96,7 +96,7 @@ Environment:
   [a0c0ee7d] DifferentiationInterface v0.7.18
   [0703355e] DimensionalData v0.30.1
   [b4f34e82] Distances v0.10.12
-  [31c24e10] Distributions v0.25.126
+  [31c24e10] Distributions v0.25.127
   [ffbed154] DocStringExtensions v0.9.5
   [e30172f5] Documenter v1.17.0
   [5b8099bc] DomainSets v0.8.0
@@ -120,7 +120,7 @@ Environment:
 ⌅ [64ca27bc] FindFirstFunctions v2.1.0
   [6a86dc24] FiniteDiff v2.31.0
 ⌅ [53c48c17] FixedPointNumbers v0.8.6
-  [4a37a8b9] FlexiChains v0.6.15
+  [4a37a8b9] FlexiChains v0.6.16
   [1fa38f19] Format v1.3.7
   [f6369f11] ForwardDiff v1.4.1
   [a85aefff] FunctionMaps v0.1.2
@@ -163,7 +163,7 @@ Environment:
   [6f1fad26] Libtask v0.9.18
   [87fe0de2] LineSearch v0.1.9
   [d3d80556] LineSearches v7.7.1
-  [7ed4a6bd] LinearSolve v3.85.2
+  [7ed4a6bd] LinearSolve v3.86.0
   [6fdf6af0] LogDensityProblems v2.2.0
   [996a588d] LogDensityProblemsAD v1.13.1
 ⌅ [2ab3a3ac] LogExpFunctions v0.3.29
@@ -178,9 +178,9 @@ Environment:
   [442fdcdd] Measures v0.3.3
   [e1d29d7a] Missings v1.2.0
   [dbe65cb8] MistyClosures v2.1.0
-  [961ee093] ModelingToolkit v11.26.8
-  [7771a370] ModelingToolkitBase v1.42.2
-  [6bb917b9] ModelingToolkitTearing v1.14.2
+  [961ee093] ModelingToolkit v11.28.0
+  [7771a370] ModelingToolkitBase v1.44.0
+  [6bb917b9] ModelingToolkitTearing v1.15.0
   [2e0e35c7] Moshi v0.3.8
   [46d2c3a1] MuladdMacro v0.2.4
   [102ac46a] MultivariatePolynomials v0.5.19
@@ -219,7 +219,7 @@ Environment:
   [65888b18] ParameterizedFunctions v5.24.0
 ⌅ [d96e819e] Parameters v0.12.3
   [69de0a69] Parsers v2.8.6
-  [569bd051] PartitionedDistributions v0.0.1
+⌅ [569bd051] PartitionedDistributions v0.0.1
   [ccf2f8ad] PlotThemes v3.3.0
   [995b91a9] PlotUtils v1.4.4
   [91a5bcdd] Plots v1.41.6
@@ -267,7 +267,7 @@ Environment:
   [777ac1f9] SimpleBufferStream v1.2.0
   [727e6d20] SimpleNonlinearSolve v2.12.0
   [699a6c99] SimpleTraits v0.9.6
-  [a2af1166] SortingAlgorithms v1.2.2
+  [a2af1166] SortingAlgorithms v1.2.3
   [a57abbd0] SparseColumnPivotedQR v2.1.1
   [9f842d2f] SparseConnectivityTracer v1.2.1
   [0a514795] SparseMatrixColorings v0.4.27
@@ -285,14 +285,14 @@ Environment:
   [2913bbd2] StatsBase v0.34.12
 ⌅ [4c63d2b9] StatsFuns v1.5.2
   [f3b207a7] StatsPlots v0.15.8
-  [5e0ebb24] Strided v2.6.0
-  [4db3bf67] StridedViews v0.5.1
+  [5e0ebb24] Strided v2.6.1
+  [4db3bf67] StridedViews v0.5.2
   [892a3eda] StringManipulation v0.4.4
   [09ab397b] StructArrays v0.7.3
   [2efcf032] SymbolicIndexingInterface v0.3.48
   [19f23fe9] SymbolicLimits v1.1.0
-  [d1185830] SymbolicUtils v4.35.1
-  [0c5d862f] Symbolics v7.27.0
+  [d1185830] SymbolicUtils v4.35.3
+  [0c5d862f] Symbolics v7.28.1
   [ab02a1b2] TableOperations v1.2.0
   [3783bdb8] TableTraits v1.0.1
   [bd369af6] Tables v1.12.1
@@ -357,7 +357,7 @@ Environment:
   [36c8627f] Pango_jll v1.57.1+0
   [30392449] Pixman_jll v0.46.4+0
   [c0090381] Qt6Base_jll v6.10.2+2
-  [629bc702] Qt6Declarative_jll v6.10.2+1
+  [629bc702] Qt6Declarative_jll v6.10.2+2
   [ce943373] Qt6ShaderTools_jll v6.10.2+1
   [6de9746b] Qt6Svg_jll v6.10.2+0
   [e99dba38] Qt6Wayland_jll v6.10.2+1
@@ -459,4 +459,4 @@ Environment:
   [3f19e933] p7zip_jll v17.7.0+0
 Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`</code></pre></details>You can also download the 
 <a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.0/assets/Manifest.toml</p>">manifest</a> file and the
-<a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.0/assets/Project.toml</p>">project</a> file.</article><nav class="docs-footer"><a class="docs-footer-nextpage" href="methods/">Methods »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Wednesday 17 June 2026 11:21">Wednesday 17 June 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+<a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.0/assets/Project.toml</p>">project</a> file.</article><nav class="docs-footer"><a class="docs-footer-nextpage" href="methods/">Methods »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Sunday 21 June 2026 01:54">Sunday 21 June 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

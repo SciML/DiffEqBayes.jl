@@ -17,13 +17,10 @@ run_qa(
             # Non-public (un-`public`/un-exported) names of other packages that
             # DiffEqBayes accesses qualified; safe until each upstream marks them public:
             ignore = (
-                :AbstractSciMLProblem,   # SciMLBase
-                :Fix1,                   # Base
                 :GLOBAL_RNG,             # Random
                 :StanTarget,             # ModelingToolkit (owner Symbolics)
                 :Tunable,                # SciMLStructures
                 :canonicalize,           # SciMLStructures
-                :get_iv,                 # ModelingToolkit (owner ModelingToolkitBase)
                 :isscimlstructure,       # SciMLStructures
             ),
         ),

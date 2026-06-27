@@ -14,8 +14,8 @@ run_qa(
             ),
         ),
         all_qualified_accesses_are_public = (;
-            # Non-public (un-`public`/un-exported) names of other packages that
-            # DiffEqBayes accesses qualified; safe until each upstream marks them public:
+            # Names accessed qualified that are still un-`public`/un-exported upstream.
+            # (SciMLBase-owned names are now public in 3.27.0 and need no ignore.)
             ignore = (
                 :GLOBAL_RNG,             # Random
                 :StanTarget,             # ModelingToolkit (owner Symbolics)

@@ -4,6 +4,7 @@ $(DocStringExtensions.README)
 module DiffEqBayes
 
 using DiffEqBase, Distributions, Turing, MacroTools
+import SciMLBase
 using RecursiveArrayTools, ModelingToolkit, LinearAlgebra
 using Parameters, Distributions, Optim, Requires
 using Distances, DocStringExtensions, Random, StanSample

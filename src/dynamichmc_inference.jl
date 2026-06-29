@@ -109,7 +109,7 @@ function dynamichmc_inference(
             length(parameter_priors)
         );
         σ_priors = fill(Normal(0, 5), size(data, 1)),
-        sample_u0 = false, rng = Random.GLOBAL_RNG,
+        sample_u0 = false, rng = Random.default_rng(),
         num_samples = 1000, AD_gradient_kind = Val(:ForwardDiff),
         save_idxs = nothing, solve_kwargs = (),
         mcmc_kwargs = (

@@ -1,3 +1,10 @@
+"""
+    turing_inference(prob, alg, t, data, priors; kwargs...)
+
+Run Bayesian parameter inference for a SciML problem with Turing.jl. The problem
+`prob` is solved with `alg` at save times `t`, compared against `data`, and the
+unknown parameters are sampled from `priors`.
+"""
 function turing_inference(
         prob::SciMLBase.AbstractSciMLProblem,
         alg,

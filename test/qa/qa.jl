@@ -22,13 +22,14 @@ run_qa(
             # (Symbolics 7.29.0, SciMLStructures 1.10.1) on Julia 1.12.
             ignore = (
                 :StanTarget,             # Symbolics build-target type, only `import`ed
-                                         # (not exported/`public`) into ModelingToolkit
+                # (not exported/`public`) into ModelingToolkit
                 :Tunable,                # SciMLStructures core API, not yet `public`
                 :canonicalize,           # SciMLStructures core API, not yet `public`
                 :isscimlstructure,       # SciMLStructures core API, not yet `public`
             ),
         ),
     ),
+    api_docs_kwargs = (; rendered = true),
     # DiffEqBayes pulls 68 names implicitly from heavy `using` deps (Turing,
     # Distributions, ModelingToolkit, DiffEqBase, ...); making them explicit is a
     # large, risky refactor tracked in https://github.com/SciML/DiffEqBayes.jl/issues/391

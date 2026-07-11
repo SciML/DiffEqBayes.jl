@@ -54,6 +54,13 @@ function generate_theta(n::Integer, priors)
     return theta
 end
 
+"""
+    stan_inference(prob, alg, t, data, priors = nothing; kwargs...)
+
+Run Bayesian parameter inference for a SciML problem with StanSample.jl. The
+problem `prob` is translated to Stan's ODE interface, solved with `alg`, and
+sampled against observations `data` at save times `t`.
+"""
 function stan_inference(
         prob::SciMLBase.AbstractSciMLProblem,
         alg,

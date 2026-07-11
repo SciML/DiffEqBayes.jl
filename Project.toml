@@ -41,6 +41,7 @@ Distributions = "0.25.123"
 DocStringExtensions = "0.9.5"
 DynamicHMC = "3.4.4"
 ForwardDiff = "1.0.1"
+ImplicitDiscreteSolve = "2.1.2"
 LinearAlgebra = "1"
 LogDensityProblemsAD = "1.0.1"
 MacroTools = "0.5.16"
@@ -70,6 +71,7 @@ julia = "1.10"
 
 [extras]
 ADTypes = "47edcb42-4c32-4615-8424-f2b9edc5f35b"
+ImplicitDiscreteSolve = "3263718b-31ed-49cf-8a0f-35a466e8af96"
 OrdinaryDiffEq = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
 ParameterizedFunctions = "65888b18-ceab-5e60-b2b9-181511a3b968"
 SafeTestsets = "1bc83da4-3b8d-516f-aca4-4fe02f6d838f"
@@ -79,4 +81,4 @@ SteadyStateDiffEq = "9672c7b4-1e72-59bd-8a11-6ac3964bc41f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["ADTypes", "Test", "OrdinaryDiffEq", "ParameterizedFunctions", "SafeTestsets", "SciMLTesting", "StatsBase", "SteadyStateDiffEq"]
+test = ["ADTypes", "Test", "ImplicitDiscreteSolve", "OrdinaryDiffEq", "ParameterizedFunctions", "SafeTestsets", "SciMLTesting", "StatsBase", "SteadyStateDiffEq"]

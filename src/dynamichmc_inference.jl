@@ -33,9 +33,9 @@ Base.@kwdef struct DynamicHMCPosterior{TA, TP, TD, TT, TR, TS, TK, TI, TRe}
 end
 
 function (P::DynamicHMCPosterior)(θ)
-    @unpack parameters, σ = θ
-    @unpack algorithm, problem, data, t, parameter_priors = P
-    @unpack σ_priors, solve_kwargs, sample_u0, save_idxs = P
+    Parameters.@unpack parameters, σ = θ
+    Parameters.@unpack algorithm, problem, data, t, parameter_priors = P
+    Parameters.@unpack σ_priors, solve_kwargs, sample_u0, save_idxs = P
     T = eltype(parameters)
     nu = save_idxs === nothing ? length(problem.u0) : length(save_idxs)
     u0 = convert.(T, sample_u0 ? parameters[1:nu] : problem.u0)

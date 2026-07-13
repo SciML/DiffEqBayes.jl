@@ -88,6 +88,14 @@ parameter, specified via a
 type. `num_samples` is the number of posterior samples. `ϵ` is the target
 distance between the data and simulated data. `distancefunction` is a distance metric specified from the
 [Distances.jl](https://github.com/JuliaStats/Distances.jl)
+
+## Docstrings
+
+```@docs
+stan_inference
+turing_inference
+dynamichmc_inference
+```
 package, the default is `euclidean`. `ABCalgorithm` is the ABC algorithm to use, options are `ABCSMC` or `ABCRejection` from
 [ApproxBayes.jl](https://github.com/marcjwilliams1/ApproxBayes.jl), the default
 is the former which is more efficient. `maxiterations` is the maximum number of iterations before the algorithm terminates. The extra `kwargs` are given to the internal differential

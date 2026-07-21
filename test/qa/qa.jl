@@ -3,7 +3,6 @@ using JET
 
 run_qa(
     DiffEqBayes;
-    explicit_imports = true,
     ei_kwargs = (;
         all_qualified_accesses_via_owners = (;
             # Re-exports surfaced through ModelingToolkit (Base.which points at the
@@ -29,7 +28,6 @@ run_qa(
             ),
         ),
     ),
-    api_docs_kwargs = (; rendered = true),
     # DiffEqBayes pulls 68 names implicitly from heavy `using` deps (Turing,
     # Distributions, ModelingToolkit, DiffEqBase, ...); making them explicit is a
     # large, risky refactor tracked in https://github.com/SciML/DiffEqBayes.jl/issues/391

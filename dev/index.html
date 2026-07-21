@@ -22,9 +22,9 @@ Build Info:
   Official https://julialang.org release
 Platform Info:
   OS: Linux (x86_64-linux-gnu)
-  CPU: 40 × Intel(R) Xeon(R) Silver 4114 CPU @ 2.20GHz
+  CPU: 112 × AMD EPYC 7663 56-Core Processor
   WORD_SIZE: 64
-  LLVM: libLLVM-18.1.7 (ORCJIT, skylake-avx512)
+  LLVM: libLLVM-18.1.7 (ORCJIT, znver3)
   GC: Built with stock GC
 Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)
 Environment:
@@ -43,7 +43,7 @@ Environment:
   [79e6a3ab] Adapt v4.7.0
   [0bf59076] AdvancedHMC v0.8.6
   [5b7e9947] AdvancedMH v0.8.10
-  [576499cb] AdvancedPS v0.7.2
+⌅ [576499cb] AdvancedPS v0.7.2
 ⌅ [b5ca4192] AdvancedVI v0.6.2
   [66dad0bd] AliasTables v1.1.3
   [dce04be8] ArgCheck v2.5.0
@@ -85,10 +85,10 @@ Environment:
   [88cd18e8] ConsoleProgressMonitor v0.1.2
   [187b0558] ConstructionBase v1.6.0
   [d38c429a] Contour v0.6.3
-  [a8cc5b0e] Crayons v4.1.1
+  [a8cc5b0e] Crayons v4.2.0
   [9a962f9c] DataAPI v1.16.0
   [a93c6f00] DataFrames v1.8.2
-  [864edb3b] DataStructures v0.19.5
+  [864edb3b] DataStructures v0.19.6
   [e2d170a0] DataValueInterfaces v1.0.0
   [8bb1440f] DelimitedFiles v1.9.1
   [b429d917] DensityInterface v0.4.0
@@ -120,11 +120,11 @@ Environment:
   [9aa1b823] FastClosures v0.3.2
   [a4df4552] FastPower v1.3.4
   [48062228] FilePathsBase v0.9.24
-  [1a297f60] FillArrays v1.16.0
-  [64ca27bc] FindFirstFunctions v3.1.0
+  [1a297f60] FillArrays v1.17.0
+  [64ca27bc] FindFirstFunctions v3.2.0
   [6a86dc24] FiniteDiff v2.32.0
 ⌅ [53c48c17] FixedPointNumbers v0.8.6
-  [4a37a8b9] FlexiChains v0.6.29
+  [4a37a8b9] FlexiChains v0.6.32
   [1fa38f19] Format v1.3.7
   [f6369f11] ForwardDiff v1.4.1
   [a85aefff] FunctionMaps v0.1.2
@@ -160,7 +160,7 @@ Environment:
   [5ab0869b] KernelDensity v0.6.12
   [ba0b0d4f] Krylov v0.10.8
   [b964fa9f] LaTeXStrings v1.4.0
-  [23fbe1c1] Latexify v0.16.10
+  [23fbe1c1] Latexify v0.16.11
   [0e77f7df] LazilyInitializedFields v1.3.0
   [1fad7336] LazyStack v0.1.3
 ⌅ [1d6d02ad] LeftChildRightSiblingTrees v0.2.1
@@ -182,10 +182,10 @@ Environment:
   [442fdcdd] Measures v0.3.3
   [e1d29d7a] Missings v1.2.0
   [dbe65cb8] MistyClosures v2.1.0
-  [961ee093] ModelingToolkit v11.31.2
-  [7771a370] ModelingToolkitBase v1.51.1
-  [6bb917b9] ModelingToolkitTearing v1.18.2
-  [2e0e35c7] Moshi v0.3.11
+  [961ee093] ModelingToolkit v11.35.1
+  [7771a370] ModelingToolkitBase v1.54.2
+  [6bb917b9] ModelingToolkitTearing v1.19.4
+  [2e0e35c7] Moshi v0.3.12
   [46d2c3a1] MuladdMacro v0.2.6
   [102ac46a] MultivariatePolynomials v0.5.19
   [6f286f6a] MultivariateStats v0.10.4
@@ -193,11 +193,11 @@ Environment:
   [d41bc354] NLSolversBase v8.0.0
   [77ba4419] NaNMath v1.1.4
   [d9ec5142] NamedTupleTools v0.14.3
-  [b8a86587] NearestNeighbors v0.4.28
-  [8913a72c] NonlinearSolve v4.21.0
-  [be0214bd] NonlinearSolveBase v2.34.1
-  [5959db7a] NonlinearSolveFirstOrder v2.2.0
-  [9a2c21bd] NonlinearSolveQuasiNewton v1.14.0
+  [b8a86587] NearestNeighbors v0.4.29
+  [8913a72c] NonlinearSolve v4.21.1
+⌃ [be0214bd] NonlinearSolveBase v2.35.0
+⌃ [5959db7a] NonlinearSolveFirstOrder v2.2.0
+⌃ [9a2c21bd] NonlinearSolveQuasiNewton v1.14.0
   [26075421] NonlinearSolveSpectralMethods v1.7.3
   [510215fc] Observables v0.5.5
   [6fe1bfb0] OffsetArrays v1.17.0
@@ -209,13 +209,13 @@ Environment:
   [36348300] OptimizationOptimJL v0.4.16
 ⌅ [bac558e1] OrderedCollections v1.8.2
   [1dea7af3] OrdinaryDiffEq v7.1.3
-  [6ad6398a] OrdinaryDiffEqBDF v2.3.1
-  [bbf590c4] OrdinaryDiffEqCore v4.7.0
+  [6ad6398a] OrdinaryDiffEqBDF v2.3.2
+  [bbf590c4] OrdinaryDiffEqCore v4.8.0
   [50262376] OrdinaryDiffEqDefault v2.3.0
-  [4302a76b] OrdinaryDiffEqDifferentiation v3.3.1
-  [127b3ac7] OrdinaryDiffEqNonlinearSolve v2.1.0
-  [43230ef6] OrdinaryDiffEqRosenbrock v2.4.0
-  [b4bd8bb3] OrdinaryDiffEqRosenbrockTableaus v2.2.0
+  [4302a76b] OrdinaryDiffEqDifferentiation v3.3.2
+  [127b3ac7] OrdinaryDiffEqNonlinearSolve v2.3.0
+  [43230ef6] OrdinaryDiffEqRosenbrock v2.4.2
+  [b4bd8bb3] OrdinaryDiffEqRosenbrockTableaus v2.2.1
   [2d112036] OrdinaryDiffEqSDIRK v2.8.1
   [b1df2697] OrdinaryDiffEqTsit5 v2.1.0
   [79d7bb75] OrdinaryDiffEqVerner v2.2.0
@@ -233,7 +233,7 @@ Environment:
   [d236fae5] PreallocationTools v1.3.0
   [aea7be01] PrecompileTools v1.3.4
   [21216c6a] Preferences v1.5.2
-  [08abe8d2] PrettyTables v3.4.0
+  [08abe8d2] PrettyTables v3.4.2
   [27ebfcd6] Primes v0.5.7
   [33c8b6b6] ProgressLogging v0.1.6
   [92933f4c] ProgressMeter v1.11.0
@@ -253,14 +253,14 @@ Environment:
   [05181044] RelocatableFolders v1.0.1
   [ae029012] Requires v1.3.1
   [79098fc4] Rmath v0.9.0
-  [f2b01f46] Roots v3.0.4
+  [f2b01f46] Roots v3.0.6
   [7e49a35a] RuntimeGeneratedFunctions v0.5.22
   [9dfe8606] SCCNonlinearSolve v1.13.3
   [26aad666] SSMProblems v0.6.1
-  [0bca4576] SciMLBase v3.35.2
-  [19f34311] SciMLJacobianOperators v0.1.15
+  [0bca4576] SciMLBase v3.36.1
+  [19f34311] SciMLJacobianOperators v0.1.16
   [a6db7da4] SciMLLogging v2.0.3
-  [c0aeaf25] SciMLOperators v1.24.2
+  [c0aeaf25] SciMLOperators v1.24.4
   [431bcebd] SciMLPublic v1.2.3
   [53ae85a6] SciMLStructures v1.10.3
   [30f210dd] ScientificTypesBase v3.1.0
@@ -289,13 +289,13 @@ Environment:
   [2913bbd2] StatsBase v0.34.12
 ⌅ [4c63d2b9] StatsFuns v1.5.2
   [f3b207a7] StatsPlots v0.15.8
-  [5e0ebb24] Strided v2.6.1
+  [5e0ebb24] Strided v2.6.3
   [4db3bf67] StridedViews v0.5.2
-  [892a3eda] StringManipulation v0.4.4
+  [892a3eda] StringManipulation v0.4.5
   [2efcf032] SymbolicIndexingInterface v0.3.51
   [19f23fe9] SymbolicLimits v1.1.4
-  [d1185830] SymbolicUtils v4.40.0
-  [0c5d862f] Symbolics v7.31.0
+  [d1185830] SymbolicUtils v4.40.2
+  [0c5d862f] Symbolics v7.32.1
   [ab02a1b2] TableOperations v1.2.0
   [3783bdb8] TableTraits v1.0.1
   [bd369af6] Tables v1.13.0
@@ -304,7 +304,7 @@ Environment:
   [62fd8b95] TensorCore v0.1.1
   [8ea1fca8] TermInterface v2.0.0
   [5d786b92] TerminalLoggers v0.1.7
-  [a759f4b9] TimerOutputs v0.5.29
+⌅ [a759f4b9] TimerOutputs v0.5.29
   [3bb67fe8] TranscodingStreams v0.11.3
   [84d833dd] TransformVariables v0.8.26
   [f9bc47f6] TransformedLogDensities v1.1.1
@@ -460,6 +460,6 @@ Environment:
   [8e850b90] libblastrampoline_jll v5.15.0+0
   [8e850ede] nghttp2_jll v1.64.0+1
   [3f19e933] p7zip_jll v17.7.0+0
-Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`</code></pre></details>You can also download the 
+Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details>You can also download the 
 <a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.2/assets/Manifest.toml</p>">manifest</a> file and the
-<a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.2/assets/Project.toml</p>">project</a> file.</article><nav class="docs-footer"><a class="docs-footer-nextpage" href="methods/">Methods »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Monday 13 July 2026 05:25">Monday 13 July 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+<a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.2/assets/Project.toml</p>">project</a> file.</article><nav class="docs-footer"><a class="docs-footer-nextpage" href="methods/">Methods »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 21 July 2026 14:48">Tuesday 21 July 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

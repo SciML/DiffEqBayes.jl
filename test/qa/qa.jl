@@ -31,5 +31,5 @@ run_qa(
     # DiffEqBayes pulls 68 names implicitly from heavy `using` deps (Turing,
     # Distributions, ModelingToolkit, DiffEqBase, ...); making them explicit is a
     # large, risky refactor tracked in https://github.com/SciML/DiffEqBayes.jl/issues/391
-    ei_broken = (:no_implicit_imports,)
+    ei_broken = ()
 )

@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations · DiffEqBayes.jl</title><meta name="title" content="DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations · DiffEqBayes.jl"/><meta property="og:title" content="DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations · DiffEqBayes.jl"/><meta property="twitter:title" content="DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations · DiffEqBayes.jl"/><meta name="description" content="Documentation for DiffEqBayes.jl."/><meta property="og:description" content="Documentation for DiffEqBayes.jl."/><meta property="twitter:description" content="Documentation for DiffEqBayes.jl."/><meta property="og:url" content="https://docs.sciml.ai/DiffEqBayes/stable/"/><meta property="twitter:url" content="https://docs.sciml.ai/DiffEqBayes/stable/"/><link rel="canonical" href="https://docs.sciml.ai/DiffEqBayes/stable/"/><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="search_index.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script><link href="assets/favicon.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href><img src="assets/logo.png" alt="DiffEqBayes.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href>DiffEqBayes.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li class="is-active"><a class="tocitem" href>DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations</a><ul class="internal"><li><a class="tocitem" href="#Installation"><span>Installation</span></a></li><li><a class="tocitem" href="#Contributing"><span>Contributing</span></a></li><li><a class="tocitem" href="#Reproducibility"><span>Reproducibility</span></a></li></ul></li><li><a class="tocitem" href="methods/">Methods</a></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="examples/">Bayesian Inference of ODE</a></li><li><a class="tocitem" href="examples/pendulum/">Bayesian Inference of Pendulum Parameters</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/SciML/DiffEqBayes.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/SciML/DiffEqBayes.jl/blob/master/docs/src/index.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="DiffEqBayes.jl:-Bayesian-Parameter-Estimation-for-Differential-Equations"><a class="docs-heading-anchor" href="#DiffEqBayes.jl:-Bayesian-Parameter-Estimation-for-Differential-Equations">DiffEqBayes.jl: Bayesian Parameter Estimation for Differential Equations</a><a id="DiffEqBayes.jl:-Bayesian-Parameter-Estimation-for-Differential-Equations-1"></a><a class="docs-heading-anchor-permalink" href="#DiffEqBayes.jl:-Bayesian-Parameter-Estimation-for-Differential-Equations" title="Permalink"></a></h1><p>This repository is a set of extension functionality for estimating the parameters of differential equations using Bayesian methods. It allows the choice of using <a href="https://stanjulia.github.io/StanSample.jl/stable/">StanSample.jl</a>, <a href="https://turing.ml/stable/docs/using-turing/">Turing.jl</a>, <a href="https://www.tamaspapp.eu/DynamicHMC.jl/stable/">DynamicHMC.jl</a> and <a href="https://github.com/marcjwilliams1/ApproxBayes.jl">ApproxBayes.jl</a> to perform a Bayesian estimation of a differential equation problem specified via the <a href="https://docs.sciml.ai/DiffEqDocs/stable/">DifferentialEquations.jl</a> interface.</p><h2 id="Installation"><a class="docs-heading-anchor" href="#Installation">Installation</a><a id="Installation-1"></a><a class="docs-heading-anchor-permalink" href="#Installation" title="Permalink"></a></h2><p>To install DiffEqBayes.jl, use the Julia package manager:</p><pre><code class="language-julia hljs">using Pkg
 Pkg.add(&quot;DiffEqBayes&quot;)</code></pre><h2 id="Contributing"><a class="docs-heading-anchor" href="#Contributing">Contributing</a><a id="Contributing-1"></a><a class="docs-heading-anchor-permalink" href="#Contributing" title="Permalink"></a></h2><ul><li><p>Please refer to the <a href="https://github.com/SciML/ColPrac/blob/master/README.md">SciML ColPrac: Contributor&#39;s Guide on Collaborative Practices for Community Packages</a> for guidance on PRs, issues, and other matters relating to contributing to SciML.</p></li><li><p>See the <a href="https://github.com/SciML/SciMLStyle">SciML Style Guide</a> for common coding practices and other style decisions.</p></li><li><p>There are a few community forums:</p><ul><li>The #diffeq-bridged and #sciml-bridged channels in the <a href="https://julialang.org/slack/">Julia Slack</a></li><li>The #diffeq-bridged and #sciml-bridged channels in the <a href="https://julialang.zulipchat.com/#narrow/stream/279055-sciml-bridged">Julia Zulip</a></li><li>On the <a href="https://discourse.julialang.org">Julia Discourse forums</a></li><li>See also <a href="https://sciml.ai/community/">SciML Community page</a></li></ul></li></ul><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><details><summary>The documentation of this SciML package was built using these direct dependencies,</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/_work/DiffEqBayes.jl/DiffEqBayes.jl/docs/Project.toml`
   [6e4b80f9] BenchmarkTools v1.8.0
-  [ebbdde9d] DiffEqBayes v3.14.2 `~/_work/DiffEqBayes.jl/DiffEqBayes.jl`
+  [ebbdde9d] DiffEqBayes v3.14.3 `~/_work/DiffEqBayes.jl/DiffEqBayes.jl`
   [31c24e10] Distributions v0.25.129
   [e30172f5] Documenter v1.17.0
   [bbc10e6e] DynamicHMC v3.6.1
@@ -22,7 +22,7 @@ Build Info:
   Official https://julialang.org release
 Platform Info:
   OS: Linux (x86_64-linux-gnu)
-  CPU: 128 × AMD EPYC 7513 32-Core Processor
+  CPU: 112 × AMD EPYC 7663 56-Core Processor
   WORD_SIZE: 64
   LLVM: libLLVM-18.1.7 (ORCJIT, znver3)
   GC: Built with stock GC
@@ -35,7 +35,7 @@ Environment:
   [14f7f29c] AMD v0.5.3
   [a4c015fc] ANSIColoredPrinters v0.0.1
   [621f4979] AbstractFFTs v1.5.0
-  [80f14c24] AbstractMCMC v5.15.1
+  [80f14c24] AbstractMCMC v5.16.0
 ⌅ [7a57a42e] AbstractPPL v0.14.2
   [6e696c72] AbstractPlutoDingetjes v1.4.0
   [1520ce14] AbstractTrees v0.4.5
@@ -49,7 +49,7 @@ Environment:
   [dce04be8] ArgCheck v2.5.0
   [ec485272] ArnoldiMethod v0.4.0
   [7d9fca2a] Arpack v0.5.4
-  [4fba245c] ArrayInterface v7.27.0
+  [4fba245c] ArrayInterface v7.28.0
   [4c555306] ArrayLayouts v1.12.2
   [13072b0f] AxisAlgorithms v1.1.0
   [aae01518] BandedMatrices v1.11.0
@@ -60,7 +60,7 @@ Environment:
   [b2a6c25c] BinaryHeaps v1.0.3
   [caf10ac8] BipartiteGraphs v0.1.9
   [d1d4a3ce] BitFlags v0.1.10
-  [8e7c35d0] BlockArrays v1.9.5
+  [8e7c35d0] BlockArrays v1.10.0
   [70df07ce] BracketingNonlinearSolve v1.12.3
   [336ed68f] CSV v0.10.16
   [d360d2e6] ChainRulesCore v1.26.1
@@ -93,7 +93,7 @@ Environment:
   [8bb1440f] DelimitedFiles v1.9.1
   [b429d917] DensityInterface v0.4.0
   [2b5f629d] DiffEqBase v7.6.2
-  [ebbdde9d] DiffEqBayes v3.14.2 `~/_work/DiffEqBayes.jl/DiffEqBayes.jl`
+  [ebbdde9d] DiffEqBayes v3.14.3 `~/_work/DiffEqBayes.jl/DiffEqBayes.jl`
   [459566f4] DiffEqCallbacks v4.18.3
   [163ba53b] DiffResults v1.1.0
   [b552c78f] DiffRules v1.16.0
@@ -111,7 +111,7 @@ Environment:
   [4e289a0a] EnumX v1.0.7
   [f151be2c] EnzymeCore v0.8.21
   [460bff9d] ExceptionUnwrapping v0.1.11
-  [e2ba6199] ExprTools v0.1.10
+  [e2ba6199] ExprTools v0.1.11
   [55351af7] ExproniconLite v0.10.14
   [411431e0] Extents v0.1.6
   [c87230d0] FFMPEG v0.4.5
@@ -124,7 +124,7 @@ Environment:
   [64ca27bc] FindFirstFunctions v3.2.0
   [6a86dc24] FiniteDiff v2.32.0
 ⌅ [53c48c17] FixedPointNumbers v0.8.6
-  [4a37a8b9] FlexiChains v0.6.32
+  [4a37a8b9] FlexiChains v0.6.33
   [1fa38f19] Format v1.3.7
   [f6369f11] ForwardDiff v1.4.1
   [a85aefff] FunctionMaps v0.1.2
@@ -140,7 +140,7 @@ Environment:
 ⌅ [cd3eb016] HTTP v1.11.0
   [34004b35] HypergeometricFunctions v0.3.29
   [b5f81e59] IOCapture v1.0.0
-  [3263718b] ImplicitDiscreteSolve v2.1.3
+  [3263718b] ImplicitDiscreteSolve v2.1.4
   [d25df0c9] Inflate v0.1.5
   [22cec73e] InitialValues v0.3.1
   [842dd82b] InlineStrings v1.4.5
@@ -182,8 +182,8 @@ Environment:
   [442fdcdd] Measures v0.3.3
   [e1d29d7a] Missings v1.2.0
   [dbe65cb8] MistyClosures v2.1.0
-  [961ee093] ModelingToolkit v11.35.1
-  [7771a370] ModelingToolkitBase v1.54.2
+  [961ee093] ModelingToolkit v11.36.0
+  [7771a370] ModelingToolkitBase v1.56.0
   [6bb917b9] ModelingToolkitTearing v1.19.4
   [2e0e35c7] Moshi v0.3.12
   [46d2c3a1] MuladdMacro v0.2.6
@@ -194,7 +194,7 @@ Environment:
   [77ba4419] NaNMath v1.1.4
   [d9ec5142] NamedTupleTools v0.14.3
   [b8a86587] NearestNeighbors v0.4.29
-  [8913a72c] NonlinearSolve v4.21.1
+⌃ [8913a72c] NonlinearSolve v4.21.1
 ⌃ [be0214bd] NonlinearSolveBase v2.35.0
 ⌃ [5959db7a] NonlinearSolveFirstOrder v2.2.0
 ⌃ [9a2c21bd] NonlinearSolveQuasiNewton v1.14.0
@@ -205,17 +205,17 @@ Environment:
   [429524aa] Optim v2.2.1
   [3bd65402] Optimisers v0.4.7
   [7f7a1694] Optimization v5.6.5
-  [bca83a33] OptimizationBase v5.2.1
+  [bca83a33] OptimizationBase v5.2.2
   [36348300] OptimizationOptimJL v0.4.16
 ⌅ [bac558e1] OrderedCollections v1.8.2
   [1dea7af3] OrdinaryDiffEq v7.1.3
-  [6ad6398a] OrdinaryDiffEqBDF v2.3.2
+  [6ad6398a] OrdinaryDiffEqBDF v2.4.0
   [bbf590c4] OrdinaryDiffEqCore v4.8.0
   [50262376] OrdinaryDiffEqDefault v2.3.0
-  [4302a76b] OrdinaryDiffEqDifferentiation v3.3.2
-  [127b3ac7] OrdinaryDiffEqNonlinearSolve v2.3.0
+⌃ [4302a76b] OrdinaryDiffEqDifferentiation v3.4.1
+  [127b3ac7] OrdinaryDiffEqNonlinearSolve v2.4.0
   [43230ef6] OrdinaryDiffEqRosenbrock v2.4.2
-  [b4bd8bb3] OrdinaryDiffEqRosenbrockTableaus v2.2.1
+  [b4bd8bb3] OrdinaryDiffEqRosenbrockTableaus v2.2.2
   [2d112036] OrdinaryDiffEqSDIRK v2.8.1
   [b1df2697] OrdinaryDiffEqTsit5 v2.1.0
   [79d7bb75] OrdinaryDiffEqVerner v2.2.0
@@ -255,9 +255,9 @@ Environment:
   [79098fc4] Rmath v0.9.0
   [f2b01f46] Roots v3.0.6
   [7e49a35a] RuntimeGeneratedFunctions v0.5.22
-  [9dfe8606] SCCNonlinearSolve v1.13.3
+⌃ [9dfe8606] SCCNonlinearSolve v1.13.3
   [26aad666] SSMProblems v0.6.1
-  [0bca4576] SciMLBase v3.36.1
+  [0bca4576] SciMLBase v3.37.0
   [19f34311] SciMLJacobianOperators v0.1.16
   [a6db7da4] SciMLLogging v2.0.3
   [c0aeaf25] SciMLOperators v1.24.4
@@ -291,10 +291,10 @@ Environment:
   [f3b207a7] StatsPlots v0.15.8
   [5e0ebb24] Strided v2.6.3
   [4db3bf67] StridedViews v0.5.2
-  [892a3eda] StringManipulation v0.4.5
+  [892a3eda] StringManipulation v0.4.6
   [2efcf032] SymbolicIndexingInterface v0.3.51
   [19f23fe9] SymbolicLimits v1.1.4
-  [d1185830] SymbolicUtils v4.40.2
+  [d1185830] SymbolicUtils v4.40.3
   [0c5d862f] Symbolics v7.32.1
   [ab02a1b2] TableOperations v1.2.0
   [3783bdb8] TableTraits v1.0.1
@@ -318,7 +318,7 @@ Environment:
   [41fe7b60] Unzip v0.2.0
   [d30d5f5c] WeakCacheSets v0.1.0
   [ea10d353] WeakRefStrings v1.4.3
-  [cc8bc4a8] Widgets v0.6.7
+  [cc8bc4a8] Widgets v0.6.8
   [efce3f68] WoodburyMatrices v1.1.0
   [76eceee3] WorkerUtilities v1.6.1
 ⌅ [68821587] Arpack_jll v3.5.2+0
@@ -398,7 +398,7 @@ Environment:
   [a4ae2306] libaom_jll v3.13.3+0
   [0ac62f75] libass_jll v0.17.4+0
   [1183f4f0] libdecor_jll v0.2.2+0
-  [8e53e030] libdrm_jll v2.4.125+1
+  [8e53e030] libdrm_jll v2.4.134+0
   [2db6ffa8] libevdev_jll v1.13.4+0
   [f638f0a6] libfdk_aac_jll v2.0.4+0
   [36db933b] libinput_jll v1.28.1+0
@@ -461,5 +461,5 @@ Environment:
   [8e850ede] nghttp2_jll v1.64.0+1
   [3f19e933] p7zip_jll v17.7.0+0
 Info Packages marked with ⌃ and ⌅ have new versions available. Those with ⌃ may be upgradable, but those with ⌅ are restricted by compatibility constraints from upgrading. To see why use `status --outdated -m`</code></pre></details>You can also download the 
-<a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.2/assets/Manifest.toml</p>">manifest</a> file and the
-<a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.2/assets/Project.toml</p>">project</a> file.</article><nav class="docs-footer"><a class="docs-footer-nextpage" href="methods/">Methods »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 21 July 2026 17:09">Tuesday 21 July 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+<a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.3/assets/Manifest.toml</p>">manifest</a> file and the
+<a href="<p>https://github.com/SciML/DiffEqBayes.jl/tree/gh-pages/v3.14.3/assets/Project.toml</p>">project</a> file.</article><nav class="docs-footer"><a class="docs-footer-nextpage" href="methods/">Methods »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 23 July 2026 20:32">Thursday 23 July 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

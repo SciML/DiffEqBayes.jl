@@ -21,11 +21,11 @@ using StanSample: StanSample, SampleModel, read_samples, stan_sample
 using TransformVariables: TransformVariables, as, asℝ₊
 using TransformedLogDensities: TransformedLogDensities, TransformedLogDensity
 using Turing: Turing, Bernoulli, Beta, BetaBinomial, Binomial, Categorical,
-              Cauchy, Chisq, Distributions, Exponential, Frechet, Gamma,
-              GeneralizedPareto, Gumbel, Hypergeometric, InverseGamma, Laplace,
-              LogNormal, MCMCSerial, MvNormal, NamedDist, NegativeBinomial,
-              Normal, Pareto, Poisson, Rayleigh, TDist, Truncated, Uniform,
-              VonMises, Weibull, logpdf, params, sample
+    Cauchy, Chisq, Distributions, Exponential, Frechet, Gamma,
+    GeneralizedPareto, Gumbel, Hypergeometric, InverseGamma, Laplace,
+    LogNormal, MCMCSerial, MvNormal, NamedDist, NegativeBinomial,
+    Normal, Pareto, Poisson, Rayleigh, TDist, Truncated, Uniform,
+    VonMises, Weibull, logpdf, params, sample
 
 STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
 function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)

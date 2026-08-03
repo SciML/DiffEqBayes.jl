@@ -21,7 +21,7 @@ using StanSample: StanSample, SampleModel, read_samples, stan_sample
 using TransformVariables: TransformVariables, as, asℝ₊
 using TransformedLogDensities: TransformedLogDensities, TransformedLogDensity
 using Turing: Turing, InverseGamma, MCMCSerial, MvNormal, NamedDist, Normal,
-              logpdf, sample
+    logpdf, sample
 STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
 function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)
     return EnsembleProblem(remake(prob.prob; u0 = eltype(p).(prob.prob.u0), p = p))

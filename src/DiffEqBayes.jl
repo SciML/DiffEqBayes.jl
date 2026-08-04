@@ -12,7 +12,7 @@ using LogDensityProblemsAD: LogDensityProblemsAD
 using MacroTools: MacroTools
 using ModelingToolkit: ModelingToolkit, parameters, solve
 using Optim: Optim
-using Parameters: Parameters, @unpack
+using Parameters: Parameters
 using Random: Random
 using RecursiveArrayTools: RecursiveArrayTools
 using Requires: Requires

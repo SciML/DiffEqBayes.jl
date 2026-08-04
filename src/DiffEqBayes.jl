@@ -1,3 +1,4 @@
+
 """
 $(DocStringExtensions.README)
 """
@@ -13,6 +14,11 @@ using MacroTools: MacroTools
 using ModelingToolkit: ModelingToolkit, parameters, solve
 using Optim: Optim
 using Parameters: Parameters
+using Distributions: Distributions, Bernoulli, Beta, BetaBinomial, Binomial,
+    Categorical, Cauchy, Chisq, Exponential, Frechet, Gamma, GeneralizedPareto,
+    Gumbel, Hypergeometric, Laplace, LogNormal, NegativeBinomial, Pareto,
+    Poisson, Rayleigh, TDist, Truncated, Uniform, VonMises, Weibull
+using StatsAPI: params
 using Random: Random
 using RecursiveArrayTools: RecursiveArrayTools
 using Requires: Requires

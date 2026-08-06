@@ -15,6 +15,13 @@ using Pkg
 Pkg.add("DiffEqBayes")
 ```
 
+## Direct Turing.jl Usage
+
+While DiffEqBayes.jl provides a simplified interface, users who want more control
+can use Turing.jl directly with DifferentialEquations.jl. See the
+[Turing.jl Bayesian Differential Equations tutorial](https://turinglang.org/docs/tutorials/bayesian-differential-equations/)
+for a complete guide on writing custom `@model` macros with ODE solvers.
+
 ## Contributing
 
   - Please refer to the

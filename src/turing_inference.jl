@@ -4,6 +4,17 @@
 Run Bayesian parameter inference for a SciML problem with Turing.jl. The problem
 `prob` is solved with `alg` at save times `t`, compared against `data`, and the
 unknown parameters are sampled from `priors`.
+
+Returns the chain produced by `Turing.sample`, which since Turing 0.45 is a
+`FlexiChains.VNChain` of size `(num_samples, n_chains)` rather than the
+`MCMCChains.Chains` returned by earlier versions. Draws for a parameter are read
+with a `VarName` key built from the corresponding entry of `syms`, not with a plain
+symbol:
+
+```julia
+chain = turing_inference(prob, Tsit5(), t, data, priors; syms = [:a])
+mean(chain[@varname(a)])
+```
 """
 function turing_inference(
         prob::SciMLBase.AbstractSciMLProblem,

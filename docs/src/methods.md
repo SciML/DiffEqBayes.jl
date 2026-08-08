@@ -14,7 +14,7 @@ using DiffEqBayes
 stan_inference(prob::DiffEqBase.DEProblem, alg, t, data, priors = nothing;
     stanmodel = nothing, likelihood = Normal, vars = (StanODEData(), InverseGamma(3, 3)), sample_u0 = false,
     solve_kwargs = Dict(), diffeq_string = nothing, sample_kwargs = Dict(),
-    output_format = :mcmcchains, print_summary = true, tmpdir = mktempdir())
+    output_format = :dataframe, print_summary = true, tmpdir = mktempdir())
 ```
 
 `stan_inference` uses [StanSample.jl](https://stanjulia.github.io/StanSample.jl/stable/)
@@ -25,6 +25,8 @@ is required to use this function. Currently `CmdStan v2.34.1` is supported.
 `prob` can be any `DEProblem` with a corresponding `alg` choice. `alg` is a choice between `:rk45` and `:bdf`, the two internal integrators of Stan. `t` is the array of time and `data` is the array where the first dimension (columns) corresponds to the array of system values. `priors` is an array of prior distributions for each parameter, specified via a [Distributions.jl](https://juliastats.github.io/Distributions.jl/dev/) type. `likelihood` is the likelihood distribution to use with the arguments from `vars`, and `vars` is a tuple of priors for the distributions of the likelihood hyperparameters. The special value `StanODEData()` in this tuple denotes the position that the ODE solution takes in the likelihood's parameter list.
 
 `solve_kwargs` is a `Dict` and passed to the stan differential equation solver. `solve_kwargs` may contain `save_idxs`, `reltol`, `abstol`, and `maxiter`. `save_idxs` is documented at [`DifferentialEquations.jl`](https://docs.sciml.ai/DiffEqDocs/stable/basics/common_solver_opts/). `sample_kwargs` are passed to the stan sampler and accepts `num_samples`, `num_warmups`, `num_cpp_chains` , `num_chains`, `num_threads`, `delta`. Please refer to the [stan documentation for more information](https://mc-stan.org/docs/cmdstan-guide/mcmc-intro.html).
+
+`output_format` selects the `StanSample.read_samples` format. It defaults to `:dataframe`, which gives a `DataFrame` with one column per Stan parameter (`theta_1`, `theta_2`, …) and all chains appended. The `:mcmcchains` format is unavailable here: it comes from StanSample's MCMCChains extension, and MCMCChains is not in DiffEqBayes' dependency graph because StanSample caps it below 7 while the rest of the stack requires 7.6 or newer.
 
 ### turing_inference
 
@@ -52,6 +54,13 @@ sampler = Turing.NUTS(0.65)
 parallel_type = MCMCSerial()
 num_samples = 1000
 n_chains = 1
+```
+
+Since Turing 0.45, `turing_inference` returns a `FlexiChains.VNChain` of size `(num_samples, n_chains)` instead of the `MCMCChains.Chains` returned by earlier versions. Parameter draws are indexed by `VarName`, built from the corresponding entry of `syms`, rather than by plain symbol:
+
+```julia
+chain = turing_inference(prob, Tsit5(), t, data, priors; syms = [:a])
+mean(chain[@varname(a)])
 ```
 
 ### dynamichmc_inference

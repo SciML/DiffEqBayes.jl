@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "8d6deadd975ffc63f9ce1122c2e4bf18d0281184"
+project_hash = "a3f70026ecdae316d0ea5ce85f995ee669478370"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "9b38b82a9fe131f3d331a53b7203d9d1a2a4602c"
@@ -52,14 +52,25 @@ version = "5.16.0"
     TensorBoardLogger = "899adc3e-224a-11e9-021f-63837185c80f"
 
 [[deps.AbstractPPL]]
-deps = ["AbstractMCMC", "Accessors", "BangBang", "DensityInterface", "JSON", "LinearAlgebra", "MacroTools", "OrderedCollections", "Random", "StatsBase"]
-git-tree-sha1 = "e7be2de9646c1f61332de9f1e32c7dedf1e00831"
+deps = ["ADTypes", "AbstractMCMC", "Accessors", "BangBang", "DensityInterface", "JSON", "LinearAlgebra", "MacroTools", "OrderedCollections", "Random", "StatsBase"]
+git-tree-sha1 = "31fb177c9952267ac2dc54a44868cb768390e6ef"
 uuid = "7a57a42e-76ec-4ea3-a279-07e840d6d9cf"
-version = "0.14.2"
-weakdeps = ["Distributions"]
+version = "0.15.5"
 
     [deps.AbstractPPL.extensions]
+    AbstractPPLDifferentiationInterfaceExt = ["DifferentiationInterface"]
     AbstractPPLDistributionsExt = ["Distributions", "LinearAlgebra"]
+    AbstractPPLForwardDiffExt = ["ForwardDiff", "DiffResults"]
+    AbstractPPLMooncakeExt = ["Mooncake"]
+    AbstractPPLTestExt = ["Test"]
+
+    [deps.AbstractPPL.weakdeps]
+    DiffResults = "163ba53b-c6d8-5494-b064-1a9d43ac40c5"
+    DifferentiationInterface = "a0c0ee7d-e4b9-4e03-894e-1c5f64a51d63"
+    Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+    ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
+    Mooncake = "da2b9cff-9c12-43a0-ae48-6db2b0edb7d6"
+    Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[deps.AbstractPlutoDingetjes]]
 git-tree-sha1 = "6c3913f4e9bdf6ba3c08041a446fb1332716cbc2"
@@ -154,19 +165,19 @@ weakdeps = ["Libtask"]
     AdvancedPSLibtaskExt = "Libtask"
 
 [[deps.AdvancedVI]]
-deps = ["ADTypes", "Accessors", "ChainRulesCore", "DiffResults", "DifferentiationInterface", "Distributions", "DocStringExtensions", "FillArrays", "Functors", "LinearAlgebra", "LogDensityProblems", "Optimisers", "ProgressMeter", "Random", "StatsBase"]
-git-tree-sha1 = "d69d7d9e1756fff9dd5d3fd26add46ee5ac62be4"
+deps = ["ADTypes", "AbstractPPL", "Accessors", "ChainRulesCore", "DiffResults", "Distributions", "DocStringExtensions", "FillArrays", "Functors", "LinearAlgebra", "LogDensityProblems", "Optimisers", "ProgressMeter", "Random", "StatsBase"]
+git-tree-sha1 = "fc42c29943eae508fd28ec620d1faa4d2c1ce044"
 uuid = "b5ca4192-6429-45e5-a2d9-87aec30a685c"
-version = "0.6.2"
+version = "0.7.0"
 
     [deps.AdvancedVI.extensions]
-    AdvancedVIBijectorsExt = ["Bijectors", "Optimisers"]
+    AdvancedVIDynamicPPLExt = ["DynamicPPL", "Accessors", "Distributions", "LogDensityProblems"]
     AdvancedVIEnzymeExt = ["Enzyme", "ChainRulesCore"]
     AdvancedVIMooncakeExt = ["Mooncake", "ChainRulesCore"]
     AdvancedVIReverseDiffExt = ["ReverseDiff", "ChainRulesCore"]
 
     [deps.AdvancedVI.weakdeps]
-    Bijectors = "76274a88-744f-5084-9051-94815aaf08c4"
+    DynamicPPL = "366bfd00-2699-11ea-058f-f148b4cae6d8"
     Enzyme = "7da242da-08ed-463a-9acd-ee780be4f1d9"
     Mooncake = "da2b9cff-9c12-43a0-ae48-6db2b0edb7d6"
     ReverseDiff = "37e2e3b7-166d-5795-8a7a-e32c996b4267"
@@ -314,13 +325,14 @@ uuid = "e2ed5e7c-b2de-5872-ae92-c73ca462fb04"
 version = "0.2.2"
 
 [[deps.Bijectors]]
-deps = ["AbstractPPL", "ArgCheck", "ChainRulesCore", "ChangesOfVariables", "DifferentiationInterface", "Distributions", "DocStringExtensions", "EnzymeCore", "FillArrays", "Functors", "InverseFunctions", "IrrationalConstants", "LinearAlgebra", "LogExpFunctions", "MappedArrays", "Random", "Reexport", "Roots", "SparseArrays", "Statistics", "Test"]
-git-tree-sha1 = "b425418b2644f826823e8ebd4b68a076e8d8d2ec"
+deps = ["ADTypes", "AbstractPPL", "ArgCheck", "ChangesOfVariables", "Distributions", "DocStringExtensions", "FillArrays", "Functors", "InverseFunctions", "IrrationalConstants", "LinearAlgebra", "LogExpFunctions", "MappedArrays", "Random", "Reexport", "Roots", "SparseArrays", "Statistics", "Test"]
+git-tree-sha1 = "1eddcf2576939a8990350c1d23eb51a14752b7b9"
 uuid = "76274a88-744f-5084-9051-94815aaf08c4"
-version = "0.15.24"
+version = "0.16.2"
 
     [deps.Bijectors.extensions]
-    BijectorsDistributionsADExt = "DistributionsAD"
+    BijectorsChainRulesCoreExt = "ChainRulesCore"
+    BijectorsEnzymeCoreExt = "EnzymeCore"
     BijectorsForwardDiffExt = "ForwardDiff"
     BijectorsLazyArraysExt = "LazyArrays"
     BijectorsMooncakeExt = "Mooncake"
@@ -329,7 +341,8 @@ version = "0.15.24"
 
     [deps.Bijectors.weakdeps]
     ChainRules = "082447d4-558c-5d27-93f4-14fc19e9eca2"
-    DistributionsAD = "ced4e74d-a319-5a8a-b0ac-84af2272839c"
+    ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+    EnzymeCore = "f151be2c-9106-41f4-ab19-57ee4f262869"
     ForwardDiff = "f6369f11-7733-5829-9624-2563aa707210"
     LazyArrays = "5078a376-72f3-5289-bfd5-ec5146d43c02"
     Mooncake = "da2b9cff-9c12-43a0-ae48-6db2b0edb7d6"
@@ -656,7 +669,7 @@ version = "7.13.0"
 deps = ["DiffEqBase", "DiffResults", "Distances", "Distributed", "Distributions", "DocStringExtensions", "DynamicHMC", "ForwardDiff", "LinearAlgebra", "LogDensityProblemsAD", "MacroTools", "Missings", "ModelingToolkit", "Optim", "PDMats", "Parameters", "Random", "RecursiveArrayTools", "Reexport", "Requires", "SciMLBase", "SciMLStructures", "StanSample", "StatsAPI", "TransformVariables", "TransformedLogDensities", "Turing"]
 path = "/home/runner/_work/DiffEqBayes.jl/DiffEqBayes.jl"
 uuid = "ebbdde9d-f333-5424-9be2-dbf1e9acfb5e"
-version = "3.14.4"
+version = "3.14.5"
 
 [[deps.DiffEqCallbacks]]
 deps = ["ConcreteStructs", "DataStructures", "DiffEqBase", "DifferentiationInterface", "LinearAlgebra", "Markdown", "PrecompileTools", "RecipesBase", "RecursiveArrayTools", "SciMLBase", "StaticArraysCore"]
@@ -835,10 +848,10 @@ uuid = "bbc10e6e-7c05-544b-b16e-64fede858acb"
 version = "3.6.1"
 
 [[deps.DynamicPPL]]
-deps = ["ADTypes", "AbstractMCMC", "AbstractPPL", "Accessors", "BangBang", "Bijectors", "Chairmarks", "Compat", "ConstructionBase", "DifferentiationInterface", "Distributions", "DocStringExtensions", "FillArrays", "InteractiveUtils", "LinearAlgebra", "LogDensityProblems", "MacroTools", "OrderedCollections", "PartitionedDistributions", "PrecompileTools", "Preferences", "Printf", "Random", "Statistics", "Test"]
-git-tree-sha1 = "ec00e9fd60e861925780a4d0bd001862747a8a73"
+deps = ["ADTypes", "AbstractMCMC", "AbstractPPL", "Accessors", "BangBang", "Bijectors", "Chairmarks", "Compat", "ConstructionBase", "Distributions", "DocStringExtensions", "FillArrays", "InteractiveUtils", "LinearAlgebra", "LogDensityProblems", "MacroTools", "OrderedCollections", "PartitionedDistributions", "PrecompileTools", "Preferences", "Printf", "Random", "Statistics", "Test"]
+git-tree-sha1 = "2f879da24f01b7ee525dac2292654d2fc2b19dd8"
 uuid = "366bfd00-2699-11ea-058f-f148b4cae6d8"
-version = "0.41.8"
+version = "0.42.4"
 
     [deps.DynamicPPL.extensions]
     DynamicPPLComponentArraysExt = ["ComponentArrays"]
@@ -846,7 +859,7 @@ version = "0.41.8"
     DynamicPPLForwardDiffExt = ["ForwardDiff"]
     DynamicPPLMCMCChainsExt = ["MCMCChains"]
     DynamicPPLMarginalLogDensitiesExt = ["MarginalLogDensities"]
-    DynamicPPLMooncakeExt = ["Mooncake", "DifferentiationInterface"]
+    DynamicPPLMooncakeExt = ["Mooncake"]
     DynamicPPLReverseDiffExt = ["ReverseDiff"]
 
     [deps.DynamicPPL.weakdeps]
@@ -1812,10 +1825,10 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 version = "1.11.0"
 
 [[deps.ModelingToolkit]]
-deps = ["ADTypes", "BipartiteGraphs", "BlockArrays", "Combinatorics", "CommonSolve", "ConstructionBase", "DataStructures", "DiffEqBase", "DifferentiationInterface", "DocStringExtensions", "FillArrays", "ForwardDiff", "Graphs", "InteractiveUtils", "Libdl", "LinearAlgebra", "ModelingToolkitBase", "ModelingToolkitTearing", "Moshi", "OffsetArrays", "OrderedCollections", "PreallocationTools", "PrecompileTools", "REPL", "Reexport", "RuntimeGeneratedFunctions", "SCCNonlinearSolve", "SciMLBase", "SciMLPublic", "SciMLStructures", "Serialization", "Setfield", "SimpleNonlinearSolve", "SparseArrays", "StateSelection", "StaticArrays", "SymbolicIndexingInterface", "SymbolicUtils", "Symbolics", "UnPack"]
-git-tree-sha1 = "af9a90272b3105fdb6c61d01587a3f75af6e8845"
+deps = ["ADTypes", "BipartiteGraphs", "BlockArrays", "Combinatorics", "CommonSolve", "ConstructionBase", "DataStructures", "DiffEqBase", "DifferentiationInterface", "DocStringExtensions", "FillArrays", "ForwardDiff", "Graphs", "InteractiveUtils", "Libdl", "LinearAlgebra", "ModelingToolkitBase", "ModelingToolkitTearing", "Moshi", "OffsetArrays", "OrderedCollections", "PreallocationTools", "PrecompileTools", "REPL", "Reexport", "RuntimeGeneratedFunctions", "SCCNonlinearSolve", "SciMLBase", "SciMLPublic", "SciMLStructures", "Serialization", "Setfield", "SimpleNonlinearSolve", "SparseArrays", "StateSelection", "StaticArrays", "SymbolicIndexingInterface", "SymbolicUtils", "Symbolics", "TermInterface", "UnPack"]
+git-tree-sha1 = "8b42e7560f568b4f01d27f8a493142c7263f84aa"
 uuid = "961ee093-0014-501f-94e3-6117800e7a78"
-version = "11.38.1"
+version = "11.38.2"
 
     [deps.ModelingToolkit.extensions]
     MTKFMIExt = "FMIImport"
@@ -1831,9 +1844,9 @@ version = "11.38.1"
 
 [[deps.ModelingToolkitBase]]
 deps = ["ADTypes", "AbstractTrees", "ArrayInterface", "BandedMatrices", "BipartiteGraphs", "BlockArrays", "Combinatorics", "CommonSolve", "Compat", "ConstructionBase", "DataStructures", "DiffEqBase", "DiffEqCallbacks", "DiffRules", "DifferentiationInterface", "DocStringExtensions", "DomainSets", "EnumX", "EnzymeCore", "ExprTools", "FillArrays", "ForwardDiff", "FunctionWrappers", "FunctionWrappersWrappers", "Graphs", "ImplicitDiscreteSolve", "InteractiveUtils", "JumpProcesses", "Libdl", "LinearAlgebra", "Moshi", "NaNMath", "OffsetArrays", "OrderedCollections", "PreallocationTools", "PrecompileTools", "Printf", "REPL", "Random", "ReadOnlyDicts", "RecursiveArrayTools", "Reexport", "RuntimeGeneratedFunctions", "SCCNonlinearSolve", "SciMLBase", "SciMLPublic", "SciMLStructures", "Serialization", "Setfield", "SimpleNonlinearSolve", "SparseArrays", "SpecialFunctions", "StaticArrays", "SymbolicIndexingInterface", "SymbolicUtils", "Symbolics", "TaskLocalValues", "UnPack"]
-git-tree-sha1 = "13f0c665e199eea62bb3509a216c658e8f57ab57"
+git-tree-sha1 = "817dd850b0ea9205e691457cdbfb8e3df3b2991c"
 uuid = "7771a370-6774-4173-bd38-47e70ca0b839"
-version = "1.60.1"
+version = "1.61.0"
 
     [deps.ModelingToolkitBase.extensions]
     MTKBifurcationKitExt = "BifurcationKit"
@@ -2281,9 +2294,9 @@ version = "2.8.7"
 
 [[deps.PartitionedDistributions]]
 deps = ["Distributions", "FillArrays", "InvertedIndices", "IrrationalConstants", "LinearAlgebra", "LogExpFunctions", "PDMats", "SpecialFunctions", "StatsBase"]
-git-tree-sha1 = "5ea8f2735c0daeba35af6b879487e98f4e797093"
+git-tree-sha1 = "621944b594bec8df388aeecd2d694824cbe71ecd"
 uuid = "569bd051-8d7b-4221-bcb8-d78512b5866a"
-version = "0.0.1"
+version = "0.1.0"
 
 [[deps.Pixman_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "LLVMOpenMP_jll", "Libdl"]
@@ -2382,9 +2395,9 @@ version = "1.5.2"
 
 [[deps.PrettyTables]]
 deps = ["Crayons", "LaTeXStrings", "Markdown", "PrecompileTools", "Printf", "REPL", "Reexport", "StringManipulation", "Tables"]
-git-tree-sha1 = "ca9385c2f2c93a9491c6c53d31e9c237fe21b232"
+git-tree-sha1 = "4ac881f5432bd93463a41767a814a45245be22b6"
 uuid = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
-version = "3.4.5"
+version = "3.4.6"
 
     [deps.PrettyTables.extensions]
     PrettyTablesExcelExt = "XLSX"
@@ -3249,13 +3262,14 @@ uuid = "9d95972d-f1c8-5527-a6e0-b4b365fa01f6"
 version = "1.6.0"
 
 [[deps.Turing]]
-deps = ["ADTypes", "AbstractMCMC", "AbstractPPL", "Accessors", "AdvancedHMC", "AdvancedMH", "AdvancedPS", "AdvancedVI", "BangBang", "Bijectors", "Compat", "DataStructures", "DifferentiationInterface", "Distributions", "DocStringExtensions", "DynamicPPL", "EllipticalSliceSampling", "FlexiChains", "ForwardDiff", "Libtask", "LinearAlgebra", "LogDensityProblems", "Optimization", "OptimizationOptimJL", "OrderedCollections", "Printf", "Random", "Reexport", "SciMLBase", "SpecialFunctions", "Statistics", "StatsAPI", "StatsBase", "StatsFuns"]
-git-tree-sha1 = "96cfabe16a96096d4864df1760187ee8814c17bf"
+deps = ["ADTypes", "AbstractMCMC", "AbstractPPL", "Accessors", "AdvancedHMC", "AdvancedMH", "AdvancedPS", "AdvancedVI", "BangBang", "Bijectors", "Compat", "DataStructures", "Distributions", "DocStringExtensions", "DynamicPPL", "EllipticalSliceSampling", "FlexiChains", "ForwardDiff", "Libtask", "LinearAlgebra", "LogDensityProblems", "Optimization", "OptimizationOptimJL", "OrderedCollections", "Printf", "Random", "Reexport", "SciMLBase", "SpecialFunctions", "Statistics", "StatsAPI", "StatsBase", "StatsFuns"]
+git-tree-sha1 = "36243b86c346ac2329f931b31d00c0f147f77381"
 uuid = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
-version = "0.45.0"
+version = "0.46.0"
 
     [deps.Turing.extensions]
     TuringDynamicHMCExt = "DynamicHMC"
+    TuringMCMCChainsExt = "MCMCChains"
 
     [deps.Turing.weakdeps]
     DynamicHMC = "bbc10e6e-7c05-544b-b16e-64fede858acb"

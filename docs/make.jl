@@ -11,9 +11,7 @@ makedocs(
     sitename = "DiffEqBayes.jl",
     authors = "Chris Rackauckas, Vaibhav Kumar Dixit et al.",
     clean = true,
-    doctest = false,
     modules = [DiffEqBayes],
-    warnonly = true,
     format = Documenter.HTML(
         assets = ["assets/favicon.ico"],
         canonical = "https://docs.sciml.ai/DiffEqBayes/stable/"

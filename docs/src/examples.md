@@ -37,7 +37,7 @@ data = convert(Array, randomized)
 
 ### Stan
 
-```@example all
+```julia
 using StanSample #required for using the Stan backend
 bayesian_result_stan = stan_inference(prob1, :rk45, t, data, priors)
 ```

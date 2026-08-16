@@ -13,7 +13,7 @@ unknown parameters are sampled from `priors`.
 - `data`: observations corresponding to `t`.
 - `priors`: an iterable of priors for the model parameters.
 
-# Keyword Arguments
+# Keywords
 
 - `likelihood_dist_priors`: priors for the likelihood scale parameters. The default
   is `[InverseGamma(2, 3)]`.

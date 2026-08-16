@@ -5,12 +5,19 @@ Result returned by [`stan_inference`](@ref) after a successful Stan run.
 
 # Fields
 
-- `model`: the `StanSample.SampleModel` used for sampling.
-- `return_code`: the result returned by `StanSample.stan_sample`.
-- `chains`: the samples returned by `StanSample.read_samples`, using the requested
+- `model::M`: the `StanSample.SampleModel` used for sampling.
+- `return_code::R`: the result returned by `StanSample.stan_sample`.
+- `chains::C`: the samples returned by `StanSample.read_samples`, using the requested
   `output_format`.
 
 The result displays the contents of `chains` when printed with the `text/plain` MIME type.
+
+# Examples
+
+```julia
+result = StanResult(nothing, 0, (;))
+result.chains
+```
 """
 struct StanResult{M, R, C}
     model::M
@@ -28,6 +35,14 @@ end
 Marker used in the `vars` argument of [`stan_inference`](@ref) to include the simulated
 ODE data in the likelihood tuple passed to the Stan model. Other entries in `vars` are
 interpreted as prior distributions for likelihood parameters.
+
+# Examples
+
+```julia
+using Distributions: Normal
+
+vars = (StanODEData(), Normal(0, 1))
+```
 """
 struct StanODEData end
 
@@ -97,7 +112,7 @@ to provide the already-generated differential-equation function.
 - `priors`: an iterable of prior distributions for the model parameters, or `nothing`
   to use Stan's `normal(0, 1)` prior for every parameter.
 
-# Keyword Arguments
+# Keywords
 
 - `stanmodel`: an existing `StanSample.SampleModel`, or `nothing` to generate one.
 - `likelihood`: the likelihood distribution type or value understood by `stan_string`.
@@ -126,7 +141,7 @@ Returns a [`StanResult`](@ref) containing the model, Stan return code, and sampl
 chains when sampling succeeds. If Stan reports a failure, the error object from the
 Stan return code is returned instead.
 
-# Errors
+# Throws
 
 Throws an error if a generated model is requested with an unsupported `alg`.
 

@@ -97,7 +97,7 @@ unconstrained space, and passed to `DynamicHMC.mcmc_with_warmup`.
 - `parameter_transformations`: a `TransformVariables` transformation mapping an
   unconstrained real vector to the valid parameter space.
 
-# Keyword Arguments
+# Keywords
 
 - `σ_priors`: priors for the noise scale of each observed component. The default is
   `Normal(0, 5)` for every component.

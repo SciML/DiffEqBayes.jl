@@ -1,3 +1,24 @@
+"""
+    StanResult(model, return_code, chains)
+
+Result returned by [`stan_inference`](@ref) after a successful Stan run.
+
+# Fields
+
+- `model::M`: the `StanSample.SampleModel` used for sampling.
+- `return_code::R`: the result returned by `StanSample.stan_sample`.
+- `chains::C`: the samples returned by `StanSample.read_samples`, using the requested
+  `output_format`.
+
+The result displays the contents of `chains` when printed with the `text/plain` MIME type.
+
+# Examples
+
+```julia
+result = StanResult(nothing, 0, (;))
+result.chains
+```
+"""
 struct StanResult{M, R, C}
     model::M
     return_code::R
@@ -8,6 +29,21 @@ function Base.show(io::IO, mime::MIME"text/plain", res::StanResult)
     return show(io, mime, res.chains)
 end
 
+"""
+    StanODEData()
+
+Marker used in the `vars` argument of [`stan_inference`](@ref) to include the simulated
+ODE data in the likelihood tuple passed to the Stan model. Other entries in `vars` are
+interpreted as prior distributions for likelihood parameters.
+
+# Examples
+
+```julia
+using Distributions: Normal
+
+vars = (StanODEData(), Normal(0, 1))
+```
+"""
 struct StanODEData end
 
 function generate_priors(n::Integer, priors)
@@ -57,9 +93,67 @@ end
 """
     stan_inference(prob, alg, t, data, priors = nothing; kwargs...)
 
-Run Bayesian parameter inference for a SciML problem with StanSample.jl. The
-problem `prob` is translated to Stan's ODE interface, solved with `alg`, and
-sampled against observations `data` at save times `t`.
+Run Bayesian parameter inference for a SciML problem with StanSample.jl.
+
+When `stanmodel` is omitted, `prob` is translated to Stan's ODE interface and a Stan
+model is generated. The model is then sampled against `data` at the save times `t`.
+When `stanmodel` is supplied, it is sampled directly and `diffeq_string` can be used
+to provide the already-generated differential-equation function.
+
+# Arguments
+
+- `prob`: an `AbstractSciMLProblem` containing the initial condition, parameters, and
+  time span used by the generated Stan model.
+- `alg`: one of `:adams`, `:rk45`, or `:bdf` when a model is generated. These select
+  Stan's corresponding ODE integrators.
+- `t`: the time points at which observations are available.
+- `data`: an array whose columns correspond to the entries of `t` and whose rows
+  correspond to the components of the problem state.
+- `priors`: an iterable of prior distributions for the model parameters, or `nothing`
+  to use Stan's `normal(0, 1)` prior for every parameter.
+
+# Keywords
+
+- `stanmodel`: an existing `StanSample.SampleModel`, or `nothing` to generate one.
+- `likelihood`: the likelihood distribution type or value understood by `stan_string`.
+  The default is `Normal`.
+- `vars`: a tuple describing the likelihood parameters. Use `StanODEData()` for the
+  simulated data and distributions for additional likelihood hyperparameters.
+- `sample_u0`: whether the selected initial-condition entries should be sampled as
+  parameters. The default is `false`.
+- `solve_kwargs`: a dictionary of Stan ODE options. Supported keys are `:save_idxs`,
+  `:reltol`, `:abstol`, and `:maxiter`.
+- `diffeq_string`: a pre-generated Stan differential-equation function, or `nothing`
+  to generate it from `prob` with ModelingToolkit.
+- `sample_kwargs`: a dictionary of Stan sampling options. Supported keys are
+  `:num_samples`, `:num_warmups`, `:num_cpp_chains`, `:num_chains`, `:num_threads`,
+  and `:delta`.
+- `output_format`: the format passed to `StanSample.read_samples`. The default is
+  `:dataframe`.
+- `print_summary`: whether StanSample prints the sampling summary. The default is
+  `true`.
+- `tmpdir`: directory used for generated Stan files and build artifacts. The default
+  is a new temporary directory.
+
+# Returns
+
+Returns a [`StanResult`](@ref) containing the model, Stan return code, and sampled
+chains when sampling succeeds. If Stan reports a failure, the error object from the
+Stan return code is returned instead.
+
+# Throws
+
+Throws an error if a generated model is requested with an unsupported `alg`.
+
+# Examples
+
+```julia
+using DiffEqBayes
+
+result = stan_inference(prob, :rk45, times, observations, priors;
+    vars = (StanODEData(),))
+result.chains
+```
 """
 function stan_inference(
         prob::SciMLBase.AbstractSciMLProblem,

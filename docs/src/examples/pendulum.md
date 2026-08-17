@@ -123,7 +123,7 @@ to get better understanding of the performance.
     syms = [:omega, :L], sample_args = (num_samples = 10_000,))
 ```
 
-```@example pendulum
+```julia
 @btime bayesian_result = stan_inference(prob1, :rk45, t, data, priors;
     sample_kwargs = Dict(:num_samples => 10_000), print_summary = false)
 ```

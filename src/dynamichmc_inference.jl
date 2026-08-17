@@ -25,10 +25,13 @@ Base.@kwdef struct DynamicHMCPosterior{TA, TP, TD, TT, TR, TS, TK, TI, TRe}
     one for each variable.
     """
     σ_priors::TS
-    "Keyword arguments passed on the the ODE solver `solve`."
+    "Keyword arguments passed on to the ODE solver `solve`."
     solve_kwargs::TK
+    "Whether the initial-condition entries selected by `save_idxs` are sampled."
     sample_u0::Bool
+    "Indices of the state selected for observations and optional initial-condition sampling."
     save_idxs::TI
+    "Callable that reconstructs the parameter container expected by `problem`."
     repack::TRe
 end
 
@@ -77,29 +80,57 @@ end
 
 """
 $(SIGNATURES)
-Run MCMC for an ODE problem. Return a `NamedTuple`, which is similar to the one returned by
-`DynamicHMC.mcmc_with_warmup`, with an added field `posterior` which contains a vector of
-posterior values (transformed from `ℝⁿ`).
+Run MCMC for an ODE problem with DynamicHMC.jl.
+
+The ODE is solved at the times in `t` for each sampled parameter vector. The resulting
+likelihood is combined with the parameter and noise-scale priors, transformed to an
+unconstrained space, and passed to `DynamicHMC.mcmc_with_warmup`.
 
 # Arguments
 
-  - `problem` is the ODE problem
-  - `algorithm` is the ODE algorithm
-  - `t` is the time values at which the solution is compared to `data`
-  - `data` is a matrix of data, with one column for each element in `t`
-  - `parameter_priors` is an iterable with the length of the number of paramers, and is used
-    as a prior on it, should have comparable structure.
-  - `parameter_transformations`: a `TransformVariables` transformation to mapping `ℝⁿ` to the
-    vector of valid parameters.
+- `problem`: an `AbstractSciMLProblem` to solve.
+- `algorithm`: the ODE algorithm passed to `solve`.
+- `t`: the time values at which the solution is compared with `data`.
+- `data`: a matrix with one column for each value in `t`.
+- `parameter_priors`: an iterable of parameter priors with one entry for each sampled
+  parameter.
+- `parameter_transformations`: a `TransformVariables` transformation mapping an
+  unconstrained real vector to the valid parameter space.
 
-# Keyword arguments
+# Keywords
 
-  - `rng` is the random number generator used for MCMC. Defaults to the global one.
-  - `num_samples` is the number of MCMC draws (default: 1000)
-  - `AD_gradient_kind` is passed on to `LogDensityProblems.ADgradient`, make sure to `import`
-    the corresponding library.
-  - `solve_kwargs` is passed on to `solve`
-  - `mcmc_kwargs` are passed on as keyword arguments to `DynamicHMC.mcmc_with_warmup`
+- `σ_priors`: priors for the noise scale of each observed component. The default is
+  `Normal(0, 5)` for every component.
+- `sample_u0`: whether the selected initial-condition entries are sampled. The default
+  is `false`.
+- `rng`: random number generator used for MCMC. The default is `Random.default_rng()`.
+- `num_samples`: number of MCMC draws. The default is `1000`.
+- `AD_gradient_kind`: gradient implementation passed to `LogDensityProblemsAD.ADgradient`.
+  The default is `Val(:ForwardDiff)`; load the corresponding AD package when changing it.
+- `save_idxs`: state indices used for observations and initial-condition sampling, or
+  `nothing` to use every state component.
+- `solve_kwargs`: keyword arguments forwarded to `solve`.
+- `mcmc_kwargs`: keyword arguments forwarded to
+  `DynamicHMC.mcmc_with_warmup`. Its `initialization.q` vector must have one entry for
+  every sampled parameter and noise scale.
+
+# Returns
+
+Returns a `NamedTuple` containing the fields returned by
+`DynamicHMC.mcmc_with_warmup` and an additional `posterior` field. `posterior` contains
+the sampled parameter vectors transformed back to the constrained parameter space.
+
+# Examples
+
+```julia
+using DiffEqBayes
+using TransformVariables: as, asℝ₊
+
+posterior = dynamichmc_inference(
+    prob, Tsit5(), times, observations, priors,
+    as(Vector, asℝ₊, length(priors)); num_samples = 100
+)
+```
 """
 function dynamichmc_inference(
         problem::SciMLBase.AbstractSciMLProblem, algorithm, t, data,

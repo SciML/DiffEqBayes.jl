@@ -5,11 +5,36 @@ Run Bayesian parameter inference for a SciML problem with Turing.jl. The problem
 `prob` is solved with `alg` at save times `t`, compared against `data`, and the
 unknown parameters are sampled from `priors`.
 
-Returns the chain produced by `Turing.sample`, which since Turing 0.45 is a
-`FlexiChains.VNChain` of size `(num_samples, n_chains)` rather than the
-`MCMCChains.Chains` returned by earlier versions. Draws for a parameter are read
-with a `VarName` key built from the corresponding entry of `syms`, not with a plain
-symbol:
+# Arguments
+
+- `prob`: an `AbstractSciMLProblem` to solve for each parameter draw.
+- `alg`: the solver passed to `solve`.
+- `t`: save times at which the solution is compared with `data`.
+- `data`: observations corresponding to `t`.
+- `priors`: an iterable of priors for the model parameters.
+
+# Keywords
+
+- `likelihood_dist_priors`: priors for the likelihood scale parameters. The default
+  is `[InverseGamma(2, 3)]`.
+- `likelihood`: callable returning the observation distribution from `(u, p, t, σ)`.
+- `syms`: Turing variable names for the sampled parameters. The default creates one
+  name per entry in `priors`.
+- `sample_u0`: whether the initial condition is included in the sampled parameters.
+- `progress`: whether Turing displays sampling progress.
+- `solve_kwargs`: dictionary of keyword arguments forwarded to `solve`; `:save_idxs`
+  defaults to `nothing`.
+- `sample_args`: named arguments controlling Turing's sampler, with defaults of
+  `NUTS(0.65)`, `MCMCSerial()`, `1000` samples, and one chain.
+- `sample_kwargs`: additional keyword arguments forwarded to `Turing.sample`.
+
+# Returns
+
+Returns the chain produced by `Turing.sample`. With current Turing releases this is a
+`FlexiChains.VNChain` of size `(num_samples, n_chains)` rather than the older
+`MCMCChains.Chains`. Draws are indexed using the `VarName` values in `syms`.
+
+# Examples
 
 ```julia
 chain = turing_inference(prob, Tsit5(), t, data, priors; syms = [:a])

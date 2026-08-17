@@ -38,5 +38,5 @@ include("stan_string.jl")
 include("stan_inference.jl")
 include("dynamichmc_inference.jl")
 
-export turing_inference, stan_inference, dynamichmc_inference
+export turing_inference, stan_inference, dynamichmc_inference, StanODEData, StanResult
 end # module

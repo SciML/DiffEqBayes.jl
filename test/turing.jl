@@ -1,5 +1,6 @@
 using DiffEqBayes, OrdinaryDiffEq, ParameterizedFunctions, RecursiveArrayTools
 using Test, Distributions, SteadyStateDiffEq
+using SciMLBase: SteadyStateProblem
 using Turing, ADTypes
 
 println("One parameter case")

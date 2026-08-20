@@ -13,6 +13,7 @@ using MacroTools: MacroTools
 using ModelingToolkit: ModelingToolkit, parameters, solve
 using Optim: Optim
 using Parameters: Parameters
+using PrecompileTools: @compile_workload, @setup_workload
 using Distributions: Distributions, Bernoulli, Beta, BetaBinomial, Binomial,
     Categorical, Cauchy, Chisq, Exponential, Frechet, Gamma, GeneralizedPareto,
     Gumbel, Hypergeometric, Laplace, LogNormal, NegativeBinomial, Pareto,
@@ -37,6 +38,7 @@ include("turing_inference.jl")
 include("stan_string.jl")
 include("stan_inference.jl")
 include("dynamichmc_inference.jl")
+include("precompile.jl")
 
 export turing_inference, stan_inference, dynamichmc_inference, StanODEData, StanResult
 end # module

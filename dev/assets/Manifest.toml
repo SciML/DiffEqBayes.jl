@@ -669,7 +669,7 @@ version = "7.18.1"
 deps = ["DiffEqBase", "DiffResults", "Distances", "Distributed", "Distributions", "DocStringExtensions", "DynamicHMC", "ForwardDiff", "LinearAlgebra", "LogDensityProblemsAD", "MacroTools", "Missings", "ModelingToolkit", "Optim", "PDMats", "Parameters", "PrecompileTools", "Random", "RecursiveArrayTools", "Reexport", "Requires", "SciMLBase", "SciMLStructures", "StanSample", "StatsAPI", "TransformVariables", "TransformedLogDensities", "Turing"]
 path = "/home/runner/_work/DiffEqBayes.jl/DiffEqBayes.jl"
 uuid = "ebbdde9d-f333-5424-9be2-dbf1e9acfb5e"
-version = "3.15.0"
+version = "3.16.0"
 
 [[deps.DiffEqCallbacks]]
 deps = ["ConcreteStructs", "DataStructures", "DiffEqBase", "DifferentiationInterface", "LinearAlgebra", "Markdown", "PrecompileTools", "RecipesBase", "RecursiveArrayTools", "SciMLBase", "StaticArraysCore"]

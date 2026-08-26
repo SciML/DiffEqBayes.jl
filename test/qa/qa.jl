@@ -8,7 +8,6 @@ run_qa(
             # Re-exports surfaced through ModelingToolkit (Base.which points at the
             # defining package, not the module DiffEqBayes accesses them from):
             ignore = (
-                :StanTarget,   # owner Symbolics, re-exported by ModelingToolkit
                 :get_iv,       # owner ModelingToolkitBase, re-exported by ModelingToolkit
             ),
         ),

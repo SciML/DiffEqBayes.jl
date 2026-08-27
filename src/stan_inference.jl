@@ -318,7 +318,7 @@ function stan_inference(
                 ModelingToolkit.get_iv(sys);
                 expression = Val{true},
                 fname = :sho,
-                target = ModelingToolkit.StanTarget()
+                target = Symbolics.StanTarget()
             )
         end
 

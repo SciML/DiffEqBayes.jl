@@ -11,6 +11,7 @@ using LinearAlgebra: LinearAlgebra, Diagonal
 using LogDensityProblemsAD: LogDensityProblemsAD
 using MacroTools: MacroTools
 using ModelingToolkit: ModelingToolkit, parameters, solve
+using Symbolics: Symbolics
 using Optim: Optim
 using Parameters: Parameters
 using PrecompileTools: @compile_workload, @setup_workload

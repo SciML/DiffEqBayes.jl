@@ -7,6 +7,7 @@ using DiffEqBase: DiffEqBase, EnsembleProblem, SciMLBase, remake
 using Distances: Distances
 using DocStringExtensions: DocStringExtensions, FIELDS, SIGNATURES, TYPEDEF
 using DynamicHMC: DynamicHMC, mcmc_with_warmup
+using DynamicPPL: DynamicPPL, NoTemplate, VarName, tilde_assume!!
 using LinearAlgebra: LinearAlgebra, Diagonal
 using LogDensityProblemsAD: LogDensityProblemsAD
 using MacroTools: MacroTools
@@ -27,7 +28,7 @@ using SciMLStructures: SciMLStructures
 using StanSample: StanSample, SampleModel, read_samples, stan_sample
 using TransformVariables: TransformVariables, as, asℝ₊
 using TransformedLogDensities: TransformedLogDensities, TransformedLogDensity
-using Turing: Turing, InverseGamma, MCMCSerial, MvNormal, NamedDist, Normal,
+using Turing: Turing, InverseGamma, MCMCSerial, MvNormal, Normal,
     logpdf, sample
 STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
 function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)

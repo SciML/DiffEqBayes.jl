@@ -16,7 +16,7 @@ TransformVariables = "84d833dd-6860-57f9-a1a7-6da5db126cff"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
 [sources]
-DiffEqBayes = {path = "/home/runner/_work/DiffEqBayes.jl/DiffEqBayes.jl"}
+DiffEqBayes = {path = "/home/runner/work/DiffEqBayes.jl/DiffEqBayes.jl"}
 
 [compat]
 BenchmarkTools = "1"
@@ -31,5 +31,6 @@ RecursiveArrayTools = "4.3"
 StanSample = "7"
 StatsBase = "0.33, 0.34"
 StatsPlots = "0.15"
+Test = "< 0.0.1, 1"
 TransformVariables = "0.8"
-Turing = "0.45, 0.46, 0.47, 0.48"
+Turing = "0.45, 0.46, 0.47, 0.48, 0.49"

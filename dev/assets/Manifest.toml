@@ -2,7 +2,7 @@
 
 julia_version = "1.13.0"
 manifest_format = "2.1"
-project_hash = "13e2134ba5e302af43f790378a6404796f35f08a"
+project_hash = "9de41836e4f40c1b71fb9e76da1e0e4e201e86cb"
 
 [[deps.ADTypes]]
 deps = ["PrecompileTools"]
@@ -715,9 +715,9 @@ version = "7.21.1"
 
 [[deps.DiffEqBayes]]
 deps = ["DiffEqBase", "DiffResults", "Distances", "Distributed", "Distributions", "DocStringExtensions", "DynamicHMC", "DynamicPPL", "ForwardDiff", "LinearAlgebra", "LogDensityProblemsAD", "MacroTools", "Missings", "ModelingToolkit", "Optim", "PDMats", "Parameters", "PrecompileTools", "Random", "RecursiveArrayTools", "Reexport", "Requires", "SciMLBase", "SciMLStructures", "StanSample", "StatsAPI", "Symbolics", "TransformVariables", "TransformedLogDensities", "Turing"]
-path = "/home/runner/_work/DiffEqBayes.jl/DiffEqBayes.jl"
+path = "/home/runner/work/DiffEqBayes.jl/DiffEqBayes.jl"
 uuid = "ebbdde9d-f333-5424-9be2-dbf1e9acfb5e"
-version = "3.16.1"
+version = "3.16.2"
 
 [[deps.DiffEqCallbacks]]
 deps = ["ConcreteStructs", "DataStructures", "DiffEqBase", "DifferentiationInterface", "LinearAlgebra", "Markdown", "PrecompileTools", "RecipesBase", "RecursiveArrayTools", "SciMLBase", "StaticArraysCore"]
@@ -3552,10 +3552,10 @@ version = "1.6.0"
 
 [[deps.Turing]]
 deps = ["ADTypes", "AbstractMCMC", "AbstractPPL", "Accessors", "AdvancedHMC", "AdvancedMH", "AdvancedVI", "BangBang", "Bijectors", "Compat", "DataStructures", "Distributions", "DocStringExtensions", "DynamicPPL", "EllipticalSliceSampling", "FlexiChains", "ForwardDiff", "Libtask", "LinearAlgebra", "LogDensityProblems", "Optimization", "OptimizationOptimJL", "OrderedCollections", "Printf", "Random", "Random123", "Reexport", "SciMLBase", "Statistics", "StatsAPI", "StatsBase", "StatsFuns"]
-git-tree-sha1 = "6ae6ea2c2c83718587ba504f78235e460cce9551"
+git-tree-sha1 = "92b456a228ba157b0d8ee4309f82769e6f672671"
 registries = "General"
 uuid = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
-version = "0.48.0"
+version = "0.49.0"
 
     [deps.Turing.extensions]
     TuringDistributionsExt = "Distributions"

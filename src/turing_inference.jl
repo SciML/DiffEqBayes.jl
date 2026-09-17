@@ -1,3 +1,6 @@
+_as_varname(name::Symbol) = VarName{name}()
+_as_varname(vn::VarName) = vn
+
 """
     turing_inference(prob, alg, t, data, priors; kwargs...)
 
@@ -59,6 +62,7 @@ function turing_inference(
         sample_kwargs = Dict() # accept Turing.jl sample kwargs
     )
     N = length(priors)
+    param_vns = map(_as_varname, syms)
     # default args are updated with user supplied args
     solve_kwargs = merge(Dict(:save_idxs => nothing), solve_kwargs)
     sample_args = (;
@@ -79,11 +83,12 @@ function turing_inference(
     Turing.@model function infer(x, ::Type{T} = Float64) where {T <: Real}
         theta = Vector{T}(undef, length(priors))
         for i in 1:length(priors)
-            # Sample into a scalar bound to the user-supplied name (via `NamedDist`)
-            # and store it explicitly: as of DynamicPPL 0.41 the `~` assignment uses
-            # the resolved (renamed) varname's optic, so `theta[i] ~ NamedDist(d, :a)`
-            # would overwrite the whole `theta` with a scalar instead of element `i`.
-            param ~ NamedDist(priors[i], syms[i])
+            # `~` cannot take a varname known only at run time, and DynamicPPL removed
+            # `NamedDist` in 0.42.13, so call the tilde pipeline as `@model` would for a
+            # bare-symbol left-hand side, then store the draw into `theta[i]` by hand.
+            param, __varinfo__ = tilde_assume!!(
+                __model__.context, priors[i], param_vns[i], NoTemplate(), __varinfo__
+            )
             theta[i] = param
         end
         σ = Vector{T}(undef, length(likelihood_dist_priors))

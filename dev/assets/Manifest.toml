@@ -2,7 +2,7 @@
 
 julia_version = "1.13.0"
 manifest_format = "2.1"
-project_hash = "9de41836e4f40c1b71fb9e76da1e0e4e201e86cb"
+project_hash = "13e2134ba5e302af43f790378a6404796f35f08a"
 
 [[deps.ADTypes]]
 deps = ["PrecompileTools"]
@@ -3552,10 +3552,10 @@ version = "1.6.0"
 
 [[deps.Turing]]
 deps = ["ADTypes", "AbstractMCMC", "AbstractPPL", "Accessors", "AdvancedHMC", "AdvancedMH", "AdvancedVI", "BangBang", "Bijectors", "Compat", "DataStructures", "Distributions", "DocStringExtensions", "DynamicPPL", "EllipticalSliceSampling", "FlexiChains", "ForwardDiff", "Libtask", "LinearAlgebra", "LogDensityProblems", "Optimization", "OptimizationOptimJL", "OrderedCollections", "Printf", "Random", "Random123", "Reexport", "SciMLBase", "Statistics", "StatsAPI", "StatsBase", "StatsFuns"]
-git-tree-sha1 = "92b456a228ba157b0d8ee4309f82769e6f672671"
+git-tree-sha1 = "6ae6ea2c2c83718587ba504f78235e460cce9551"
 registries = "General"
 uuid = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
-version = "0.49.0"
+version = "0.48.0"
 
     [deps.Turing.extensions]
     TuringDistributionsExt = "Distributions"

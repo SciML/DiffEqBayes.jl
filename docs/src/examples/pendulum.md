@@ -7,7 +7,7 @@ pendulum.
 
 ```@example pendulum
 using DiffEqBayes, OrdinaryDiffEq, RecursiveArrayTools, Distributions, Plots, StatsPlots,
-      BenchmarkTools, TransformVariables, StanSample, DynamicHMC
+      BenchmarkTools, TransformVariables, StanSample, DynamicHMC, NaNMath
 ```
 
 Let's define our simple pendulum problem. Here, our pendulum has a drag term `ω`
@@ -23,13 +23,20 @@ function pendulum(du, u, p, t)
     ω, L = p
     x, y = u
     du[1] = y
-    du[2] = -ω * y - (9.8 / L) * sin(x)
+    du[2] = -ω * y - (9.8 / L) * NaNMath.sin(x)
 end
 
 u0 = [1.0, 0.1]
 tspan = (0.0, 10.0)
 prob1 = ODEProblem(pendulum, u0, tspan, [1.0, 2.5])
 ```
+
+The right-hand side uses `NaNMath.sin` instead of `sin`. During warmup, the sampler
+can propose extreme parameter values (for example `ω ≈ 1e100`) for which the state
+overflows to `Inf` within a single solver stage. `sin(Inf)` throws a `DomainError`,
+which aborts the whole sampling run, while `NaNMath.sin(Inf)` returns `NaN`. The
+solver then rejects the step, the solve stops early, and the inference routine
+assigns the proposal zero likelihood.
 
 ## Solve the model and plot
 

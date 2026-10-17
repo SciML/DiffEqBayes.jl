@@ -10,6 +10,9 @@ on:
       - master
     paths-ignore:
       - 'docs/**'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   downgrade:
     # Runs strict (the @v1 reusable workflow hardcodes allow_reresolve=false); expected RED until Turing/DynamicPPL is fixed. See https://github.com/SciML/DiffEqBayes.jl/issues/370

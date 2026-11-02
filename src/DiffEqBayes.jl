@@ -4,7 +4,7 @@ $(DocStringExtensions.README)
 module DiffEqBayes
 
 using DiffEqBase: DiffEqBase, EnsembleProblem, SciMLBase, remake, SDEProblem
-using DiffEqBase: EM
+using StochasticDiffEq: EM
 using Distances: Distances
 using DocStringExtensions: DocStringExtensions, FIELDS, SIGNATURES, TYPEDEF
 using DynamicHMC: DynamicHMC, mcmc_with_warmup

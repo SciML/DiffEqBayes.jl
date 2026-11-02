@@ -30,7 +30,7 @@ using StanSample: StanSample, SampleModel, read_samples, stan_sample
 using TransformVariables: TransformVariables, as, asℝ₊
 using TransformedLogDensities: TransformedLogDensities, TransformedLogDensity
 using Turing: Turing, InverseGamma, MCMCSerial, MvNormal, Normal,
-    logpdf, sample, arraydist, NUTS
+    logpdf, sample, arraydist, NUTS, @model
 
 STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
 function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)

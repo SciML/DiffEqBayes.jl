@@ -26,3 +26,4 @@ function sde_inference(
     chain = sample(sde_model(data, t, prob, priors), NUTS(), kwargs...)
     return chain
 end
+

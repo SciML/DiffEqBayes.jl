@@ -8,7 +8,10 @@ using Turing: NUTS, arraydist
 Bayesian parameter estimation for discretely observed SDEs using the
 Euler-Maruyama pseudo-likelihood.
 """
-function sde_inference(prob::SDEProblem, data, t, priors; likelihood = :gaussian, sigma = nothing, kwargs...)
+function sde_inference(prob::SDEProblem, data, t, priors;
+        likelihood = :gaussian,
+        sigma = nothing,
+        kwargs...)
     @model function sde_model(data, t, prob, priors)
         theta ~ arraydist(priors)
         sol = solve(remake(prob, p = theta), EM(); saveat = t)

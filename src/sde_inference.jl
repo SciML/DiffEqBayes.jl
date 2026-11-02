@@ -1,7 +1,3 @@
-using DiffEqBase: SDEProblem
-using StochasticDiffEq: EM
-using Turing: NUTS, arraydist
-
 """
     sde_inference(prob::SDEProblem, data, t, priors; kwargs...)
 

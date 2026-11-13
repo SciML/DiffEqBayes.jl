@@ -1,7 +1,7 @@
 name = "DiffEqBayes"
 uuid = "ebbdde9d-f333-5424-9be2-dbf1e9acfb5e"
-authors = ["Vaibhavdixit02 <vaibhavyashdixit@gmail.com>"]
 version = "3.16.2"
+authors = ["Vaibhavdixit02 <vaibhavyashdixit@gmail.com>"]
 
 [deps]
 DiffEqBase = "2b5f629d-d688-5b77-993f-72d75c75574e"
@@ -29,8 +29,9 @@ Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 SciMLBase = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
 SciMLStructures = "53ae85a6-f571-4167-b2af-e1d143709226"
 StanSample = "c1514b29-d3a0-5178-b312-660c88baa699"
-Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 StatsAPI = "82ae8749-77ed-4fe6-ae5f-f523153014b0"
+StochasticDiffEq = "789caeaf-c7a9-5a7d-9973-96adeb23e2a0"
+Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 TransformVariables = "84d833dd-6860-57f9-a1a7-6da5db126cff"
 TransformedLogDensities = "f9bc47f6-f3f8-4f3b-ab21-f8bc73906f26"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
@@ -67,14 +68,15 @@ SciMLBase = "3.27"
 SciMLStructures = "1.7"
 SciMLTesting = "2.4"
 StanSample = "7"
-Symbolics = "7.39.2"
 StatsAPI = "1.8.0"
 StatsBase = "0.34.6"
 SteadyStateDiffEq = "2.10.1"
+StochasticDiffEq = "7"
+Symbolics = "7.39.2"
 Test = "1"
 TransformVariables = "0.8.15"
 TransformedLogDensities = "1.0.3"
-Turing = "0.45, 0.46, 0.47, 0.48, 0.49"
+Turing = "0.49"
 julia = "1.10"
 
 [extras]

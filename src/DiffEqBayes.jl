@@ -3,7 +3,7 @@ $(DocStringExtensions.README)
 """
 module DiffEqBayes
 
-using DiffEqBase: DiffEqBase, EnsembleProblem, SciMLBase, remake
+using DiffEqBase: DiffEqBase, EnsembleProblem, SciMLBase, remake, SDEProblem
 using Distances: Distances
 using DocStringExtensions: DocStringExtensions, FIELDS, SIGNATURES, TYPEDEF
 using DynamicHMC: DynamicHMC, mcmc_with_warmup
@@ -29,7 +29,8 @@ using StanSample: StanSample, SampleModel, read_samples, stan_sample
 using TransformVariables: TransformVariables, as, asℝ₊
 using TransformedLogDensities: TransformedLogDensities, TransformedLogDensity
 using Turing: Turing, InverseGamma, MCMCSerial, MvNormal, Normal,
-    logpdf, sample
+    logpdf, sample, arraydist, NUTS, @model
+
 STANDARD_PROB_GENERATOR(prob, p) = remake(prob; u0 = eltype(p).(prob.u0), p = p)
 function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)
     return EnsembleProblem(remake(prob.prob; u0 = eltype(p).(prob.prob.u0), p = p))
@@ -41,6 +42,8 @@ include("stan_string.jl")
 include("stan_inference.jl")
 include("dynamichmc_inference.jl")
 include("precompile.jl")
+include("sde_inference.jl")
 
-export turing_inference, stan_inference, dynamichmc_inference, StanODEData, StanResult
+export turing_inference, stan_inference, dynamichmc_inference, StanODEData, StanResult, sde_inference
 end # module
+

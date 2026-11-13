@@ -6,7 +6,7 @@ in `test/public_interface.jl`.
 
 ## Problem interface
 
-`stan_inference`, `turing_inference`, and `dynamichmc_inference` accept an
+`stan_inference`, `turing_inference`, `sde_inference`, and `dynamichmc_inference` accept an
 `SciMLBase.AbstractSciMLProblem`. For Turing and DynamicHMC, the problem must support
 `solve(problem, algorithm; ...)`. Stan instead translates the problem using its standard
 SciML fields `u0`, `p`, and, when required by the algorithm, `tspan`.
@@ -27,7 +27,8 @@ state is observed.
 
 For `turing_inference`, `t = nothing` is supported for a one-dimensional result such as
 a steady-state problem. In that case `data` is passed as one observation vector. The
-DynamicHMC and Stan interfaces require an explicit time grid.
+DynamicHMC and Stan interfaces require an explicit time grid. The `sde_inference`
+function uses `t` as the observation times for the Euler-Maruyama pseudo-likelihood.
 
 ## Priors and parameters
 
@@ -51,6 +52,8 @@ observed component.
 - `stan_inference` supports Stan's `:adams`, `:rk45`, and `:bdf` algorithm names when
   generating a model. `solve_kwargs`, `sample_kwargs`, and `output_format` are passed
   to the corresponding Stan operations. It requires a CmdStan installation.
+- `sde_inference` uses `solve_kwargs` for the Euler-Maruyama solver and forwards sampling
+  options through `sample_kwargs`. It currently supports `:gaussian` and `:poisson` likelihoods.
 
 ## Extension rules
 
@@ -77,5 +80,4 @@ applications should call [`dynamichmc_inference`](@ref) and should not construct
 subtype, or extend this type.
 
 ```@docs
-DiffEqBayes.DynamicHMCPosterior
-```
+DiffEqBayes.DynamicHMCPosterior```

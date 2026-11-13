@@ -80,4 +80,4 @@ applications should call [`dynamichmc_inference`](@ref) and should not construct
 subtype, or extend this type.
 
 ```@docs
-DiffEqBayes.DynamicHMCPosterior
+DiffEqBayes.DynamicHMCPosterior```

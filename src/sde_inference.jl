@@ -1,28 +1,43 @@
+using DiffEqBase: SDEProblem
+using StochasticDiffEq: EM
+using Turing: NUTS, arraydist, @model
+using Distributions: MvNormal, Poisson, Normal
+using LinearAlgebra: Diagonal
+
 """
     sde_inference(prob::SDEProblem, data, t, priors; kwargs...)
 
 Bayesian parameter estimation for discretely observed SDEs using the
 Euler-Maruyama pseudo-likelihood.
 """
-function sde_inference(
-        prob::SDEProblem, data, t, priors;
+function sde_inference(prob::SDEProblem, data, t, priors;
         likelihood = :gaussian,
-        sigma = nothing,
-        kwargs...
-    )
+        sigma = 0.1,
+        num_samples = 1000,
+        dt = 0.1,
+        kwargs...)
     @model function sde_model(data, t, prob, priors)
         theta ~ arraydist(priors)
-        sol = solve(remake(prob, p = theta), EM(); saveat = t)
-        for i in 1:length(t)
+        p = theta
+        # Euler-Maruyama transition likelihood
+        for i in 1:(length(t) - 1)
+            ?t = t[i+1] - t[i]
+            u = data[:, i]
+            f_val = similar(u)
+            g_val = similar(u)
+            prob.f(f_val, u, p, t[i])
+            prob.g(g_val, u, p, t[i])
+            µ = u + f_val * ?t
+            S = Diagonal((g_val .^ 2) .* ?t .+ sigma^2)
             if likelihood == :gaussian
-                data[:, i] ~ MvNormal(sol[:, i], sigma)
+                data[:, i+1] ~ MvNormal(µ, S)
             elseif likelihood == :poisson
-                data[:, i] ~ Poisson.(sol[:, i])
+                data[:, i+1] ~ arraydist(Poisson.(µ))
             else
-                error("Unsupported likelihood: $likelihood")
+                error("Unsupported likelihood: ")
             end
         end
     end
-    chain = sample(sde_model(data, t, prob, priors), NUTS(), kwargs...)
+    chain = sample(sde_model(data, t, prob, priors), NUTS(), num_samples; kwargs...)
     return chain
 end

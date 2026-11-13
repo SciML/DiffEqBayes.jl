@@ -21,20 +21,20 @@ function sde_inference(prob::SDEProblem, data, t, priors;
         p = theta
         # Euler-Maruyama transition likelihood
         for i in 1:(length(t) - 1)
-            ?t = t[i+1] - t[i]
+            delta_t = t[i+1] - t[i]
             u = data[:, i]
             f_val = similar(u)
             g_val = similar(u)
             prob.f(f_val, u, p, t[i])
             prob.g(g_val, u, p, t[i])
-            µ = u + f_val * ?t
-            S = Diagonal((g_val .^ 2) .* ?t .+ sigma^2)
+            mu_val = u + f_val * delta_t
+            Sigma = Diagonal((g_val .^ 2) .* delta_t .+ sigma^2)
             if likelihood == :gaussian
-                data[:, i+1] ~ MvNormal(µ, S)
+                data[:, i+1] ~ MvNormal(mu_val, Sigma)
             elseif likelihood == :poisson
-                data[:, i+1] ~ arraydist(Poisson.(µ))
+                data[:, i+1] ~ arraydist(Poisson.(mu_val))
             else
-                error("Unsupported likelihood: ")
+                error("Unsupported likelihood: $likelihood")
             end
         end
     end

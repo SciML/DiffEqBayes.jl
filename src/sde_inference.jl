@@ -1,5 +1,4 @@
 using DiffEqBase: SDEProblem
-using StochasticDiffEq: EM
 using Turing: NUTS, arraydist, @model
 using Distributions: MvNormal, Poisson, Normal
 using LinearAlgebra: Diagonal

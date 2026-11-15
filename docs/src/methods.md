@@ -41,5 +41,7 @@ StanODEData
 StanResult
 stan_inference
 turing_inference
+sde_inference
 dynamichmc_inference
+DiffEqBayes.DynamicHMCPosterior
 ```

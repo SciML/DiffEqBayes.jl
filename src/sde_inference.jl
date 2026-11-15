@@ -20,12 +20,11 @@ function sde_inference(
     @model function sde_model(data, t, prob, priors)
         theta ~ arraydist(priors)
         p = theta
-        # Euler-Maruyama transition likelihood
         for i in 1:(length(t) - 1)
             delta_t = t[i + 1] - t[i]
             u = data[:, i]
-            f_val = similar(u)
-            g_val = similar(u)
+            f_val = similar(u, eltype(p))
+            g_val = similar(u, eltype(p))
             prob.f(f_val, u, p, t[i])
             prob.g(g_val, u, p, t[i])
             mu_val = u + f_val * delta_t
@@ -33,7 +32,7 @@ function sde_inference(
             if likelihood == :gaussian
                 data[:, i + 1] ~ MvNormal(mu_val, Sigma)
             elseif likelihood == :poisson
-                data[:, i + 1] ~ arraydist(Poisson.(mu_val))
+                data[:, i + 1] ~ arraydist(Poisson.(max.(mu_val, 0)))
             else
                 error("Unsupported likelihood: $likelihood")
             end

@@ -8,7 +8,7 @@ using Distances: Distances
 using DocStringExtensions: DocStringExtensions, FIELDS, SIGNATURES, TYPEDEF
 using DynamicHMC: DynamicHMC, mcmc_with_warmup
 using DynamicPPL: DynamicPPL, NoTemplate, VarName, tilde_assume!!
-using LinearAlgebra: LinearAlgebra, Diagonal
+using LinearAlgebra: LinearAlgebra, Diagonal, Symmetric, cholesky, dot, issuccess, logdet
 using LogDensityProblemsAD: LogDensityProblemsAD
 using MacroTools: MacroTools
 using ModelingToolkit: ModelingToolkit, parameters, solve
@@ -36,11 +36,13 @@ function STANDARD_PROB_GENERATOR(prob::EnsembleProblem, p)
 end
 
 include("turing_inference.jl")
+include("sde_inference.jl")
 # include("abc_inference.jl")
 include("stan_string.jl")
 include("stan_inference.jl")
 include("dynamichmc_inference.jl")
 include("precompile.jl")
 
-export turing_inference, stan_inference, dynamichmc_inference, StanODEData, StanResult
+export turing_inference, sde_inference, stan_inference, dynamichmc_inference,
+    StanODEData, StanResult
 end # module

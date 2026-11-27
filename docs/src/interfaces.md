@@ -6,7 +6,7 @@ in `test/public_interface.jl`.
 
 ## Problem interface
 
-`stan_inference`, `turing_inference`, `sde_inference`, and `dynamichmc_inference` accept an
+`stan_inference`, `turing_inference`, and `dynamichmc_inference` accept an
 `SciMLBase.AbstractSciMLProblem`. For Turing and DynamicHMC, the problem must support
 `solve(problem, algorithm; ...)`. Stan instead translates the problem using its standard
 SciML fields `u0`, `p`, and, when required by the algorithm, `tspan`.
@@ -16,6 +16,12 @@ problem therefore must support the normal SciML parameter contract: its paramete
 container must accept the sampled values, and `SciMLStructures.Tunable` must be
 available when a structured parameter container is used. Plain arrays and ordinary
 SciML problem types are the simplest supported form.
+
+`sde_inference` is the exception. It accepts a `SciMLBase.SDEProblem` and never calls
+`solve`: it reads the drift, the diffusion, and `noise_rate_prototype` from the problem
+and evaluates the Euler-Maruyama transition density between consecutive observations in
+closed form. In-place and out-of-place problems with diagonal or non-diagonal noise are
+supported; problems with a custom `noise` process are rejected.
 
 ## Observations
 
@@ -27,8 +33,11 @@ state is observed.
 
 For `turing_inference`, `t = nothing` is supported for a one-dimensional result such as
 a steady-state problem. In that case `data` is passed as one observation vector. The
-DynamicHMC and Stan interfaces require an explicit time grid. The `sde_inference`
-function uses `t` as the observation times for the Euler-Maruyama pseudo-likelihood.
+DynamicHMC and Stan interfaces require an explicit time grid.
+
+`sde_inference` requires every state component to be observed at strictly increasing
+times, because each observation is the starting point of the next transition. The first
+observation is conditioned on, so `u0` is not sampled.
 
 ## Priors and parameters
 
@@ -46,14 +55,16 @@ observed component.
 - `turing_inference` forwards `solve_kwargs` to SciML `solve`, and forwards sampling
   options through `sample_args` and `sample_kwargs`. The `likelihood` callable receives
   `(u, p, t, σ)` and must return the distribution used for the observation.
+- `sde_inference` forwards sampling options through `sample_args` and `sample_kwargs`
+  like `turing_inference`. It has no `solve_kwargs` because no solver is called. Its
+  likelihood is the Gaussian Euler-Maruyama transition density, and `sigma` sets a fixed
+  standard deviation added to every transition.
 - `dynamichmc_inference` uses `solve_kwargs` for SciML `solve` and
   `mcmc_kwargs` for DynamicHMC. Its result contains the backend result plus a
   `posterior` collection of transformed parameter values.
 - `stan_inference` supports Stan's `:adams`, `:rk45`, and `:bdf` algorithm names when
   generating a model. `solve_kwargs`, `sample_kwargs`, and `output_format` are passed
   to the corresponding Stan operations. It requires a CmdStan installation.
-- `sde_inference` uses `solve_kwargs` for the Euler-Maruyama solver and forwards sampling
-  options through `sample_kwargs`. It currently supports `:gaussian` and `:poisson` likelihoods.
 
 ## Extension rules
 
@@ -80,4 +91,5 @@ applications should call [`dynamichmc_inference`](@ref) and should not construct
 subtype, or extend this type.
 
 ```@docs
-DiffEqBayes.DynamicHMCPosterior```
+DiffEqBayes.DynamicHMCPosterior
+```

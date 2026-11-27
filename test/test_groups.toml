@@ -13,6 +13,3 @@ arch = "x86"
 
 [QA]
 versions = ["lts", "1"]
-
-[SDE]
-versions = ["lts", "1"]

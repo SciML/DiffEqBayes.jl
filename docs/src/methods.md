@@ -27,6 +27,17 @@ before using it.
 `Turing.sample`. Parameter draws are indexed by the `VarName` values supplied through
 `syms`.
 
+## Stochastic differential equations
+
+[`sde_inference`](@ref) estimates the parameters of a discretely observed
+`SDEProblem` with [Turing.jl](https://turinglang.org/stable/) using the Euler-Maruyama
+pseudo-likelihood. Each transition between consecutive observations is treated as one
+Euler-Maruyama step, which gives a Gaussian transition density with mean
+`x + f(x, p, t) Δt` and covariance `G(x, p, t) G(x, p, t)ᵀ Δt`. The density is evaluated
+directly from the drift and diffusion of the problem, so the SDE is never simulated and
+the posterior can be sampled with NUTS. The approximation is accurate when the
+observations are closely spaced relative to the dynamics.
+
 ## DynamicHMC
 
 [`dynamichmc_inference`](@ref) uses
@@ -43,5 +54,4 @@ stan_inference
 turing_inference
 sde_inference
 dynamichmc_inference
-DiffEqBayes.DynamicHMCPosterior
 ```
